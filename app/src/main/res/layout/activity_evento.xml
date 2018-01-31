@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.dglozano.meetapp.MainActivity">
+    tools:context="com.example.dglozano.meetapp.EventoActivity">
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
@@ -20,7 +20,7 @@
         android:layout_gravity="bottom">
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabDotsMain"
+            android:id="@+id/tabDotsTareasParticipantesGastos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabBackground="@drawable/tab_selector"
