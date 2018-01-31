@@ -8,10 +8,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="20dp">
 
         <TextView
             android:id="@+id/tv_settings_title"
@@ -22,16 +22,20 @@
             android:layout_marginLeft="2dp"
             android:text="@string/settings_title"
             android:textAppearance="@android:style/TextAppearance.Material.Large"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/settings_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_settings_title"
+            android:layout_marginBottom="2dp"
             android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:text="@string/settings_username_pholder"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+            android:textAppearance="@android:style/TextAppearance.Material.Medium"
+            android:textSize="20sp" />
 
         <View
             android:id="@+id/settings_separator"
@@ -47,45 +51,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/settings_separator"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="CheckBox"
-            tools:text="@string/chb_settings_notif_tareas" />
+            android:text="@string/chb_settings_notif_tareas" />
 
         <CheckBox
             android:id="@+id/chb_settings_notif_horas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/chb_settings_notif"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="1"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="CheckBox"
-            tools:text="@string/chb_settings_notif_horas" />
+            android:text="@string/chb_settings_notif_horas" />
 
         <CheckBox
             android:id="@+id/chb_settings_mostrar_eventos_pasados"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/chb_settings_notif_horas"
-            android:layout_marginBottom="3dp"
+            android:layout_marginBottom="4dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="1"
             android:button="@null"
             android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="CheckBox"
-            tools:text="@string/chb_settings_mostrar_eventos_pasados" />
+            android:text="@string/chb_settings_mostrar_eventos_pasados" />
 
         <Button
             android:id="@+id/button"
