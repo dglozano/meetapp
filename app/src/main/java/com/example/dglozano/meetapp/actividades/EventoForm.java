@@ -100,7 +100,7 @@ public class EventoForm extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(this, data);
                 // TODO hacer esto
-                et_lugar.setText(place.getName());
+                et_lugar.setText(place.getAddress());
             }
         }
     }
