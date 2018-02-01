@@ -1,7 +1,5 @@
 package com.example.dglozano.meetapp;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
@@ -13,8 +11,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             View rootView = null;
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
                 case FRAGMENT_ID_LISTA_EVENTOS:
-                    rootView = inflater.inflate(R.layout.fragment_eventos_list, container, false);
+                    rootView = inflater.inflate(R.layout.fragment_eventos_page, container, false);
                     break;
                 case FRAGMENT_ID_SETTINGS:
                     rootView = inflater.inflate(R.layout.fragment_settings, container, false);
