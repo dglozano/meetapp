@@ -14,4 +14,9 @@
     <string name="hint_fecha">Fecha</string>
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
+    <string name="title_activity_evento">EventoActivity</string>
+    <string name="tareas_title">Tareas</string>
+    <string name="evento_name_pholder"><![CDATA[<Evento name>]]></string>
+    <string name="dividir_gastos_title">Dividir Gastos</string>
+    <string name="participantes_title">Participantes</string>
 </resources>

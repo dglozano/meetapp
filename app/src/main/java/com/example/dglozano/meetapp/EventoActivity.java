@@ -4,6 +4,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +12,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class EventoActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -32,13 +35,14 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private static final int FRAGMENT_ID_LISTA_EVENTOS = 1;
-    private static final int FRAGMENT_ID_SETTINGS = 2;
+    private static final int FRAGMENT_ID_LISTA_TAREAS = 1;
+    private static final int FRAGMENT_ID_LISTA_PARTICIPANTES = 2;
+    private static final int FRAGMENT_ID_LISTA_PAGOS = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_evento);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -51,9 +55,32 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Esto es para que aparezcan los puntito abajo que indican en que pagina se esta
          */
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDotsMain);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDotsTareasParticipantesGastos);
         tabLayout.setupWithViewPager(mViewPager, true);
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_evento, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -86,11 +113,14 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = null;
             switch(getArguments().getInt(ARG_SECTION_NUMBER)){
-                case FRAGMENT_ID_LISTA_EVENTOS:
-                    rootView = inflater.inflate(R.layout.fragment_eventos_list, container, false);
+                case FRAGMENT_ID_LISTA_TAREAS:
+                    rootView = inflater.inflate(R.layout.fragment_tareas_list, container, false);
                     break;
-                case FRAGMENT_ID_SETTINGS:
-                    rootView = inflater.inflate(R.layout.fragment_settings, container, false);
+                case FRAGMENT_ID_LISTA_PARTICIPANTES:
+                    rootView = inflater.inflate(R.layout.fragment_participantes_list, container, false);
+                    break;
+                case FRAGMENT_ID_LISTA_PAGOS:
+                    rootView = inflater.inflate(R.layout.fragment_dividir_gastos, container, false);
                     break;
             }
             return rootView;
@@ -116,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            // Show 3 total pages.
+            return 3;
         }
     }
 }
