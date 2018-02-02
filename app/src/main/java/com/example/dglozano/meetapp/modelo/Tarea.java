@@ -93,7 +93,6 @@ public class Tarea {
         tarea = new Tarea("Comprar servilletas", p, EstadoTarea.FINALIZADA);
         listaTareasMock.add(tarea);
 
-
         return listaTareasMock;
     }
 }

@@ -69,7 +69,7 @@ public class Pago {
 
         Participante pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
         Participante cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        Pago pago = new Pago(EstadoPago.NO_PAGADO, pag, cob, 25);
+        Pago pago = new Pago(EstadoPago.NO_PAGADO, pag, cob, 1225);
         listaPagosMock.add(pago);
 
         pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));

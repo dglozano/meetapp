@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
-    private List<Participante> participantesList = new ArrayList<>();
+    private List<Participante> participantesList = Participante.getParticipantesMock();
     private ParticipanteItemAdapter mParticipanteAdapter;
     private RecyclerView mParticipantesRecyclerView;
 
@@ -65,12 +66,15 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
         mParticipanteAdapter =  new ParticipanteItemAdapter(participantesList);
-        mParticipantesRecyclerView.setAdapter(mParticipanteAdapter);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PARTICIPANTES TODAVIA
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
+                getActivity().getApplicationContext());
         mParticipantesRecyclerView.setLayoutManager(mLayoutManager);
         mParticipantesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        participantesList.addAll(Participante.getParticipantesMock());
+        mParticipantesRecyclerView.addItemDecoration(new DividerItemDecoration(
+                getActivity().getApplicationContext(),
+                LinearLayoutManager.VERTICAL));
+        mParticipantesRecyclerView.setAdapter(mParticipanteAdapter);
         mParticipanteAdapter.notifyDataSetChanged();
     }
 }

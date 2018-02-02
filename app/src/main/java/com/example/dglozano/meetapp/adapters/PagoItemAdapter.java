@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.modelo.Pago;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -57,7 +58,8 @@ public class PagoItemAdapter extends RecyclerView.Adapter<PagoItemAdapter.PagoVi
     @Override
     public void onBindViewHolder(PagoViewHolder holder, int position) {
         Pago pago = pagosList.get(position);
-        holder.montoTextView.setText("$ "+Double.toString(pago.getMonto()));
+        DecimalFormat df = new DecimalFormat("$ ###,###.00");
+        holder.montoTextView.setText(df.format(pago.getMonto()));
         holder.pagadorTextView.setText(pago.getPagador().toString());
         holder.arrowImageView.setImageResource(R.drawable.ic_subdirectory_arrow_right_black_24dp);
         holder.cobradorTextView.setText(pago.getCobrador().toString());

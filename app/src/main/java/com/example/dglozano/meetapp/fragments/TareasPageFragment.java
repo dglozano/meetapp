@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +29,7 @@ import java.util.List;
  */
 public class TareasPageFragment extends android.support.v4.app.Fragment {
 
-    private List<Tarea> tareasList = new ArrayList<>();
+    private List<Tarea> tareasList = Tarea.getTareasMock();
     private TareaItemAdapter mTareaAdapter;
     private RecyclerView mTareasRecyclerview;
 
@@ -66,12 +67,15 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mTareasRecyclerview = view.findViewById(R.id.recvw_tareas_list);
         mTareaAdapter =  new TareaItemAdapter(tareasList);
-        mTareasRecyclerview.setAdapter(mTareaAdapter);
         //TODO: ver que mostrar si no hay tareas aun
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
+                getActivity().getApplicationContext());
         mTareasRecyclerview.setLayoutManager(mLayoutManager);
         mTareasRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        tareasList.addAll(Tarea.getTareasMock());
+        mTareasRecyclerview.addItemDecoration(new DividerItemDecoration(
+                getActivity().getApplicationContext(),
+                LinearLayoutManager.VERTICAL));
+        mTareasRecyclerview.setAdapter(mTareaAdapter);
         mTareaAdapter.notifyDataSetChanged();
     }
 }

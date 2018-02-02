@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 public class DivisionGastosPageFragment extends android.support.v4.app.Fragment {
 
-    private List<Pago> pagosList = new ArrayList<>();
+    private List<Pago> pagosList = Pago.getPagosMock();
     private PagoItemAdapter mPagoItemAdapter;
     private RecyclerView mPagosRecyclerView;
 
@@ -64,12 +65,15 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
         mPagoItemAdapter =  new PagoItemAdapter(pagosList);
-        mPagosRecyclerView.setAdapter(mPagoItemAdapter);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
+                getActivity().getApplicationContext());
         mPagosRecyclerView.setLayoutManager(mLayoutManager);
         mPagosRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        pagosList.addAll(Pago.getPagosMock());
+        mPagosRecyclerView.addItemDecoration(new DividerItemDecoration(
+                getActivity().getApplicationContext(),
+                LinearLayoutManager.VERTICAL));
+        mPagosRecyclerView.setAdapter(mPagoItemAdapter);
         mPagoItemAdapter.notifyDataSetChanged();
     }
 }
