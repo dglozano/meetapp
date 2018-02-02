@@ -19,4 +19,7 @@
     <string name="evento_name_pholder"><![CDATA[<Evento name>]]></string>
     <string name="dividir_gastos_title">Dividir Gastos</string>
     <string name="participantes_title">Participantes</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
