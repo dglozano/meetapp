@@ -3,16 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content"
+    android:titleTextColor="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="com.example.dglozano.meetapp.EventoActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryDark"
+        app:titleTextColor="@android:color/white"
+        app:subtitleTextColor="@android:color/white"
+        android:elevation="4dp"
+        android:theme="@style/ToolbarStyle"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <FrameLayout
         android:layout_width="match_parent"
