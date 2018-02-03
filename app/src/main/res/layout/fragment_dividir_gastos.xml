@@ -22,23 +22,11 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/tv_evento_name_pagos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_pagos_title"
-            android:layout_marginBottom="2dp"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="2dp"
-            android:text="@string/evento_name_pholder"
-            android:textAppearance="@android:style/TextAppearance.Material.Medium"
-            android:textSize="20sp" />
-
         <View
             android:id="@+id/pagos_separator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_below="@id/tv_evento_name_pagos"
+            android:layout_below="@id/tv_pagos_title"
             android:layout_marginBottom="3dp"
             android:layout_marginTop="3dp"
             android:background="@color/colorPrimary" />
