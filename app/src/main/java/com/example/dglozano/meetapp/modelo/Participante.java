@@ -57,6 +57,10 @@ public class Participante {
         this.pictureId = pictureId;
     }
 
+    public boolean matches(String query){
+        return this.nombreApellido.toUpperCase().contains(query.toUpperCase());
+    }
+
     public static List<Participante> getParticipantesMock() {
         List<Participante> listaParticipantesMock = new ArrayList<>();
 

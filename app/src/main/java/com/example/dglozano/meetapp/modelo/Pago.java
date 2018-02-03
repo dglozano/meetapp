@@ -63,6 +63,17 @@ public class Pago {
         this.monto = monto;
     }
 
+    public boolean matches (String query){
+        boolean matches = false;
+        if(this.getPagador().matches(query) || this.getCobrador().matches(query)){
+            matches = true;
+        }
+        if(Double.toString(this.getMonto()).contains(query)){
+            matches = true;
+        }
+        return matches;
+    }
+
     public static List<Pago> getPagosMock() {
         List<Pago> listaPagosMock = new ArrayList<>();
         List<Participante> listaParticipantesMock = Participante.getParticipantesMock();
