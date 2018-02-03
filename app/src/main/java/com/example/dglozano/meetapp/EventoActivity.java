@@ -41,6 +41,8 @@ public class EventoActivity extends AppCompatActivity {
     private static final int FRAGMENT_ID_LISTA_PARTICIPANTES = 1;
     private static final int FRAGMENT_ID_LISTA_PAGOS = 2;
 
+    private Fragment fragmentBeingDisplayed;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +94,6 @@ public class EventoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_evento, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.toolbar_search);
-        SearchView searchView =
-                (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        // TODO: Configure the search info and add any event listeners...
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -114,19 +110,18 @@ public class EventoActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragmentToDisplay = null;
             switch(position){
                 case FRAGMENT_ID_LISTA_TAREAS:
-                    fragmentToDisplay = TareasPageFragment.newInstance();
+                    fragmentBeingDisplayed = TareasPageFragment.newInstance();
                     break;
                 case FRAGMENT_ID_LISTA_PARTICIPANTES:
-                    fragmentToDisplay = ParticipantesPageFragment.newInstance();
+                    fragmentBeingDisplayed = ParticipantesPageFragment.newInstance();
                     break;
                 case FRAGMENT_ID_LISTA_PAGOS:
-                    fragmentToDisplay = DivisionGastosPageFragment.newInstance();
+                    fragmentBeingDisplayed = DivisionGastosPageFragment.newInstance();
                     break;
             }
-            return fragmentToDisplay;
+            return fragmentBeingDisplayed;
         }
 
         @Override

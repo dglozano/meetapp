@@ -1,7 +1,5 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
@@ -9,7 +7,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -25,12 +26,13 @@ import java.util.List;
  * Use the {@link DivisionGastosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DivisionGastosPageFragment extends android.support.v4.app.Fragment {
+public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
 
-    private List<Pago> pagosList = Pago.getPagosMock();
+    private List<Pago> pagosListDisplayed = new ArrayList<>();
     private PagoItemAdapter mPagoItemAdapter;
     private RecyclerView mPagosRecyclerView;
 
+    private List<Pago> pagosListDelEvento = Pago.getPagosMock();
 
     public DivisionGastosPageFragment() {
         // Required empty public constructor
@@ -52,6 +54,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
-        mPagoItemAdapter =  new PagoItemAdapter(pagosList);
+        mPagoItemAdapter =  new PagoItemAdapter(pagosListDisplayed);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -74,6 +77,63 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mPagosRecyclerView.setAdapter(mPagoItemAdapter);
+        pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
+    }
+
+    private void search(String query) {
+        List<Pago> result = new ArrayList<>();
+        for(Pago p: pagosListDelEvento){
+            if(p.matches(query)){
+                result.add(p);
+            }
+        }
+        pagosListDisplayed.clear();
+        pagosListDisplayed.addAll(result);
+        System.out.println(pagosListDisplayed);
+        mPagoItemAdapter.notifyDataSetChanged();
+    }
+
+    private void restoreOriginalPagosList(){
+        pagosListDisplayed.clear();
+        pagosListDisplayed.addAll(pagosListDelEvento);
+        mPagoItemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        final MenuItem searchItem = menu.findItem(R.id.toolbar_search);
+        final SearchView searchView =
+                (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new DivisionGastosPageFragment.MyOnQueryTextListener());
+        searchView.setOnCloseListener(new DivisionGastosPageFragment.MyOnCloseListener());
+    }
+
+    private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
+
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            search(query);
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String query) {
+            System.out.println("Entro)");
+            search(query);
+            if(query.trim().isEmpty()){
+                restoreOriginalPagosList();
+            }
+            return false;
+        }
+    }
+
+    private class MyOnCloseListener implements SearchView.OnCloseListener {
+        @Override
+        public boolean onClose() {
+            restoreOriginalPagosList();
+            return false;
+        }
     }
 }
