@@ -1,83 +1,72 @@
-package com.example.dglozano.meetapp;
+package com.example.dglozano.meetapp.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.modelo.Evento;
 
 /**
  * Created by augusto on 01/02/2018.
  */
 
-public class EventoAdapter extends BaseAdapter {
+public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoViewHolder> {
 
-    LayoutInflater inflater;
-    List<Evento> listaEventos;
+    private List<Evento> eventosList;
 
-    public EventoAdapter(Context applicationContext, List<Evento> listaEventos) {
-        super();
-        inflater = LayoutInflater.from(applicationContext);
-        this.listaEventos = listaEventos;
-    }
-
-    private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-
-    @Override
-    public int getCount() {
-        return listaEventos.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return listaEventos.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return listaEventos.get(position).getId();;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View row = convertView;
-        if(row == null) row = inflater.inflate(R.layout.fila_evento, parent, false);
-        ViewItemHolder holder = (ViewItemHolder) row.getTag();
-        if(holder ==null){
-            holder = new ViewItemHolder(row);
-            row.setTag(holder);
-        }
-
-        Evento evento = (Evento) getItem(position);
-
-        holder.tituloEventoTV.setText(evento.getTitulo());
-        holder.fechaEventoTV.setText(evento.getFecha());
-        holder.cantOrganizadoresTV.setText(evento.getOrganizadores());
-        holder.tareasRestantesTV.setText(evento.getTareas());
-
-        return null;
-    }
-
-    private class ViewItemHolder {
+    public class EventoViewHolder extends RecyclerView.ViewHolder {
         TextView tituloEventoTV = null;
         TextView fechaEventoTV = null;
         TextView cantOrganizadoresTV = null;
         TextView tareasRestantesTV = null;
 
 
-        ViewItemHolder(View base) {
-            this.tituloEventoTV = base.findViewById(R.id.titulo_evento);
-            this.fechaEventoTV = base.findViewById(R.id.fecha_evento);
-            this.cantOrganizadoresTV = base.findViewById(R.id.cant_organizadores_evento);
-            this.tareasRestantesTV = base.findViewById(R.id.tareas_restantes_evento);
+
+        public EventoViewHolder(View view) {
+            super(view);
+            tituloEventoTV = (TextView) view.findViewById(R.id.titulo_evento);
+            fechaEventoTV = (TextView) view.findViewById(R.id.fecha_evento);
+            cantOrganizadoresTV = (TextView) view.findViewById(R.id.cant_organizadores_evento);
+            tareasRestantesTV = (TextView) view.findViewById(R.id.tareas_restantes_evento);
+
         }
     }
+
+    public EventoAdapter(List<Evento> eventosList) {
+        this.eventosList = eventosList;
+    }
+
+    @Override
+    public EventoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fila_evento, parent, false);
+
+        return new EventoViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(EventoViewHolder holder, int position) {
+        Evento evento = eventosList.get(position);
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        holder.tituloEventoTV.setText(evento.getNombre());
+        holder.fechaEventoTV.setText(evento.getFecha());
+        holder.cantOrganizadoresTV.setText('A');
+        holder.tareasRestantesTV.setText('B');
+    }
+
+    @Override
+    public int getItemCount() {
+        return eventosList.size();
+    }
+
+
+
 }
 
