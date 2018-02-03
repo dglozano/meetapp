@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -11,22 +11,22 @@
         android:layout_margin="@dimen/activity_vertical_margin">
 
         <TextView
-            android:id="@+id/tv_pagos_title"
+            android:id="@+id/tv_tareas_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="2dp"
-            android:text="@string/dividir_gastos_title"
+            android:text="@string/tareas_title"
             android:textAppearance="@android:style/TextAppearance.Material.Large"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/tv_evento_name_pagos"
+            android:id="@+id/tv_evento_name_tareas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tv_pagos_title"
+            android:layout_below="@id/tv_tareas_title"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginTop="2dp"
@@ -35,33 +35,33 @@
             android:textSize="20sp" />
 
         <View
-            android:id="@+id/pagos_separator"
+            android:id="@+id/tareas_separator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_below="@id/tv_evento_name_pagos"
+            android:layout_below="@id/tv_evento_name_tareas"
             android:layout_marginBottom="3dp"
             android:layout_marginTop="3dp"
             android:background="@color/colorPrimary" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recvw_payments_list"
+            android:id="@+id/recvw_tareas_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/pagos_separator"
+            android:layout_below="@id/tareas_separator"
             android:layout_marginBottom="@dimen/activity_bottom_carousel_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:scrollbars="vertical" />
-    </RelativeLayout>
 
+    </RelativeLayout>
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_btn_dividir_gastos"
+        android:id="@+id/fab_btn_crear_tarea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp"
         android:clickable="true"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_attach_money_white_24dp" />
+        app:srcCompat="@drawable/ic_create_white_24dp" />
 </android.support.constraint.ConstraintLayout>
