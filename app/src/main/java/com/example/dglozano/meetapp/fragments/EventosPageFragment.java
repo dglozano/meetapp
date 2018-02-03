@@ -1,22 +1,23 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.support.v4.app.Fragment;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.adapters.EventoAdapter;
-import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
+import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
 import com.example.dglozano.meetapp.modelo.Evento;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +26,17 @@ import java.util.List;
  */
 
 /**
- * A simple {@link android.app.Fragment} subclass.
- * Use the {@link DivisionGastosPageFragment#newInstance} factory method to
+ * A simple {@link Fragment} subclass.
+ * Use the {@link EventosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class EventosPageFragment extends android.support.v4.app.Fragment {
 
-    private List<Evento> eventosList = Evento.getEventosMock();
-    private EventoAdapter mEventoAdapter;
+    private List<Evento> eventosListDisplayed = new ArrayList<>();
+    private EventoItemAdapter mEventoItemAdapter;
     private RecyclerView mEventosRecyclerView;
+
+    private List<Evento> eventosDelUsuario = Evento.getEventosMock();
 
 
     public EventosPageFragment() {
@@ -68,7 +71,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
-        mEventoAdapter =  new EventoAdapter(eventosList);
+        mEventoItemAdapter =  new EventoItemAdapter(eventosListDisplayed);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -77,7 +80,65 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         mEventosRecyclerView.addItemDecoration(new DividerItemDecoration(
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
-        mEventosRecyclerView.setAdapter(mEventoAdapter);
-        mEventoAdapter.notifyDataSetChanged();
+        mEventosRecyclerView.setAdapter(mEventoItemAdapter);
+        eventosListDisplayed.addAll(eventosDelUsuario);
+        mEventoItemAdapter.notifyDataSetChanged();
+    }
+
+    private void search(String query) {
+        List<Evento> result = new ArrayList<>();
+        for(Evento e: eventosDelUsuario){
+            if(e.matches(query)){
+                result.add(e);
+            }
+        }
+        eventosListDisplayed.clear();
+        eventosListDisplayed.addAll(result);
+        System.out.println(eventosListDisplayed);
+        mEventoItemAdapter.notifyDataSetChanged();
+    }
+
+    private void restoreOriginalEventosList(){
+        eventosListDisplayed.clear();
+        eventosListDisplayed.addAll(eventosDelUsuario);
+        mEventoItemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        final MenuItem searchItem = menu.findItem(R.id.toolbar_search_main);
+        final SearchView searchView =
+                (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new EventosPageFragment.MyOnQueryTextListener());
+        searchView.setOnCloseListener(new EventosPageFragment.MyOnCloseListener());
+    }
+
+    private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
+
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            search(query);
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String query) {
+            System.out.println("Entro)");
+            search(query);
+            if(query.trim().isEmpty()){
+                restoreOriginalEventosList();
+            }
+            return false;
+        }
+    }
+
+    private class MyOnCloseListener implements SearchView.OnCloseListener {
+        @Override
+        public boolean onClose() {
+            restoreOriginalEventosList();
+            return false;
+
+        }
     }
 }

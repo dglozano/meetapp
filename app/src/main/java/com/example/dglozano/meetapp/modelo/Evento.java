@@ -51,6 +51,14 @@ public class Evento implements Parcelable {
     public Evento() {
     }
 
+    public boolean matches (String query){
+        boolean matches = false;
+        if(this.getNombre().matches(query)){
+            matches = true;
+        }
+        return matches;
+    }
+
     public String getNombre() {
         return nombre;
     }
