@@ -50,7 +50,6 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintHorizontal_weight="50%"
         app:layout_constraintStart_toEndOf="@+id/cant_organizadores_evento"
         app:layout_constraintTop_toBottomOf="@+id/fecha_evento" />
 </android.support.constraint.ConstraintLayout>

@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import com.example.dglozano.meetapp.modelo.Evento;
 
 /**
  * Created by augusto on 01/02/2018.
