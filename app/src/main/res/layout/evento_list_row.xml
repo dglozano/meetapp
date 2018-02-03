@@ -1,55 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/titulo_evento"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/row_padding_vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/row_padding_vertical">
+
 
     <TextView
-        android:id="@+id/titulo_evento"
-        android:layout_width="0dp"
+        android:id="@+id/tv_titulo_evento"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
-        android:id="@+id/fecha_evento"
-        android:layout_width="0dp"
+        android:id="@+id/tv_fecha_evento"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo_evento" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_titulo_evento"
+        android:layout_marginTop="9dp"
+        android:text="TextView" />
 
     <TextView
-        android:id="@+id/cant_organizadores_evento"
-        android:layout_width="194dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fecha_evento" />
-
-    <TextView
-        android:id="@+id/tareas_restantes_evento"
-        android:layout_width="195dp"
+        android:id="@+id/tv_organizadores_evento"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cant_organizadores_evento"
-        app:layout_constraintTop_toBottomOf="@+id/fecha_evento" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_fecha_evento"
+        android:layout_marginTop="9dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tv_tareas_completas_evento"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tv_organizadores_evento"
+        android:layout_alignBottom="@+id/tv_organizadores_evento"
+        android:layout_alignParentEnd="true"
+        android:text="TextView" />
+</RelativeLayout>
