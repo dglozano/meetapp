@@ -2,10 +2,14 @@ package com.example.dglozano.meetapp.actividades;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -15,6 +19,9 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+
+import java.io.IOException;
+import java.util.Locale;
 
 public class EventoForm extends AppCompatActivity {
 
@@ -28,14 +35,17 @@ public class EventoForm extends AppCompatActivity {
     private EditText et_lugar;
     private Place place;
     private EditText et_fecha;
-    private Button btnGuardar;
-    private Button btnCancelar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evento_form);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar_evento_form);
+        setSupportActionBar(myToolbar);
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
 
         getViews();
         setListeners();
@@ -47,19 +57,29 @@ public class EventoForm extends AppCompatActivity {
         // FIXME asignar el flag en base al evento obtenido
         flagNuevoEvento = true;
 
+        if(!flagNuevoEvento) {
+            et_nombre.setText(evento.getNombre());
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            if(evento.getLugar() != null) {
+                try {
+                    String l = geocoder.getFromLocation(evento.getLugar().latitude, evento.getLugar().longitude, 1).get(0).getAddressLine(0);
+                    et_lugar.setText(l);
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            et_fecha.setText(evento.getFecha());
+        }
+
     }
 
     private void getViews() {
         et_nombre = findViewById(R.id.editText_nombre);
         et_lugar = findViewById(R.id.editText_lugar);
         et_fecha = findViewById(R.id.editText_fecha);
-        btnGuardar = findViewById(R.id.eventoFormGuardar);
-        btnCancelar = findViewById(R.id.eventoFormCancelar);
     }
 
     private void setListeners() {
-        btnGuardar.setOnClickListener(new GuardarListener());
-        btnCancelar.setOnClickListener(new CancelarListener());
         et_fecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +96,41 @@ public class EventoForm extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_item_Ok:
+                guardar();
+                setResult(RESULT_OK, intentOrigen);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_form, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void guardar() {
+        String nombre = et_nombre.getText().toString();
+        String fecha = et_fecha.getText().toString();
+
+        if(flagNuevoEvento) {
+            evento = new Evento();
+        }
+        evento.setNombre(nombre);
+        if(place != null) {
+            evento.setLugar(place.getLatLng());
+        }
+        evento.setFecha(fecha);
+
+        // TODO mandar a guardar
     }
 
     private void showDatePickerDialog() {
@@ -99,36 +154,9 @@ public class EventoForm extends AppCompatActivity {
         if(requestCode == PLACE_PICKER_REQUEST) {
             if(resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(this, data);
-                // TODO hacer esto
+                // TODO Ver si se muestra el nombre o la dirección
                 et_lugar.setText(place.getAddress());
             }
-        }
-    }
-
-    private class GuardarListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            String nombre = et_nombre.getText().toString();
-            String fecha = et_fecha.getText().toString();
-
-            if(flagNuevoEvento) {
-                evento = new Evento();
-            }
-            evento.setNombre(nombre);
-            evento.setLugar(place.getLatLng());
-            evento.setFecha(fecha);
-
-            // TODO mandar a guardar
-
-            setResult(RESULT_OK, intentOrigen);
-        }
-    }
-
-    private class CancelarListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            setResult(RESULT_CANCELED, intentOrigen);
-            finish();
         }
     }
 }

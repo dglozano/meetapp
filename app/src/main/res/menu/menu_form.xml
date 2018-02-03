@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.example.dglozano.meetapp.EventoActivity">
+
+    <item
+        android:id="@+id/menu_item_Ok"
+        android:icon="@drawable/ic_done_white_24dp"
+        android:title="@string/action_guardar"
+        app:showAsAction="always"/>
+</menu>
