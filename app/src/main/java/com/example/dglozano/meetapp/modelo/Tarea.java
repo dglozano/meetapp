@@ -47,6 +47,22 @@ public class Tarea {
         this.estadoTarea = estadoTarea;
     }
 
+    public boolean matches(String query){
+        boolean matches = false;
+        if(this.titulo.toUpperCase().contains(query.toUpperCase())){
+            matches = true;
+        }
+        if(this.getPersonaAsignada().matches(query)){
+            matches = true;
+        }
+        return matches;
+    }
+
+    @Override
+    public String toString(){
+        return this.personaAsignada + " tiene que " + this.titulo;
+    }
+
     public static List<Tarea> getTareasMock() {
         List<Tarea> listaTareasMock = new ArrayList<>();
 
