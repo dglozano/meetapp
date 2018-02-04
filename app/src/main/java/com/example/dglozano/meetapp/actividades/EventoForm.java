@@ -30,6 +30,7 @@ public class EventoForm extends AppCompatActivity {
     private Intent intentOrigen;
     private Boolean flagNuevoEvento;
     private Evento evento;
+    // TODO private Dao dao;
 
     private EditText et_nombre;
     private EditText et_lugar;
@@ -52,23 +53,25 @@ public class EventoForm extends AppCompatActivity {
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
-        // TODO ver como se obtiene el evento
-
-        // FIXME asignar el flag en base al evento obtenido
-        flagNuevoEvento = true;
+        // TODO ver que la clave coincida
+        Integer id = (extras != null) ? extras.getInt("id") : null;
+        flagNuevoEvento = id == null;
 
         if(!flagNuevoEvento) {
-            et_nombre.setText(evento.getNombre());
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            if(evento.getLugar() != null) {
-                try {
-                    String l = geocoder.getFromLocation(evento.getLugar().latitude, evento.getLugar().longitude, 1).get(0).getAddressLine(0);
-                    et_lugar.setText(l);
-                } catch(IOException e) {
-                    e.printStackTrace();
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    evento = null; // TODO dao.getEvento
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mostrarDatosEvento();
+                        }
+                    });
                 }
-            }
-            et_fecha.setText(evento.getFecha());
+            };
+            Thread t = new Thread(r);
+            t.start();
         }
 
     }
@@ -98,6 +101,20 @@ public class EventoForm extends AppCompatActivity {
         });
     }
 
+    private void mostrarDatosEvento() {
+        et_nombre.setText(evento.getNombre());
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        if(evento.getLugar() != null) {
+            try {
+                String l = geocoder.getFromLocation(evento.getLugar().latitude, evento.getLugar().longitude, 1).get(0).getAddressLine(0);
+                et_lugar.setText(l);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        et_fecha.setText(evento.getFecha());
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -123,7 +140,19 @@ public class EventoForm extends AppCompatActivity {
 
         if(flagNuevoEvento) {
             evento = new Evento();
+            int id = 0;
+            /*try {
+                id = obtenerNuevoID();
+                // TODO ver si lo hacemos así o que se encargue la capa dao
+                */
+            evento.setId(id);/*
+            } catch(ExecutionException e) {
+                e.printStackTrace();
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }*/
         }
+
         evento.setNombre(nombre);
         if(place != null) {
             evento.setLugar(place.getLatLng());
