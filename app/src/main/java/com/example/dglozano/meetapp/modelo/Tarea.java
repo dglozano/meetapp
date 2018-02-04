@@ -4,23 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by dglozano on 01/02/18.
- */
-
 public class Tarea {
 
+    private int id;
     private String titulo;
     private Participante personaAsignada;
     private EstadoTarea estadoTarea;
+    private String descripcion;
 
-    public Tarea(){
+    public Tarea() {
     }
 
-    public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea){
+    public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea) {
         this.titulo = titulo;
         this.personaAsignada = personaAsignada;
         this.estadoTarea = estadoTarea;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -47,19 +53,27 @@ public class Tarea {
         this.estadoTarea = estadoTarea;
     }
 
-    public boolean matches(String query){
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean matches(String query) {
         boolean matches = false;
-        if(this.titulo.toUpperCase().contains(query.toUpperCase())){
+        if(this.titulo.toUpperCase().contains(query.toUpperCase())) {
             matches = true;
         }
-        if(this.getPersonaAsignada().matches(query)){
+        if(this.getPersonaAsignada().matches(query)) {
             matches = true;
         }
         return matches;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.personaAsignada + " tiene que " + this.titulo;
     }
 
