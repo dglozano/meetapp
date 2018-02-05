@@ -33,6 +33,8 @@ public class TareaForm extends AppCompatActivity {
     private List<Participante> listaParticipantes;
     private ArrayAdapter<Participante> adapterParticipantes;
 
+    private final String SELECCIONAR = "-- seleccionar --";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class TareaForm extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         getViews();
-        inicializarSpinner(-1); //-1 para que no seleccione nada
+        inicializarSpinner(0); //0 para que no seleccione nada
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
@@ -86,14 +88,15 @@ public class TareaForm extends AppCompatActivity {
             @Override
             public void run() {
                 List<Participante> lista = new ArrayList<>(); // TODO = dao.getParticipantes()
+                lista.addAll(Participante.getParticipantesMock()); // TODO quitar esto
+                lista.add(0, new Participante(SELECCIONAR, 1));
                 listaParticipantes.clear();
                 listaParticipantes.addAll(lista);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         adapterParticipantes.notifyDataSetChanged();
-                        if(selectedPosition >= 0)
-                            spinner_encargado.setSelection(selectedPosition);
+                        spinner_encargado.setSelection(selectedPosition);
                     }
                 });
             }
@@ -138,7 +141,7 @@ public class TareaForm extends AppCompatActivity {
             int id = 0;
             /*try {
                 id = obtenerNuevoID();
-                // TODO ver si lo hacemos así o que se encargue la capa dao
+                // TODO ver si lo hacemos así. Debería encargarse la capa dao
                 */
             tarea.setId(id);/*
             } catch(ExecutionException e) {
@@ -155,7 +158,11 @@ public class TareaForm extends AppCompatActivity {
             }
         }
         tarea.setTitulo(titulo);
-        tarea.setPersonaAsignada(encargado);
+        if(encargado.getNombreApellido().equals(SELECCIONAR)) {
+            tarea.setPersonaAsignada(null);
+        } else {
+            tarea.setPersonaAsignada(encargado);
+        }
         tarea.setEstadoTarea(estado);
         tarea.setDescripcion(descripcion);
 
