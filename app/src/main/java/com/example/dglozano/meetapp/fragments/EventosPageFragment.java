@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -94,7 +96,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         }
         eventosListDisplayed.clear();
         eventosListDisplayed.addAll(result);
-        System.out.println(eventosListDisplayed);
         mEventoItemAdapter.notifyDataSetChanged();
     }
 
@@ -110,8 +111,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         final SearchView searchView =
                 (SearchView) searchItem.getActionView();
 
-        searchView.setOnQueryTextListener(new EventosPageFragment.MyOnQueryTextListener());
-        searchView.setOnCloseListener(new EventosPageFragment.MyOnCloseListener());
+        searchView.setOnQueryTextListener(new MyOnQueryTextListener());
+        searchView.setOnCloseListener(new MyOnCloseListener());
     }
 
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
@@ -124,7 +125,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
 
         @Override
         public boolean onQueryTextChange(String query) {
-            System.out.println("Entro)");
+
             search(query);
             if(query.trim().isEmpty()){
                 restoreOriginalEventosList();

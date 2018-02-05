@@ -48,12 +48,9 @@ public class Evento implements Parcelable {
         parcel.writeString(fecha);
     }
 
-    public Evento() {
-    }
-
     public boolean matches (String query){
         boolean matches = false;
-        if(this.getNombre().matches(query)){
+        if(this.nombre.toUpperCase().contains(query.toUpperCase())){
             matches = true;
         }
         return matches;
