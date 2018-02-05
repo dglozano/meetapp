@@ -107,8 +107,11 @@ public class TareaForm extends AppCompatActivity {
 
     private void mostrarDatosTarea() {
         et_titulo.setText(tarea.getTitulo());
-        int index = listaParticipantes.indexOf(tarea.getPersonaAsignada());
-        inicializarSpinner(adapterParticipantes.getPosition(listaParticipantes.get(index)));
+        if(tarea.getPersonaAsignada() != null) {
+            inicializarSpinner(adapterParticipantes.getPosition(tarea.getPersonaAsignada()));
+        } else {
+            inicializarSpinner(0);
+        }
         et_descripcion.setText(tarea.getDescripcion());
     }
 
