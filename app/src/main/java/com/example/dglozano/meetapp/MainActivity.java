@@ -1,6 +1,7 @@
 package com.example.dglozano.meetapp;
 
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -8,9 +9,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.dglozano.meetapp.fragments.EventosPageFragment;
+import com.example.dglozano.meetapp.fragments.SettingsPageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,13 +35,23 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private static final int FRAGMENT_ID_LISTA_EVENTOS = 1;
-    private static final int FRAGMENT_ID_SETTINGS = 2;
+    private static final int FRAGMENT_ID_LISTA_EVENTOS = 0;
+    private static final int FRAGMENT_ID_SETTINGS = 1;
+
+    private Fragment fragmentBeingDisplayed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_main);
+        setSupportActionBar(myToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -52,45 +69,30 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                System.out.println("Hizo click en settings");
+                return true;
 
-        public PlaceholderFragment() {
-        }
+            case R.id.toolbar_search_main:
+                // User chose the Search option.
+                return true;
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                System.out.println("Hizo click en buscar");
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = null;
-            switch(getArguments().getInt(ARG_SECTION_NUMBER)){
-                case FRAGMENT_ID_LISTA_EVENTOS:
-                    rootView = inflater.inflate(R.layout.fragment_eventos_page, container, false);
-                    break;
-                case FRAGMENT_ID_SETTINGS:
-                    rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-                    break;
-            }
-            return rootView;
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     /**
@@ -105,9 +107,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            switch(position){
+                case FRAGMENT_ID_LISTA_EVENTOS:
+                    fragmentBeingDisplayed = EventosPageFragment.newInstance();
+                    break;
+                case FRAGMENT_ID_SETTINGS:
+                    fragmentBeingDisplayed = SettingsPageFragment.newInstance();
+                    break;
+            }
+            return fragmentBeingDisplayed;
         }
 
         @Override
