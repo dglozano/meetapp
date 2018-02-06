@@ -19,7 +19,7 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".actividades.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -29,9 +29,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EventoActivity"
+            android:name=".actividades.EventoActivity"
             android:label="Nombre del Evento"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".actividades.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!--intent-filter>
@@ -41,23 +41,23 @@
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity"/>
+                android:value=".actividades.MainActivity"/>
         </activity>
         <activity
             android:name=".actividades.EventoForm"
-            android:parentActivityName=".EventoActivity"
+            android:parentActivityName=".actividades.EventoActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventoActivity"/>
+                android:value=".actividades.EventoActivity"/>
         </activity>
         <activity
             android:name=".actividades.TareaForm"
-            android:parentActivityName=".EventoActivity"
+            android:parentActivityName=".actividades.EventoActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EventoActivity"/>
+                android:value=".actividades.EventoActivity"/>
         </activity>
     </application>
 

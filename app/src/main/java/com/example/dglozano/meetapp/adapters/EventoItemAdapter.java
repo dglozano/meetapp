@@ -23,15 +23,12 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
     public class EventoViewHolder extends RecyclerView.ViewHolder {
         TextView tituloEventoTV, fechaEventoTV, cantOrganizadoresTV, tareasRestantesTV;
 
-
-
         public EventoViewHolder(View view) {
             super(view);
             tituloEventoTV = (TextView) view.findViewById(R.id.tv_titulo_evento);
             fechaEventoTV = (TextView) view.findViewById(R.id.tv_fecha_evento);
             cantOrganizadoresTV =  (TextView) view.findViewById(R.id.tv_organizadores_evento);
             tareasRestantesTV = (TextView) view.findViewById(R.id.tv_tareas_completas_evento);
-
         }
     }
 

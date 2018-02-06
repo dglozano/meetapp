@@ -1,4 +1,4 @@
-package com.example.dglozano.meetapp.actividades;
+package com.example.dglozano.meetapp.fragments;
 
 
 import android.app.DatePickerDialog;
