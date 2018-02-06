@@ -4,23 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by dglozano on 01/02/18.
- */
-
 public class Tarea {
 
+    private Integer id;
     private String titulo;
     private Participante personaAsignada;
     private EstadoTarea estadoTarea;
+    private String descripcion;
 
-    public Tarea(){
+    public Tarea() {
     }
 
-    public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea){
+    public Tarea(Integer id, String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
+        this.id = id;
         this.titulo = titulo;
         this.personaAsignada = personaAsignada;
         this.estadoTarea = estadoTarea;
+        this.descripcion = descripcion;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -47,19 +55,27 @@ public class Tarea {
         this.estadoTarea = estadoTarea;
     }
 
-    public boolean matches(String query){
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean matches(String query) {
         boolean matches = false;
-        if(this.titulo.toUpperCase().contains(query.toUpperCase())){
+        if(this.titulo.toUpperCase().contains(query.toUpperCase())) {
             matches = true;
         }
-        if(this.getPersonaAsignada().matches(query)){
+        if(this.getPersonaAsignada().matches(query)) {
             matches = true;
         }
         return matches;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.personaAsignada + " tiene que " + this.titulo;
     }
 
@@ -68,47 +84,57 @@ public class Tarea {
 
         List<Participante> listaParticipantesMock = Participante.getParticipantesMock();
 
-        Tarea tarea = new Tarea("Comprar 5kg Asado", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR);
+        Tarea tarea = new Tarea(1, "Comprar 5kg Asado", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
-        tarea = new Tarea("Comprar 2 cajones", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR);
+        tarea = new Tarea(2, "Comprar 2 cajones", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
-        tarea = new Tarea("Comprar carbon", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR);
+        tarea = new Tarea(3, "Comprar carbon", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         Participante p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Reservar salon", p, EstadoTarea.EN_PROGRESO);
+        tarea = new Tarea(4, "Reservar salon", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Conseguir parlante", p, EstadoTarea.EN_PROGRESO);
+        tarea = new Tarea(5, "Conseguir parlante", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Comprar torta", p, EstadoTarea.EN_PROGRESO);
+        tarea = new Tarea(6, "Comprar torta", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Difundir fiesta", p, EstadoTarea.FINALIZADA);
+        tarea = new Tarea(7, "Difundir fiesta", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Comprar hielo", p, EstadoTarea.FINALIZADA);
+        tarea = new Tarea(8, "Comprar hielo", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Contratar DJ", p, EstadoTarea.FINALIZADA);
+        tarea = new Tarea(9, "Contratar DJ", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Contratar iluminacion", p, EstadoTarea.FINALIZADA);
+        tarea = new Tarea(10, "Contratar iluminacion", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea("Comprar servilletas", p, EstadoTarea.FINALIZADA);
+        tarea = new Tarea(11, "Comprar servilletas", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
         listaTareasMock.add(tarea);
 
         return listaTareasMock;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        Tarea tarea = (Tarea) o;
+
+        return id != null ? id.equals(tarea.id) : tarea.id == null;
     }
 }

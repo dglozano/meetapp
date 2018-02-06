@@ -1,14 +1,15 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,11 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.actividades.EventoForm;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
+import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by augusto on 03/02/2018.
@@ -33,11 +39,15 @@ import java.util.List;
  */
 public class EventosPageFragment extends android.support.v4.app.Fragment {
 
+    private final int CREAR_EVENTO = 1;
+    private final int EDITAR_EVENTO = 2;
+
     private List<Evento> eventosListDisplayed = new ArrayList<>();
     private EventoItemAdapter mEventoItemAdapter;
     private RecyclerView mEventosRecyclerView;
 
-    private List<Evento> eventosDelUsuario = Evento.getEventosMock();
+    private Dao<Evento> dao;
+    private List<Evento> eventosDelUsuario;
 
 
     public EventosPageFragment() {
@@ -61,6 +71,10 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        //TODO cambiar a sqlite cuando se implemente
+        dao = MockDaoEvento.getInstance();
+        eventosDelUsuario = dao.getAll();
     }
 
     @Override
@@ -73,7 +87,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
-        mEventoItemAdapter =  new EventoItemAdapter(eventosListDisplayed);
+        mEventoItemAdapter = new EventoItemAdapter(eventosListDisplayed);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -85,12 +99,21 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         mEventosRecyclerView.setAdapter(mEventoItemAdapter);
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
+
+        FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), EventoForm.class);
+                startActivityForResult(i, CREAR_EVENTO);
+            }
+        });
     }
 
     private void search(String query) {
         List<Evento> result = new ArrayList<>();
-        for(Evento e: eventosDelUsuario){
-            if(e.matches(query)){
+        for(Evento e : eventosDelUsuario) {
+            if(e.matches(query)) {
                 result.add(e);
             }
         }
@@ -99,7 +122,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         mEventoItemAdapter.notifyDataSetChanged();
     }
 
-    private void restoreOriginalEventosList(){
+    private void restoreOriginalEventosList() {
         eventosListDisplayed.clear();
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
@@ -127,7 +150,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         public boolean onQueryTextChange(String query) {
 
             search(query);
-            if(query.trim().isEmpty()){
+            if(query.trim().isEmpty()) {
                 restoreOriginalEventosList();
             }
             return false;
@@ -140,6 +163,35 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
             restoreOriginalEventosList();
             return false;
 
+        }
+    }
+
+    // FIXME cuando se haga el menú contextual y se seleccione editar, usar este método
+    private void editarEvento(Evento evento) {
+        Intent i = new Intent(getActivity(), EventoForm.class);
+        i.putExtra(EventoForm.ID_KEY, evento.getId());
+        startActivityForResult(i, EDITAR_EVENTO);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case CREAR_EVENTO: {
+                if(resultCode == RESULT_OK) {
+                    // TODO agregar toast
+                    eventosDelUsuario = dao.getAll();
+                    restoreOriginalEventosList();
+                }
+                break;
+            }
+            case EDITAR_EVENTO: {
+                if(resultCode == RESULT_OK) {
+                    // TODO agregar toast
+                    eventosDelUsuario = dao.getAll();
+                    restoreOriginalEventosList();
+                }
+                break;
+            }
         }
     }
 }

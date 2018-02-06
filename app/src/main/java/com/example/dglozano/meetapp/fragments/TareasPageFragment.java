@@ -1,8 +1,10 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +17,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.TareaItemAdapter;
+import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,13 +35,17 @@ import java.util.List;
  * Use the {@link TareasPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TareasPageFragment extends android.support.v4.app.Fragment{
+public class TareasPageFragment extends android.support.v4.app.Fragment {
+
+    private final int CREAR_TAREA = 1;
+    private final int EDITAR_TAREA = 2;
 
     private List<Tarea> tareasListDisplayed = new ArrayList<>();
     private TareaItemAdapter mTareaAdapter;
     private RecyclerView mTareasRecyclerview;
 
-    private List<Tarea> tareasListDelEvento = Tarea.getTareasMock();
+    private Dao<Tarea> dao;
+    private List<Tarea> tareasListDelEvento;
 
     public TareasPageFragment() {
         // Required empty public constructor
@@ -58,6 +69,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        //TODO cambiar a sqlite cuando se implemente
+        dao = MockDaoTarea.getInstance();
+        tareasListDelEvento = dao.getAll();
     }
 
     @Override
@@ -70,7 +85,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mTareasRecyclerview = view.findViewById(R.id.recvw_tareas_list);
-        mTareaAdapter =  new TareaItemAdapter(tareasListDisplayed);
+        mTareaAdapter = new TareaItemAdapter(tareasListDisplayed);
         //TODO: ver que mostrar si no hay tareas aun
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -82,12 +97,21 @@ public class TareasPageFragment extends android.support.v4.app.Fragment{
         mTareasRecyclerview.setAdapter(mTareaAdapter);
         tareasListDisplayed.addAll(tareasListDelEvento);
         mTareaAdapter.notifyDataSetChanged();
+
+        FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_tarea);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), TareaForm.class);
+                startActivityForResult(i, CREAR_TAREA);
+            }
+        });
     }
 
     private void search(String query) {
         List<Tarea> result = new ArrayList<>();
-        for(Tarea t: tareasListDelEvento){
-            if(t.matches(query)){
+        for(Tarea t : tareasListDelEvento) {
+            if(t.matches(query)) {
                 result.add(t);
             }
         }
@@ -97,7 +121,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment{
         mTareaAdapter.notifyDataSetChanged();
     }
 
-    private void restoreOriginalTareasList(){
+    private void restoreOriginalTareasList() {
         tareasListDisplayed.clear();
         tareasListDisplayed.addAll(tareasListDelEvento);
         mTareaAdapter.notifyDataSetChanged();
@@ -124,7 +148,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment{
         @Override
         public boolean onQueryTextChange(String query) {
             search(query);
-            if(query.trim().isEmpty()){
+            if(query.trim().isEmpty()) {
                 restoreOriginalTareasList();
             }
             return false;
@@ -136,6 +160,35 @@ public class TareasPageFragment extends android.support.v4.app.Fragment{
         public boolean onClose() {
             restoreOriginalTareasList();
             return false;
+        }
+    }
+
+    // FIXME cuando se haga el menú contextual y se seleccione editar, usar este método
+    private void editarTarea(Tarea tarea) {
+        Intent i = new Intent(getActivity(), TareaForm.class);
+        i.putExtra(TareaForm.ID_KEY, tarea.getId());
+        startActivityForResult(i, EDITAR_TAREA);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case CREAR_TAREA: {
+                if(resultCode == RESULT_OK) {
+                    // TODO agregar toast
+                    tareasListDelEvento = dao.getAll();
+                    restoreOriginalTareasList();
+                }
+                break;
+            }
+            case EDITAR_TAREA: {
+                if(resultCode == RESULT_OK) {
+                    // TODO agregar toast
+                    tareasListDelEvento = dao.getAll();
+                    restoreOriginalTareasList();
+                }
+                break;
+            }
         }
     }
 }
