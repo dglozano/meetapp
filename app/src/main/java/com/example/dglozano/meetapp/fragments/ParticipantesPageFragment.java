@@ -1,7 +1,7 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
+import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoParticipante;
 import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.ArrayList;
@@ -32,7 +34,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     private ParticipanteItemAdapter mParticipanteAdapter;
     private RecyclerView mParticipantesRecyclerView;
 
-    private List<Participante> participantesListDelEvento = Participante.getParticipantesMock();
+    private Dao<Participante> dao;
+    private List<Participante> participantesListDelEvento;
 
     public ParticipantesPageFragment() {
         // Required empty public constructor
@@ -55,6 +58,10 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        //TODO cambiar a sqlite cuando se implemente
+        dao = MockDaoParticipante.getInstance();
+        participantesListDelEvento = dao.getAll();
     }
 
     @Override
@@ -67,7 +74,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
-        mParticipanteAdapter =  new ParticipanteItemAdapter(participantesListDisplayed);
+        mParticipanteAdapter = new ParticipanteItemAdapter(participantesListDisplayed);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PARTICIPANTES TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -83,8 +90,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
     private void search(String query) {
         List<Participante> result = new ArrayList<>();
-        for(Participante p: participantesListDelEvento){
-            if(p.matches(query)){
+        for(Participante p : participantesListDelEvento) {
+            if(p.matches(query)) {
                 result.add(p);
             }
         }
@@ -94,7 +101,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         mParticipanteAdapter.notifyDataSetChanged();
     }
 
-    private void restoreOriginalParticipantesList(){
+    private void restoreOriginalParticipantesList() {
         participantesListDisplayed.clear();
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
@@ -121,7 +128,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         @Override
         public boolean onQueryTextChange(String query) {
             search(query);
-            if(query.trim().isEmpty()){
+            if(query.trim().isEmpty()) {
                 restoreOriginalParticipantesList();
             }
             return false;

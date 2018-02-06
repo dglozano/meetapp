@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -25,12 +27,13 @@ import java.util.Locale;
 
 public class EventoForm extends AppCompatActivity {
 
+    public static final String ID_KEY = "id";
     private static final int PLACE_PICKER_REQUEST = 1;
 
     private Intent intentOrigen;
     private Boolean flagNuevoEvento;
     private Evento evento;
-    // TODO private Dao dao;
+    private Dao<Evento> dao;
 
     private EditText et_nombre;
     private EditText et_lugar;
@@ -48,20 +51,23 @@ public class EventoForm extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+
+        // TODO cambiar a daosqlite
+        dao = MockDaoEvento.getInstance();
+
         getViews();
         setListeners();
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
-        // TODO ver que la clave coincida
-        Integer id = (extras != null) ? extras.getInt("id") : null;
+        final Integer id = (extras != null) ? extras.getInt(ID_KEY) : null;
         flagNuevoEvento = id == null;
 
         if(!flagNuevoEvento) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    evento = null; // TODO dao.getEvento
+                    evento = dao.getById(id);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -140,17 +146,6 @@ public class EventoForm extends AppCompatActivity {
 
         if(flagNuevoEvento) {
             evento = new Evento();
-            int id = 0;
-            /*try {
-                id = obtenerNuevoID();
-                // TODO ver si lo hacemos así o que se encargue la capa dao
-                */
-            evento.setId(id);/*
-            } catch(ExecutionException e) {
-                e.printStackTrace();
-            } catch(InterruptedException e) {
-                e.printStackTrace();
-            }*/
         }
 
         evento.setNombre(nombre);
@@ -159,7 +154,7 @@ public class EventoForm extends AppCompatActivity {
         }
         evento.setFecha(fecha);
 
-        // TODO mandar a guardar
+        dao.save(evento);
     }
 
     private void showDatePickerDialog() {

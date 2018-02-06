@@ -3,36 +3,30 @@ package com.example.dglozano.meetapp.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dglozano on 01/02/18.
- */
-
 public class Participante {
-
-    public static Integer cantidadParticipantes = 0;
     private static Participante participanteSinAsignar = new Participante();
 
-    private int id;
+    private Integer id;
     private String nombreApellido;
     private int pictureId;
 
-    public Participante(String nombreApellido, int pictureId) {
+    public Participante(Integer id, String nombreApellido, int pictureId) {
+        this.id = id;
         this.pictureId = pictureId;
-        this.id = ++Participante.cantidadParticipantes;
         this.nombreApellido = nombreApellido;
     }
 
-    public Participante(){
+    public Participante() {
         this.id = 0;
         this.nombreApellido = "<Sin Asignar>";
         this.pictureId = 0;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -57,32 +51,42 @@ public class Participante {
         this.pictureId = pictureId;
     }
 
-    public boolean matches(String query){
+    public boolean matches(String query) {
         return this.nombreApellido.toUpperCase().contains(query.toUpperCase());
     }
 
     public static List<Participante> getParticipantesMock() {
         List<Participante> listaParticipantesMock = new ArrayList<>();
 
-        Participante participante = new Participante("Diego Garcia Lozano", 1);
+        Participante participante = new Participante(1, "Diego Garcia Lozano", 1);
         listaParticipantesMock.add(participante);
 
-        participante = new Participante("Esteban Rebechi", 2);
+        participante = new Participante(2, "Esteban Rebechi", 2);
         listaParticipantesMock.add(participante);
 
-        participante = new Participante("Andres Martinez", 2);
+        participante = new Participante(3, "Andres Martinez", 2);
         listaParticipantesMock.add(participante);
 
-        participante = new Participante("Ariel Kohan", 0);
+        participante = new Participante(4, "Ariel Kohan", 0);
         listaParticipantesMock.add(participante);
 
-        participante = new Participante("Augusto Tibalt", 1);
+        participante = new Participante(5, "Augusto Tibalt", 1);
         listaParticipantesMock.add(participante);
 
         return listaParticipantesMock;
     }
 
-    public static Participante getParticipanteSinAsignar(){
+    public static Participante getParticipanteSinAsignar() {
         return Participante.participanteSinAsignar;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        Participante that = (Participante) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
     }
 }

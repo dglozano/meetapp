@@ -2,10 +2,10 @@ package com.example.dglozano.meetapp.dao;
 
 import java.util.List;
 
-public interface EventoDao<T> {
+public interface Dao<T> {
     T getById(int id);
 
-    void guardar(T item);
+    void save(T item);
 
     List<T> getAll();
 }

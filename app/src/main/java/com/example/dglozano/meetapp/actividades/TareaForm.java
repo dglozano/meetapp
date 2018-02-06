@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
@@ -21,10 +24,13 @@ import java.util.List;
 
 public class TareaForm extends AppCompatActivity {
 
+    public static final String ID_KEY = "id";
+
     private Intent intentOrigen;
     private Boolean flagNuevaTarea;
     private Tarea tarea;
-    // TODO private Dao dao;
+    private Dao<Tarea> dao;
+    private Dao<Participante> daoParticipante;
 
     private EditText et_titulo;
     private Spinner spinner_encargado;
@@ -45,20 +51,24 @@ public class TareaForm extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
+        // TODO reemplazar por daosqlite
+        dao = MockDaoTarea.getInstance();
+        daoParticipante = MockDaoParticipante.getInstance();
+
         getViews();
         inicializarSpinner(0); //0 para que no seleccione nada
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
         // TODO ver que la clave coincida
-        Integer id = (extras != null) ? extras.getInt("id") : null;
+        final Integer id = (extras != null) ? extras.getInt(ID_KEY) : null;
         flagNuevaTarea = id == null;
 
         if(!flagNuevaTarea) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    tarea = null; // TODO dao.getTarea
+                    tarea = dao.getById(id);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -87,11 +97,10 @@ public class TareaForm extends AppCompatActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                List<Participante> lista = new ArrayList<>(); // TODO = dao.getParticipantes()
-                lista.addAll(Participante.getParticipantesMock()); // TODO quitar esto
-                lista.add(0, new Participante(SELECCIONAR, 1));
+                List<Participante> lista = daoParticipante.getAll();
                 listaParticipantes.clear();
                 listaParticipantes.addAll(lista);
+                listaParticipantes.add(0, new Participante(-1, SELECCIONAR, 1));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -107,7 +116,7 @@ public class TareaForm extends AppCompatActivity {
 
     private void mostrarDatosTarea() {
         et_titulo.setText(tarea.getTitulo());
-        if(tarea.getPersonaAsignada() != null) {
+        if(tarea.getPersonaAsignada().getId() == null) {
             inicializarSpinner(adapterParticipantes.getPosition(tarea.getPersonaAsignada()));
         } else {
             inicializarSpinner(0);
@@ -141,34 +150,20 @@ public class TareaForm extends AppCompatActivity {
         EstadoTarea estado = null;
         if(flagNuevaTarea) {
             tarea = new Tarea();
-            int id = 0;
-            /*try {
-                id = obtenerNuevoID();
-                // TODO ver si lo hacemos así. Debería encargarse la capa dao
-                */
-            tarea.setId(id);/*
-            } catch(ExecutionException e) {
-                e.printStackTrace();
-            } catch(InterruptedException e) {
-                e.printStackTrace();
-            }*/
         }
         if(flagNuevaTarea || !flagNuevaTarea && tarea.getEstadoTarea() != EstadoTarea.FINALIZADA) {
-            if(encargado != null) {
-                estado = EstadoTarea.EN_PROGRESO;
-            } else {
+            if(SELECCIONAR.equals(encargado.getNombreApellido())) {
+                tarea.setPersonaAsignada(Participante.getParticipanteSinAsignar());
                 estado = EstadoTarea.SIN_ASIGNAR;
+            } else {
+                tarea.setPersonaAsignada(encargado);
+                estado = EstadoTarea.EN_PROGRESO;
             }
         }
         tarea.setTitulo(titulo);
-        if(encargado.getNombreApellido().equals(SELECCIONAR)) {
-            tarea.setPersonaAsignada(null);
-        } else {
-            tarea.setPersonaAsignada(encargado);
-        }
         tarea.setEstadoTarea(estado);
         tarea.setDescripcion(descripcion);
 
-        // TODO mandar a guardar
+        dao.save(tarea);
     }
 }
