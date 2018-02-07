@@ -49,7 +49,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".actividades.EventoActivity"/>
+                android:value=".actividades.MainActivity"/>
         </activity>
         <activity
             android:name=".actividades.TareaForm"

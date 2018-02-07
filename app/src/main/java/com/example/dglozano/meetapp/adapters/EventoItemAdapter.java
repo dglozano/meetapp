@@ -1,5 +1,7 @@
 package com.example.dglozano.meetapp.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.actividades.EventoActivity;
 import com.example.dglozano.meetapp.modelo.Evento;
 
 /**
@@ -19,6 +22,9 @@ import com.example.dglozano.meetapp.modelo.Evento;
 public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.EventoViewHolder> {
 
     private List<Evento> eventosList;
+    private Context mContext;
+
+    public static final String EXTRA_EVENTO_ID = "com.example.dglozano.meetapp.adapters.EXTRA_EVENTO_ID";
 
     public class EventoViewHolder extends RecyclerView.ViewHolder {
         TextView tituloEventoTV, fechaEventoTV, cantOrganizadoresTV, tareasRestantesTV;
@@ -32,15 +38,16 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         }
     }
 
-    public EventoItemAdapter(List<Evento> eventosList) {
+    public EventoItemAdapter(List<Evento> eventosList, Context context) {
         this.eventosList = eventosList;
+        mContext = context;
     }
 
     @Override
     public EventoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.evento_list_row, parent, false);
-
+        itemView.setOnClickListener(new MyOnClickListener());
         return new EventoViewHolder(itemView);
     }
 
@@ -59,7 +66,18 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         return eventosList.size();
     }
 
-
+    private class MyOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            RecyclerView rv = (RecyclerView) view.getParent();
+            int itemPosition = rv.getChildLayoutPosition(view);
+            Evento eventoClickeado = eventosList.get(itemPosition);
+            System.out.println(eventoClickeado);
+            Intent intent = new Intent(mContext, EventoActivity.class);
+            intent.putExtra(EXTRA_EVENTO_ID, eventoClickeado.getId());
+            mContext.startActivity(intent);
+        }
+    }
 
 }
 

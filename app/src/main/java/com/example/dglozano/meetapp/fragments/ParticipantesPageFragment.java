@@ -17,7 +17,9 @@ import android.view.ViewGroup;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoEvento;
 import com.example.dglozano.meetapp.dao.MockDaoParticipante;
+import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.ArrayList;
@@ -37,6 +39,9 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     private Dao<Participante> dao;
     private List<Participante> participantesListDelEvento;
 
+    private static final String EVENTO_ID = "EVENTO_ID";
+    private Evento evento;
+
     public ParticipantesPageFragment() {
         // Required empty public constructor
     }
@@ -47,9 +52,10 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
      *
      * @return A new instance of fragment ParticipantesPageFragment.
      */
-    public static ParticipantesPageFragment newInstance() {
+    public static ParticipantesPageFragment newInstance(int eventoId) {
         ParticipantesPageFragment fragment = new ParticipantesPageFragment();
         Bundle args = new Bundle();
+        args.putInt(EVENTO_ID, eventoId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,6 +66,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         setHasOptionsMenu(true);
 
         //TODO cambiar a sqlite cuando se implemente
+        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
         dao = MockDaoParticipante.getInstance();
         participantesListDelEvento = dao.getAll();
     }

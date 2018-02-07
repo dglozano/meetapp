@@ -1,5 +1,6 @@
 package com.example.dglozano.meetapp.actividades;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -16,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
+import com.example.dglozano.meetapp.dao.MockDaoEvento;
 import com.example.dglozano.meetapp.fragments.DivisionGastosPageFragment;
 import com.example.dglozano.meetapp.fragments.ParticipantesPageFragment;
 import com.example.dglozano.meetapp.fragments.TareasPageFragment;
+import com.example.dglozano.meetapp.modelo.Evento;
 
 
 public class EventoActivity extends AppCompatActivity {
@@ -44,6 +48,8 @@ public class EventoActivity extends AppCompatActivity {
 
     private Fragment fragmentBeingDisplayed;
 
+    private Evento evento;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +62,11 @@ public class EventoActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        Intent intentOrigen = getIntent();
+        int idEventoClickeado = intentOrigen.getExtras().getInt(EventoItemAdapter.EXTRA_EVENTO_ID);
+        evento = MockDaoEvento.getInstance().getById(idEventoClickeado);
+        setTitle(evento.getNombre());
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -113,13 +124,13 @@ public class EventoActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch(position){
                 case FRAGMENT_ID_LISTA_TAREAS:
-                    fragmentBeingDisplayed = TareasPageFragment.newInstance();
+                    fragmentBeingDisplayed = TareasPageFragment.newInstance(evento.getId());
                     break;
                 case FRAGMENT_ID_LISTA_PARTICIPANTES:
-                    fragmentBeingDisplayed = ParticipantesPageFragment.newInstance();
+                    fragmentBeingDisplayed = ParticipantesPageFragment.newInstance(evento.getId());
                     break;
                 case FRAGMENT_ID_LISTA_PAGOS:
-                    fragmentBeingDisplayed = DivisionGastosPageFragment.newInstance();
+                    fragmentBeingDisplayed = DivisionGastosPageFragment.newInstance(evento.getId());
                     break;
             }
             return fragmentBeingDisplayed;
