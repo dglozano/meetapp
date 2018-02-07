@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
+import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     private PagoItemAdapter mPagoItemAdapter;
     private RecyclerView mPagosRecyclerView;
 
+    private static final String EVENTO_ID = "EVENTO_ID";
+    private Evento evento;
+
     private List<Pago> pagosListDelEvento = Pago.getPagosMock();
 
     public DivisionGastosPageFragment() {
@@ -44,9 +49,10 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
      *
      * @return A new instance of fragment ParticipantesPageFragment.
      */
-    public static DivisionGastosPageFragment newInstance() {
+    public static DivisionGastosPageFragment newInstance(int eventoId) {
         DivisionGastosPageFragment fragment = new DivisionGastosPageFragment();
         Bundle args = new Bundle();
+        args.putInt(EVENTO_ID,eventoId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +61,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
     }
 
     @Override

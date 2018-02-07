@@ -20,7 +20,9 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.TareaItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.MockDaoEvento;
 import com.example.dglozano.meetapp.dao.MockDaoTarea;
+import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
 import java.util.ArrayList;
@@ -44,7 +46,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
     private TareaItemAdapter mTareaAdapter;
     private RecyclerView mTareasRecyclerview;
 
+    private static final String EVENTO_ID = "EVENTO_ID";
+
     private Dao<Tarea> dao;
+    private Evento evento;
     private List<Tarea> tareasListDelEvento;
 
     public TareasPageFragment() {
@@ -58,9 +63,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
      * @return A new instance of fragment TareasPageFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TareasPageFragment newInstance() {
+    public static TareasPageFragment newInstance(int eventoId) {
         TareasPageFragment fragment = new TareasPageFragment();
         Bundle args = new Bundle();
+        args.putInt(EVENTO_ID, eventoId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,7 +77,9 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         setHasOptionsMenu(true);
 
         //TODO cambiar a sqlite cuando se implemente
+        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
         dao = MockDaoTarea.getInstance();
+        System.out.println(evento.toString());
         tareasListDelEvento = dao.getAll();
     }
 

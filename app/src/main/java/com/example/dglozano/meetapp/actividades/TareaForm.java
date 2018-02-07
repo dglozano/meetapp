@@ -39,7 +39,7 @@ public class TareaForm extends AppCompatActivity {
     private List<Participante> listaParticipantes;
     private ArrayAdapter<Participante> adapterParticipantes;
 
-    private final String SELECCIONAR = "-- seleccionar --";
+    private final String SELECCIONAR = "Sin Asignar";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +130,10 @@ public class TareaForm extends AppCompatActivity {
             case R.id.menu_item_Ok:
                 guardar();
                 setResult(RESULT_OK, intentOrigen);
+                finish();
+                return true;
+            case android.R.id.home:
+                setResult(RESULT_CANCELED);
                 finish();
                 return true;
             default:

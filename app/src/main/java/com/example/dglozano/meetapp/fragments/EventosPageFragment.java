@@ -87,7 +87,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
-        mEventoItemAdapter = new EventoItemAdapter(eventosListDisplayed);
+        mEventoItemAdapter = new EventoItemAdapter(eventosListDisplayed, getActivity());
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
