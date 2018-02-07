@@ -36,9 +36,11 @@
             android:id="@+id/tabDotsTareasParticipantesGastos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:layout_marginStart="100dp"
             app:tabBackground="@drawable/tab_selector"
             app:tabGravity="center"
-            app:tabIndicatorHeight="0dp" />
+            app:tabIndicatorHeight="0dp"/>
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>
