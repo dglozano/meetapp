@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -48,6 +49,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.evento_list_row, parent, false);
         itemView.setOnClickListener(new MyOnClickListener());
+        itemView.setOnLongClickListener(new MyOnLongClickListener());
         return new EventoViewHolder(itemView);
     }
 
@@ -59,11 +61,19 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         holder.fechaEventoTV.setText(evento.getFecha());
         holder.cantOrganizadoresTV.setText("Organizadores");
         holder.tareasRestantesTV.setText("0 de 5 Tareas");
+
     }
 
     @Override
     public int getItemCount() {
         return eventosList.size();
+    }
+
+    public Evento getItemAtPosition(int position) {
+
+        Evento evento = eventosList.get(position);
+
+        return evento;
     }
 
     private class MyOnClickListener implements View.OnClickListener {
@@ -76,6 +86,20 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
             Intent intent = new Intent(mContext, EventoActivity.class);
             intent.putExtra(EXTRA_EVENTO_ID, eventoClickeado.getId());
             mContext.startActivity(intent);
+        }
+    }
+
+    private class MyOnLongClickListener implements View.OnLongClickListener {
+
+        public boolean onLongClick(View view) {
+            RecyclerView rv = (RecyclerView) view.getParent();
+            int itemPosition = rv.getChildLayoutPosition(view);
+            Evento eventoClickeado = eventosList.get(itemPosition);
+            System.out.println(eventoClickeado);
+            Toast toast = Toast.makeText(mContext, eventoClickeado.getNombre(), Toast.LENGTH_LONG);
+            toast.show();
+
+            return true;
         }
     }
 

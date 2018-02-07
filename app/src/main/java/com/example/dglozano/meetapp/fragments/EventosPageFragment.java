@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
@@ -109,6 +111,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
             }
         });
     }
+
 
     private void search(String query) {
         List<Evento> result = new ArrayList<>();
