@@ -3,7 +3,9 @@ package com.example.dglozano.meetapp.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,7 +29,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
 
     public static final String EXTRA_EVENTO_ID = "com.example.dglozano.meetapp.adapters.EXTRA_EVENTO_ID";
 
-    public class EventoViewHolder extends RecyclerView.ViewHolder {
+    public class EventoViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
         TextView tituloEventoTV, fechaEventoTV, cantOrganizadoresTV, tareasRestantesTV;
 
         public EventoViewHolder(View view) {
@@ -36,6 +38,15 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
             fechaEventoTV = (TextView) view.findViewById(R.id.tv_fecha_evento);
             cantOrganizadoresTV =  (TextView) view.findViewById(R.id.tv_organizadores_evento);
             tareasRestantesTV = (TextView) view.findViewById(R.id.tv_tareas_completas_evento);
+            view.setOnCreateContextMenuListener(this);
+
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+            menu.add(this.getAdapterPosition(), 1, 0, R.string.texto_editar);
+            menu.add(Menu.NONE, 2, 1, R.string.texto_borrar);
         }
     }
 
@@ -49,7 +60,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.evento_list_row, parent, false);
         itemView.setOnClickListener(new MyOnClickListener());
-        itemView.setOnLongClickListener(new MyOnLongClickListener());
+//        itemView.setOnLongClickListener(new MyOnLongClickListener());
         return new EventoViewHolder(itemView);
     }
 
@@ -89,19 +100,19 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         }
     }
 
-    private class MyOnLongClickListener implements View.OnLongClickListener {
-
-        public boolean onLongClick(View view) {
-            RecyclerView rv = (RecyclerView) view.getParent();
-            int itemPosition = rv.getChildLayoutPosition(view);
-            Evento eventoClickeado = eventosList.get(itemPosition);
-            System.out.println(eventoClickeado);
-            Toast toast = Toast.makeText(mContext, eventoClickeado.getNombre(), Toast.LENGTH_LONG);
-            toast.show();
-
-            return true;
-        }
-    }
+//    private class MyOnLongClickListener implements View.OnLongClickListener {
+//
+//        public boolean onLongClick(View view) {
+//            RecyclerView rv = (RecyclerView) view.getParent();
+//            int itemPosition = rv.getChildLayoutPosition(view);
+//            Evento eventoClickeado = eventosList.get(itemPosition);
+//            System.out.println(eventoClickeado);
+//            Toast toast = Toast.makeText(mContext, eventoClickeado.getNombre(), Toast.LENGTH_LONG);
+//            toast.show();
+//
+//            return true;
+//        }
+//    }
 
 }
 
