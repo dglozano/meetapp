@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 

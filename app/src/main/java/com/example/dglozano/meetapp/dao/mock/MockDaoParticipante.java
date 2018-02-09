@@ -1,5 +1,6 @@
-package com.example.dglozano.meetapp.dao;
+package com.example.dglozano.meetapp.dao.mock;
 
+import com.example.dglozano.meetapp.dao.Dao;
 import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.List;
@@ -34,6 +35,13 @@ public class MockDaoParticipante implements Dao<Participante> {
             list.remove(list.indexOf(item));
         }
         this.list.add(item);
+    }
+
+    @Override
+    public void delete(Participante item) {
+        for(Participante p: this.list){
+            if(p.getId() == item.getId()) list.remove(p);
+        }
     }
 
     @Override

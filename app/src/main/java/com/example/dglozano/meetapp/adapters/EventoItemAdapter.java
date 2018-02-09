@@ -54,9 +54,9 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
     @Override
     public void onBindViewHolder(EventoViewHolder holder, int position) {
         Evento evento = eventosList.get(position);
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         holder.tituloEventoTV.setText(evento.getNombre());
-        holder.fechaEventoTV.setText(evento.getFecha());
+        holder.fechaEventoTV.setText(sdf.format(evento.getFecha()));
         holder.cantOrganizadoresTV.setText("Organizadores");
         holder.tareasRestantesTV.setText("0 de 5 Tareas");
     }

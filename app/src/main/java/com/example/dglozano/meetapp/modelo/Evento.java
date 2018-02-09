@@ -2,7 +2,10 @@ package com.example.dglozano.meetapp.modelo;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Evento {
@@ -10,11 +13,11 @@ public class Evento {
     private Integer id;
     private String nombre;
     private LatLng lugar;
-    private String fecha;
+    private Date fecha;
 
-    public Evento(Integer id, String nombre, String fecha) {
-        this.id = id;
+    public Evento(String nombre, LatLng lugar, Date fecha) {
         this.nombre = nombre;
+        this.lugar = lugar;
         this.fecha = fecha;
     }
 
@@ -53,42 +56,78 @@ public class Evento {
         this.lugar = lugar;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
     public static List<Evento> getEventosMock() {
         List<Evento> listaEventosMock = new ArrayList<>();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
         String nombre = "Fiesta Universitaria";
-        String fecha = "2018-03-30";
-        Evento evento = new Evento(1, nombre, fecha);
+        String fechaString = "30/03/2018";
+        LatLng lugar = new LatLng(-31.652743, -60.721669);
+        Date fecha = null;
+        try {
+            fecha = sdf.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Evento evento = new Evento(nombre, lugar, fecha);
         listaEventosMock.add(evento);
 
         nombre = "Peña ISI";
-        fecha = "2018-05-30";
-        evento = new Evento(2, nombre, fecha);
+        fechaString = "30/05/2018";
+        lugar = new LatLng(-31.617035, -60.675274);
+        fecha = null;
+        try {
+            fecha = sdf.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        evento = new Evento(nombre, lugar, fecha);
         listaEventosMock.add(evento);
 
         nombre = "CONAIISI 2018";
-        fecha = "2018-11-20";
-        evento = new Evento(3, nombre, fecha);
+        fechaString = "20/11/2018";
+        lugar = new LatLng(-31.617035, -60.675274);
+        fecha = null;
+        try {
+            fecha = sdf.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        evento = new Evento(nombre, lugar, fecha);
         listaEventosMock.add(evento);
 
         nombre = "JUR 2018";
-        fecha = "2018-11-03";
-        evento = new Evento(4, nombre, fecha);
+        fechaString = "03/10/2018";
+        lugar = new LatLng(-31.627316, -60.713997);
+        fecha = null;
+        try {
+            fecha = sdf.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        evento = new Evento(nombre, lugar, fecha);
         listaEventosMock.add(evento);
 
         nombre = "Fiesta Fin de Año";
-        fecha = "2018-12-31";
-        evento = new Evento(5, nombre, fecha);
+        fechaString = "31/12/2018";
+        lugar = new LatLng(-31.639732, -60.706646);
+        fecha = null;
+        try {
+            fecha = sdf.parse(fechaString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        evento = new Evento(nombre, lugar, fecha);
         listaEventosMock.add(evento);
-
 
         return listaEventosMock;
     }

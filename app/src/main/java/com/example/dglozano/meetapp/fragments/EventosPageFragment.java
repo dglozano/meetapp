@@ -20,7 +20,7 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         setHasOptionsMenu(true);
 
         //TODO cambiar a sqlite cuando se implemente
-        dao = MockDaoEvento.getInstance();
+        dao = new SQLiteDaoEvento(getActivity());
         eventosDelUsuario = dao.getAll();
     }
 

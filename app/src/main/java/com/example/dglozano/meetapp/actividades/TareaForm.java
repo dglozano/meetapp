@@ -13,8 +13,8 @@ import android.widget.Spinner;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoParticipante;
-import com.example.dglozano.meetapp.dao.MockDaoTarea;
+import com.example.dglozano.meetapp.dao.mock.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;

@@ -2,7 +2,6 @@ package com.example.dglozano.meetapp.actividades;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -11,14 +10,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
 import com.example.dglozano.meetapp.fragments.DivisionGastosPageFragment;
 import com.example.dglozano.meetapp.fragments.ParticipantesPageFragment;
 import com.example.dglozano.meetapp.fragments.TareasPageFragment;

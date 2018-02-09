@@ -35,6 +35,7 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.PARTICIPANTE_TABLENAME + "("
             + Constants.PARTICIPANTE_ID +  " integer primary key autoincrement,"
             + Constants.PARTICIPANTE_NOMBRE + " string,"
+            + Constants.PARTICIPANTE_EVENTO_FK + " integer,"
             + "FOREIGN KEY("+Constants.PARTICIPANTE_EVENTO_FK+") " +
             "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + "));";
 
@@ -43,23 +44,29 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.TAREA_ID +  " integer primary key autoincrement,"
             + Constants.TAREA_TITULO + " string,"
             + Constants.TAREA_DESCRIPCION + " text,"
+            + Constants.TAREA_ESTADO_FK + " integer,"
+            + Constants.TAREA_EVENTO_FK + " integer,"
+            + Constants.TAREA_PARTICIPANTE_FK + " integer,"
             + "FOREIGN KEY("+Constants.TAREA_ESTADO_FK+") " +
             "REFERENCES " + Constants.ESTADO_TAREA_TABLENAME + "(" + Constants.ESTADO_TAREA_ID + "),"
             + "FOREIGN KEY("+Constants.TAREA_EVENTO_FK+") " +
             "REFERENCES " + Constants.TAREA_TABLENAME + "(" + Constants.TAREA_ID + "),"
             + "FOREIGN KEY("+Constants.TAREA_PARTICIPANTE_FK+") " +
-            "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + ");";
+            "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + "));";
 
     private static final String SQL_CREATE_PAGO= "CREATE TABLE "
             + Constants.PAGO_TABLENAME + "("
             + Constants.PAGO_ID +  " integer primary key autoincrement,"
             + Constants.PAGO_MONTO + " real,"
+            + Constants.PAGO_ESTADO_FK + " integer,"
+            + Constants.PAGO_PARTICIPANTE_COBRADOR_FK + " integer,"
+            + Constants.PAGO_PARTICIPANTE_PAGADOR_FK + " integer,"
             + "FOREIGN KEY("+Constants.PAGO_ESTADO_FK+") " +
             "REFERENCES " + Constants.ESTADO_PAGO_TABLENAME + "(" + Constants.ESTADO_PAGO_ID + "),"
             + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_COBRADOR_FK+") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + "),"
             + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_PAGADOR_FK+") " +
-            "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + ");";
+            "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + "));";
 
     private static MeetAppOpenHelper _INSTANCE;
 

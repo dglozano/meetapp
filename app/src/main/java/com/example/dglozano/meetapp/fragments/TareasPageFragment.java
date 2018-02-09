@@ -20,8 +20,8 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.TareaItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
-import com.example.dglozano.meetapp.dao.MockDaoTarea;
+import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
 

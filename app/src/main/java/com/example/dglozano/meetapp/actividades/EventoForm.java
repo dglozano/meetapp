@@ -15,7 +15,7 @@ import android.widget.EditText;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.fragments.DatePickerFragment;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -24,12 +24,16 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class EventoForm extends AppCompatActivity {
 
     public static final String ID_KEY = "id";
     private static final int PLACE_PICKER_REQUEST = 1;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private Intent intentOrigen;
     private Boolean flagNuevoEvento;
@@ -54,7 +58,7 @@ public class EventoForm extends AppCompatActivity {
 
 
         // TODO cambiar a daosqlite
-        dao = MockDaoEvento.getInstance();
+        dao = new SQLiteDaoEvento(this);
 
         getViews();
         setListeners();
@@ -119,7 +123,8 @@ public class EventoForm extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        et_fecha.setText(evento.getFecha());
+
+        et_fecha.setText(sdf.format(evento.getFecha()));
     }
 
     @Override
@@ -153,7 +158,13 @@ public class EventoForm extends AppCompatActivity {
         if(place != null) {
             evento.setLugar(place.getLatLng());
         }
-        evento.setFecha(fecha);
+        try {
+            evento.setFecha(sdf.parse(fecha));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(sdf.format(evento.getFecha()));
 
         dao.save(evento);
     }
@@ -162,9 +173,11 @@ public class EventoForm extends AppCompatActivity {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // month + 1 porque los meses van del 0 al 11
-                final String selectedDate = day + " / " + (month + 1) + " / " + year;
-                et_fecha.setText(selectedDate);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String formatedDate = sdf.format(calendar.getTime());
+                et_fecha.setText(formatedDate);
             }
         });
         newFragment.show(getFragmentManager(), "datePicker");

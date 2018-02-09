@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
-import com.example.dglozano.meetapp.dao.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.mock.MockDaoParticipante;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 

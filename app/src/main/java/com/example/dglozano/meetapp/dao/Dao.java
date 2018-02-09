@@ -7,5 +7,7 @@ public interface Dao<T> {
 
     void save(T item);
 
+    void delete(T item);
+
     List<T> getAll();
 }
