@@ -105,8 +105,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mTareasRecyclerview.setAdapter(mTareaAdapter);
-        tareasListDisplayed.addAll(tareasListDelEvento);
-        mTareaAdapter.notifyDataSetChanged();
+        restoreOriginalTareasList();
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_tarea);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +154,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         Tarea tarea = tareasListDisplayed.get(item.getGroupId());
 
         Toast toast;
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case 1:
                 editarTarea(tarea);
                 toast = Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT);
