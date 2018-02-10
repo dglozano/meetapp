@@ -186,26 +186,20 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
-        Integer pos = item.getItemId();
         Evento evento = eventosListDisplayed.get(item.getGroupId());
 
-        Toast toast;
         switch (item.getItemId()) {
             case 1:
                 editarEvento(evento);
-                toast = Toast.makeText(this.getContext(), "Evento editado", Toast.LENGTH_SHORT);
-                toast.show();
                 return true;
             case 2:
-                toast = Toast.makeText(this.getContext(), "Evento borrado", Toast.LENGTH_SHORT);
-                toast.show();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
-    // FIXME cuando se haga el menú contextual y se seleccione editar, usar este método
+
     private void editarEvento(Evento evento) {
         Intent i = new Intent(getActivity(), EventoForm.class);
         i.putExtra(EventoForm.ID_KEY, evento.getId());
