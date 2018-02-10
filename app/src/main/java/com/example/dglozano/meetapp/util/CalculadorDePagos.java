@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.example.dglozano.meetapp.dao.MockDaoParticipante;
 import com.example.dglozano.meetapp.dao.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoPago;
+import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
@@ -19,13 +20,25 @@ import java.util.List;
 
 public class CalculadorDePagos {
 
-    private static List<Pago> listaPagos;
+    private List<Pago> listaPagos;
 
-    public static List<Pago> getListaPagos() {
+    public List<Pago> getListaPagos() {
         return listaPagos;
     }
 
-    public static void calcularPagos() {
+    public boolean puedeCalcular() {
+        boolean puede = true;
+        // FIXME quitar este mock
+        List<Tarea> tareasDelEvento = MockDaoTarea.getInstance().getAll();
+        for(Tarea tarea : tareasDelEvento) {
+            if(!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
+                puede = false;
+            }
+        }
+        return puede;
+    }
+
+    public void calcularPagos() {
         // TODO obtener tareas y participantes del evento
 
         // FIXME quitar este mock
@@ -77,7 +90,7 @@ public class CalculadorDePagos {
         listaPagos = pagos(deudasPorParticipante, 0.009);
     }
 
-    private static List<Pago> pagos(List<Pair<Participante, Double>> deudasPorParticipante, double tolerancia) {
+    private List<Pago> pagos(List<Pair<Participante, Double>> deudasPorParticipante, double tolerancia) {
         List<Pago> pagos = new ArrayList<>();
         int resueltos = 0;
         while(resueltos != deudasPorParticipante.size()) {

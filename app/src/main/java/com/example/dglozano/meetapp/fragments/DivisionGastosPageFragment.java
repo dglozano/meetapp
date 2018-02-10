@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
@@ -154,20 +155,27 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     }
 
     private void calcularPagos() {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                CalculadorDePagos.calcularPagos();
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pagosListDelEvento = CalculadorDePagos.getListaPagos();
-                        restoreOriginalPagosList();
-                    }
-                });
-            }
-        };
-        Thread t = new Thread(r);
-        t.start();
+        final CalculadorDePagos calculadorDePagos = new CalculadorDePagos();
+        // FIXME arreglar esto una vez que este hecha la persistencia
+        // if(calculadorDePagos.puedeCalcular()) {
+        if(true) {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    calculadorDePagos.calcularPagos();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            pagosListDelEvento = calculadorDePagos.getListaPagos();
+                            restoreOriginalPagosList();
+                        }
+                    });
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+        } else {
+            Toast.makeText(getContext(), R.string.tareas_sin_finalizar, Toast.LENGTH_SHORT);
+        }
     }
 }

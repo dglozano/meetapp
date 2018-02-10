@@ -30,4 +30,5 @@
     <string name="descripcion">Descripción</string>
     <string name="texto_editar">Editar</string>
     <string name="texto_borrar">Borrar</string>
+    <string name="tareas_sin_finalizar">Hay tareas sin finalizar!</string>
 </resources>
