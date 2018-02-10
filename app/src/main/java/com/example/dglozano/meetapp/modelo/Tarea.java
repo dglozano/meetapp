@@ -11,8 +11,10 @@ public class Tarea {
     private Participante personaAsignada;
     private EstadoTarea estadoTarea;
     private String descripcion;
+    private Double gasto;
 
     public Tarea() {
+        gasto = 0.0;
     }
 
     public Tarea(Integer id, String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
@@ -21,6 +23,16 @@ public class Tarea {
         this.personaAsignada = personaAsignada;
         this.estadoTarea = estadoTarea;
         this.descripcion = descripcion;
+        this.gasto = 0.0;
+    }
+
+    public Tarea(Integer id, String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion, Double gasto) {
+        this.id = id;
+        this.titulo = titulo;
+        this.personaAsignada = personaAsignada;
+        this.estadoTarea = estadoTarea;
+        this.descripcion = descripcion;
+        this.gasto = gasto;
     }
 
     public Integer getId() {
@@ -63,6 +75,14 @@ public class Tarea {
         this.descripcion = descripcion;
     }
 
+    public Double getGasto() {
+        return gasto;
+    }
+
+    public void setGasto(Double gasto) {
+        this.gasto = gasto;
+    }
+
     public boolean matches(String query) {
         boolean matches = false;
         if(this.titulo.toUpperCase().contains(query.toUpperCase())) {
@@ -94,11 +114,11 @@ public class Tarea {
         listaTareasMock.add(tarea);
 
         Participante p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(4, "Reservar salon", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
+        tarea = new Tarea(4, "Reservar salon", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción", 500.0);
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(5, "Conseguir parlante", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
+        tarea = new Tarea(5, "Conseguir parlante", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción", 200.0);
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
@@ -106,23 +126,23 @@ public class Tarea {
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(7, "Difundir fiesta", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
+        tarea = new Tarea(7, "Difundir fiesta", p, EstadoTarea.FINALIZADA, "Esto es una descripción", 200.0);
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(8, "Comprar hielo", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
+        tarea = new Tarea(8, "Comprar hielo", p, EstadoTarea.FINALIZADA, "Esto es una descripción", 1.0);
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(9, "Contratar DJ", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
+        tarea = new Tarea(9, "Contratar DJ", p, EstadoTarea.FINALIZADA, "Esto es una descripción", 15.0);
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(10, "Contratar iluminacion", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
+        tarea = new Tarea(10, "Contratar iluminacion", p, EstadoTarea.FINALIZADA, "Esto es una descripción", 1000.0);
         listaTareasMock.add(tarea);
 
         p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(11, "Comprar servilletas", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
+        tarea = new Tarea(11, "Comprar servilletas", p, EstadoTarea.FINALIZADA, "Esto es una descripción", 500.0);
         listaTareasMock.add(tarea);
 
         return listaTareasMock;
