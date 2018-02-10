@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.TareaForm;
@@ -145,6 +147,29 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         searchView.setOnCloseListener(new MyOnCloseListener());
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        Integer pos = item.getItemId();
+        Tarea tarea = tareasListDisplayed.get(item.getGroupId());
+
+        Toast toast;
+        switch (item.getItemId()) {
+            case 1:
+                editarTarea(tarea);
+                toast = Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT);
+                toast.show();
+                return true;
+            case 2:
+                toast = Toast.makeText(this.getContext(), "Tarea borrada", Toast.LENGTH_SHORT);
+                toast.show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
 
         @Override
@@ -171,7 +196,6 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    // FIXME cuando se haga el menú contextual y se seleccione editar, usar este método
     private void editarTarea(Tarea tarea) {
         Intent i = new Intent(getActivity(), TareaForm.class);
         i.putExtra(TareaForm.ID_KEY, tarea.getId());

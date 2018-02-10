@@ -28,4 +28,6 @@
     <string name="titulo">Título</string>
     <string name="encargado">Encargado</string>
     <string name="descripcion">Descripción</string>
+    <string name="texto_editar">Editar</string>
+    <string name="texto_borrar">Borrar</string>
 </resources>
