@@ -164,6 +164,7 @@ public class ContactosActivity extends AppCompatActivity {
 
             participante.setNombreApellido(Nombre);
             participante.setPictureId(randomNum);
+            participante.setNumero(Numero);
 
             dao.save(participante);
         }
