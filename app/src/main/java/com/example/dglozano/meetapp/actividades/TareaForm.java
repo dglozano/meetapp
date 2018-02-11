@@ -16,6 +16,7 @@ import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
+import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
@@ -29,6 +30,7 @@ public class TareaForm extends AppCompatActivity {
 
     public static final String KEY_TAREA_ID = "idTarea";
     public static final String KEY_EVENTO_ID = "idEvento";
+    public static final String KEY_TAREA_NUEVA_FLAG = "tareaNuevaFlag";
 
     private Intent intentOrigen;
     private Boolean flagNuevaTarea;
@@ -57,19 +59,19 @@ public class TareaForm extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         // TODO reemplazar por daosqlite
-        daoTarea = MockDaoTarea.getInstance();
+        daoTarea = new SQLiteDaoTarea(this);
         daoParticipante = new SQLiteDaoParticipante(this);
         daoEvento = new SQLiteDaoEvento(this);
 
-        getViews();
-        inicializarSpinner(0); //0 para que no seleccione nada
-
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
-        // TODO ver que la clave coincida
-        final Integer idTarea = (extras != null) ? extras.getInt(KEY_TAREA_ID) : null;
+        flagNuevaTarea = extras.getBoolean(KEY_TAREA_NUEVA_FLAG);
+        final Integer idTarea = extras.getInt(KEY_TAREA_ID);
         evento = daoEvento.getById(extras.getInt(KEY_EVENTO_ID));
-        flagNuevaTarea = idTarea == null;
+
+
+        getViews();
+        inicializarSpinner(0); //0 para que no seleccione nada
 
         if(!flagNuevaTarea) {
             Runnable r = new Runnable() {
@@ -123,7 +125,7 @@ public class TareaForm extends AppCompatActivity {
 
     private void mostrarDatosTarea() {
         et_titulo.setText(tarea.getTitulo());
-        if(tarea.getPersonaAsignada().getId() == null) {
+        if(tarea.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR) {
             inicializarSpinner(adapterParticipantes.getPosition(tarea.getPersonaAsignada()));
         } else {
             inicializarSpinner(0);
@@ -157,19 +159,27 @@ public class TareaForm extends AppCompatActivity {
     private void guardar() {
         String titulo = et_titulo.getText().toString();
         String descripcion = et_descripcion.getText().toString();
-        Participante encargado = (Participante) spinner_encargado.getSelectedItem();
-        EstadoTarea estado = EstadoTarea.FINALIZADA;
+        Participante encargado = adapterParticipantes.getItem(spinner_encargado.getSelectedItemPosition());
+        //EstadoTarea estado = EstadoTarea.FINALIZADA;
+        // TODO VER LO DEL ESTADO Y EL SEGUNDO IF QUE ES MEDIO RARO
         if(flagNuevaTarea) {
             tarea = new Tarea();
         }
-        if(flagNuevaTarea || !flagNuevaTarea && tarea.getEstadoTarea() != EstadoTarea.FINALIZADA) {
+        /*if(flagNuevaTarea || !flagNuevaTarea && tarea.getEstadoTarea() != EstadoTarea.FINALIZADA) {
             tarea.setPersonaAsignada(encargado);
             estado = EstadoTarea.EN_PROGRESO;
-        }
+        }*/
         tarea.setTitulo(titulo);
-        tarea.setEstadoTarea(estado);
+        if(flagNuevaTarea){
+            if(encargado.esSinAsignar()){
+                tarea.setEstadoTarea(EstadoTarea.SIN_ASIGNAR);
+            } else {
+                tarea.setEstadoTarea(EstadoTarea.EN_PROGRESO);
+            }
+        }
         tarea.setDescripcion(descripcion);
-
+        tarea.setPersonaAsignada(encargado);
+        //TODO UPDATE EN DB SI NO ES NUEVA TAREA
         daoTarea.save(tarea, evento.getId());
     }
 }

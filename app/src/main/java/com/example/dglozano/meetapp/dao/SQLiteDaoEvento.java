@@ -112,7 +112,6 @@ public class SQLiteDaoEvento implements DaoEvento {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.EVENTO_NAME, e.getNombre());
-        //cv.put(Constants.TRABAJO_CATEGORIAS_FK, p.getCategoria().getId());
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
         cv.put(Constants.EVENTO_FECHA, sdf.format(e.getFecha()));
         cv.put(Constants.EVENTO_LAT, e.getLugar().latitude);

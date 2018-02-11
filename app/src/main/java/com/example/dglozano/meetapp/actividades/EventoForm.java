@@ -196,8 +196,7 @@ public class EventoForm extends AppCompatActivity {
         if(requestCode == PLACE_PICKER_REQUEST) {
             if(resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(this, data);
-                // TODO Ver si se muestra el nombre o la dirección
-                et_lugar.setText(place.getAddress());
+                et_lugar.setText(place.getName());
             }
         }
     }

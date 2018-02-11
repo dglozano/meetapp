@@ -24,7 +24,7 @@ import com.example.dglozano.meetapp.adapters.TareaItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
-import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
+import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
@@ -80,10 +80,9 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //TODO cambiar a sqlite cuando se implemente
         daoEvento = new SQLiteDaoEvento(getActivity());
         evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
-        daoTarea = MockDaoTarea.getInstance();
+        daoTarea = new SQLiteDaoTarea(getActivity());
         tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
     }
 
@@ -196,6 +195,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         Intent i = new Intent(getActivity(), TareaForm.class);
         i.putExtra(TareaForm.KEY_TAREA_ID, tarea.getId());
         i.putExtra(TareaForm.KEY_EVENTO_ID, evento.getId());
+        i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, false);
         startActivityForResult(i, EDITAR_TAREA);
     }
 
@@ -205,7 +205,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             case CREAR_TAREA: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    tareasListDelEvento = daoTarea.getAll();
+                    tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
                     restoreOriginalTareasList();
                 }
                 break;
@@ -213,7 +213,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             case EDITAR_TAREA: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    tareasListDelEvento = daoTarea.getAll();
+                    tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
                     restoreOriginalTareasList();
                 }
                 break;
@@ -226,6 +226,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         public void onClick(View view) {
             Intent i = new Intent(getActivity(), TareaForm.class);
             i.putExtra(TareaForm.KEY_EVENTO_ID, evento.getId());
+            i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, true);
             startActivityForResult(i, CREAR_TAREA);
         }
     }

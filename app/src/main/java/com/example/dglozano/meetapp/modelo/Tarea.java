@@ -15,11 +15,17 @@ public class Tarea {
     public Tarea() {
     }
 
-    public Tarea(Integer id, String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
-        this.id = id;
+    public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
         this.titulo = titulo;
         this.personaAsignada = personaAsignada;
         this.estadoTarea = estadoTarea;
+        this.descripcion = descripcion;
+    }
+
+    public Tarea(String titulo, String descripcion) {
+        this.titulo = titulo;
+        this.personaAsignada = Participante.getParticipanteSinAsignar();
+        this.estadoTarea = EstadoTarea.SIN_ASIGNAR;
         this.descripcion = descripcion;
     }
 
@@ -82,49 +88,17 @@ public class Tarea {
     public static List<Tarea> getTareasMock() {
         List<Tarea> listaTareasMock = new ArrayList<>();
 
-        List<Participante> listaParticipantesMock = Participante.getParticipantesMock();
-
-        Tarea tarea = new Tarea(1, "Comprar 5kg Asado", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        tarea = new Tarea(2, "Comprar 2 cajones", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        tarea = new Tarea(3, "Comprar carbon", Participante.getParticipanteSinAsignar(), EstadoTarea.SIN_ASIGNAR, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        Participante p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(4, "Reservar salon", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(5, "Conseguir parlante", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(6, "Comprar torta", p, EstadoTarea.EN_PROGRESO, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(7, "Difundir fiesta", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(8, "Comprar hielo", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(9, "Contratar DJ", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(10, "Contratar iluminacion", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
-        p = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        tarea = new Tarea(11, "Comprar servilletas", p, EstadoTarea.FINALIZADA, "Esto es una descripción");
-        listaTareasMock.add(tarea);
-
+        listaTareasMock.add(new Tarea("Comprar 5kg Asado", "Somos 10 personas que vamos asi que comprar 5kg mas achuras"));
+        listaTareasMock.add(new Tarea("Comprar 2 cajones","Que no sean Quilmes por favor!"));
+        listaTareasMock.add(new Tarea("Comprar carbon", "Si conseguis leña mejor"));
+        listaTareasMock.add(new Tarea("Reservar salon","Que tenga aire acondicionado. Si no, no!"));
+        listaTareasMock.add(new Tarea("Conseguir parlante", "Inalambrico bluetooth. Trae auxiliar tambien."));
+        listaTareasMock.add(new Tarea("Comprar torta", "Chocotorta, torta oreo o lemon Pie"));
+        listaTareasMock.add(new Tarea("Difundir fiesta", "Difundir por Instagram, FB y WhatsApp pasando la dirección por privado"));
+        listaTareasMock.add(new Tarea("Comprar hielo", "5 bolsas de 10kg"));
+        listaTareasMock.add(new Tarea("Contratar DJ", "Cualquiera menos el boludo de Chento"));
+        listaTareasMock.add(new Tarea("Contratar iluminacion", "Una bola de disco tambien si puede ser"));
+        listaTareasMock.add(new Tarea("Comprar servilletas", "Cualquiera menos esas plastificados que no limpian nada"));
         return listaTareasMock;
     }
 

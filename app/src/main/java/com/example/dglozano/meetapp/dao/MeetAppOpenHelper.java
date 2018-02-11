@@ -21,16 +21,6 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.EVENTO_LNG + " real,"
             + Constants.EVENTO_FECHA + " string);";
 
-    private static final String SQL_CREATE_ESTADO_PAGO = "CREATE TABLE "
-            + Constants.ESTADO_PAGO_TABLENAME + "("
-            + Constants.ESTADO_PAGO_ID +  " integer primary key autoincrement,"
-            + Constants.ESTADO_PAGO_NOMBRE + " string);";
-
-    private static final String SQL_CREATE_ESTADO_TAREA = "CREATE TABLE "
-            + Constants.ESTADO_TAREA_TABLENAME + "("
-            + Constants.ESTADO_TAREA_ID +  " integer primary key autoincrement,"
-            + Constants.ESTADO_TAREA_NOMBRE + " string);";
-
     private static final String SQL_CREATE_PARTICIPANTE= "CREATE TABLE "
             + Constants.PARTICIPANTE_TABLENAME + "("
             + Constants.PARTICIPANTE_ID +  " integer primary key autoincrement,"
@@ -45,11 +35,9 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.TAREA_ID +  " integer primary key autoincrement,"
             + Constants.TAREA_TITULO + " string,"
             + Constants.TAREA_DESCRIPCION + " text,"
-            + Constants.TAREA_ESTADO_FK + " integer,"
+            + Constants.TAREA_ESTADO + " integer,"
             + Constants.TAREA_EVENTO_FK + " integer,"
             + Constants.TAREA_PARTICIPANTE_FK + " integer,"
-            + "FOREIGN KEY("+Constants.TAREA_ESTADO_FK+") " +
-            "REFERENCES " + Constants.ESTADO_TAREA_TABLENAME + "(" + Constants.ESTADO_TAREA_ID + "),"
             + "FOREIGN KEY("+Constants.TAREA_EVENTO_FK+") " +
             "REFERENCES " + Constants.TAREA_TABLENAME + "(" + Constants.TAREA_ID + "),"
             + "FOREIGN KEY("+Constants.TAREA_PARTICIPANTE_FK+") " +
@@ -59,11 +47,9 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.PAGO_TABLENAME + "("
             + Constants.PAGO_ID +  " integer primary key autoincrement,"
             + Constants.PAGO_MONTO + " real,"
-            + Constants.PAGO_ESTADO_FK + " integer,"
+            + Constants.PAGO_ESTADO + " integer,"
             + Constants.PAGO_PARTICIPANTE_COBRADOR_FK + " integer,"
             + Constants.PAGO_PARTICIPANTE_PAGADOR_FK + " integer,"
-            + "FOREIGN KEY("+Constants.PAGO_ESTADO_FK+") " +
-            "REFERENCES " + Constants.ESTADO_PAGO_TABLENAME + "(" + Constants.ESTADO_PAGO_ID + "),"
             + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_COBRADOR_FK+") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + "),"
             + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_PAGADOR_FK+") " +
@@ -83,8 +69,6 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(SQL_CREATE_EVENTO);
-        sqLiteDatabase.execSQL(SQL_CREATE_ESTADO_PAGO);
-        sqLiteDatabase.execSQL(SQL_CREATE_ESTADO_TAREA);
         sqLiteDatabase.execSQL(SQL_CREATE_PARTICIPANTE);
         sqLiteDatabase.execSQL(SQL_CREATE_TAREA);
         sqLiteDatabase.execSQL(SQL_CREATE_PAGO);
@@ -95,8 +79,6 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop table if exists " + Constants.PAGO_TABLENAME);
         sqLiteDatabase.execSQL("drop table if exists " + Constants.TAREA_TABLENAME);
         sqLiteDatabase.execSQL("drop table if exists " + Constants.PARTICIPANTE_TABLENAME);
-        sqLiteDatabase.execSQL("drop table if exists " + Constants.ESTADO_TAREA_TABLENAME);
-        sqLiteDatabase.execSQL("drop table if exists " + Constants.ESTADO_PAGO_TABLENAME);
         sqLiteDatabase.execSQL("drop table if exists " + Constants.EVENTO_TABLENAME);
         onCreate(sqLiteDatabase);
     }

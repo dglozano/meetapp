@@ -1,9 +1,5 @@
 package com.example.dglozano.meetapp.dao;
 
-/**
- * Created by dglozano on 08/02/18.
- */
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -17,10 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-/**
- * Created by diegogarcialozano on 29/10/17.
- */
-
 public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
 
     private SQLiteDatabase db;
@@ -33,7 +25,6 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
      */
     public SQLiteDaoParticipante(Context c){
         context = c;
-        //TODO BORRAR CUANDO SAQUEMOS MOCK DATA
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
     }
@@ -138,13 +129,15 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
     public void createMockData(List<Evento> eventosYaGuardadosEnDb){
         List<Participante> participantesMock = Participante.getParticipantesMock();
         for(Evento e: eventosYaGuardadosEnDb){
-            int totalPart = ThreadLocalRandom.current().nextInt(0, participantesMock.size() + 1);
+            int totalPart = ThreadLocalRandom.current().nextInt(1, participantesMock.size() + 1);
             for(int i = 0; i < totalPart; i++){
                 int partRandom = ThreadLocalRandom.current().nextInt(0, participantesMock.size());
                 Participante p = participantesMock.get(partRandom);
+                participantesMock.remove(partRandom);
                 e.addParticipante(p);
                 save(p, e.getId());
             }
+            participantesMock = Participante.getParticipantesMock();
         }
     }
 

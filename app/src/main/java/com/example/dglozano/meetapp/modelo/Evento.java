@@ -16,12 +16,14 @@ public class Evento {
     private LatLng lugar;
     private Date fecha;
     private List<Participante> participantes;
+    private List<Tarea> tareas;
 
     public Evento(String nombre, LatLng lugar, Date fecha) {
         this.nombre = nombre;
         this.lugar = lugar;
         this.fecha = fecha;
         this.participantes = new ArrayList<>();
+        this.tareas = new ArrayList<>();
     }
 
     public boolean matches(String query) {
@@ -80,13 +82,34 @@ public class Evento {
         for(Participante p: participantes){
             if(p.getId() == pEliminar.getId()){
                 participantes.remove(p);
-                //TODO VER SI ACA HABRIA QUE BORRAR DE LA DB TAMBIEN O LO HACE LA ACTIVITY
+                //TODO ON DELETE CASCADE
             }
         }
     }
 
     public List<Participante> getParticipantes(){
         return this.participantes;
+    }
+
+    public void addTarea(Tarea t){
+        this.tareas.add(t);
+    }
+
+    public void addAllTareas(List<Tarea> tareas){
+        this.tareas.addAll(tareas);
+    }
+
+    public void eliminarTarea(Tarea tEliminar){
+        for(Tarea t: tareas){
+            if(t.getId() == tEliminar.getId()){
+                tareas.remove(t);
+                //TODO ON DELETE CASCADE
+            }
+        }
+    }
+
+    public List<Tarea> getTareas(){
+        return this.tareas;
     }
 
     public static List<Evento> getEventosMock() {
