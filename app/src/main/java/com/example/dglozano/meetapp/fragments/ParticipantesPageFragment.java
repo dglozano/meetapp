@@ -1,10 +1,18 @@
 package com.example.dglozano.meetapp.fragments;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +48,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private List<Participante> participantesListDisplayed = new ArrayList<>();
     private ParticipanteItemAdapter mParticipanteAdapter;
     private RecyclerView mParticipantesRecyclerView;
@@ -107,10 +116,45 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pedirPermisoContactos();
+            }
+        });
+    }
+
+    public void pedirPermisoContactos(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+                        builder.setTitle("Acceso a Contactos");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setMessage("La APP necesita acceso a sus contactos para que los pueda agregar como participantes a un evento");
+                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                requestPermissions(
+                                        new String[]
+                                                {Manifest.permission.READ_CONTACTS}
+                                        , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            }
+                        });
+                    builder.show();
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                }
+            }
+            else {
                 Intent i = new Intent(getActivity(), ContactosActivity.class);
                 startActivityForResult(i, CREAR_PARTICIPANTE);
             }
-        });
+        }
+        else {
+            Intent i = new Intent(getActivity(), ContactosActivity.class);
+            startActivityForResult(i, CREAR_PARTICIPANTE);
+        }
     }
 
     private void search(String query) {

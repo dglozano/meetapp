@@ -4,7 +4,7 @@ import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.List;
 
-public class  MockDaoParticipante implements Dao<Participante> {
+public class MockDaoParticipante implements Dao<Participante> {
 
     private static final MockDaoParticipante ourInstance = new MockDaoParticipante();
 

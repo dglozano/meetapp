@@ -18,6 +18,7 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import android.widget.ListView;
 
@@ -31,9 +32,8 @@ public class ContactosActivity extends AppCompatActivity {
     ListView list;
     Intent intentOrigen;
     private Participante participante;
-    ArrayAdapter<String> adapter;
-    ArrayList<String> contacts;
-    ArrayList<String> contactsDisplayed;
+    private ArrayAdapter<String> adapter;
+    private List<String> contactsDisplayed = new ArrayList();
     private Dao<Participante> dao;
 
 
@@ -107,7 +107,6 @@ public class ContactosActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
             super.onPreExecute();
 
         }
@@ -115,7 +114,7 @@ public class ContactosActivity extends AppCompatActivity {
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
 
-            contacts = new ArrayList<String>();
+            ArrayList<String> contacts = new ArrayList<>();
 
             Cursor c = getContentResolver().query(
                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,

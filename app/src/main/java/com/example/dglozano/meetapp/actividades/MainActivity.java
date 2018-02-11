@@ -27,7 +27,7 @@ import com.example.dglozano.meetapp.fragments.SettingsPageFragment;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -53,19 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_main);
         setSupportActionBar(myToolbar);
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.READ_CONTACTS)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-            }
-        }
 
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
