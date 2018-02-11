@@ -3,6 +3,7 @@
           package="com.example.dglozano.meetapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -53,6 +54,14 @@
         </activity>
         <activity
             android:name=".actividades.TareaForm"
+            android:parentActivityName=".actividades.EventoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".actividades.EventoActivity"/>
+        </activity>
+        <activity
+            android:name=".actividades.ContactosActivity"
             android:parentActivityName=".actividades.EventoActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
