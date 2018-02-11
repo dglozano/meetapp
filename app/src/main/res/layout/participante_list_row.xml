@@ -13,22 +13,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/row_padding_vertical">
 
-    <ImageView
-        android:id="@+id/img_participante_row_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/btn_llamar_participante"
-        android:src="@drawable/ic_child_care_black_36dp" />
-
     <TextView
         android:id="@+id/tv_participante_row_nombre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_toRightOf="@id/img_participante_row_picture"
-        android:text="Diego Garcia Lozano"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/btn_llamar_participante"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="15.5sp" />

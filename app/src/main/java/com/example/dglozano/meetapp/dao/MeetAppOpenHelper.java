@@ -35,7 +35,7 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.PARTICIPANTE_TABLENAME + "("
             + Constants.PARTICIPANTE_ID +  " integer primary key autoincrement,"
             + Constants.PARTICIPANTE_NOMBRE + " string,"
-            + Constants.PARTICIPANTE_PICTURE_ID + " integer,"
+            + Constants.PARTICIPANTE_TELEFONO + " string,"
             + Constants.PARTICIPANTE_EVENTO_FK + " integer,"
             + "FOREIGN KEY("+Constants.PARTICIPANTE_EVENTO_FK+") " +
             "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + "));";

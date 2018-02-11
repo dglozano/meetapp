@@ -67,7 +67,7 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
         Participante participante = new Participante();
         participante.setId(c.getInt(c.getColumnIndex(Constants.PARTICIPANTE_ID)));
         participante.setNombreApellido(c.getString(c.getColumnIndex(Constants.PARTICIPANTE_NOMBRE)));
-        participante.setPictureId(c.getInt(c.getColumnIndex(Constants.PARTICIPANTE_PICTURE_ID)));
+        participante.setNumero(c.getString(c.getColumnIndex(Constants.PARTICIPANTE_TELEFONO)));
         return participante;
     }
 
@@ -116,8 +116,8 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PARTICIPANTE_NOMBRE, p.getNombreApellido());
-        cv.put(Constants.PARTICIPANTE_PICTURE_ID, p.getPictureId());
         cv.put(Constants.PARTICIPANTE_EVENTO_FK, eventoId);
+        cv.put(Constants.PARTICIPANTE_TELEFONO, p.getNumeroTel());
         db.insert(Constants.PARTICIPANTE_TABLENAME,null, cv);
         db.close();
     }

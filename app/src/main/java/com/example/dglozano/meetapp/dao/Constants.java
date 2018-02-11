@@ -2,7 +2,7 @@ package com.example.dglozano.meetapp.dao;
 
 class Constants {
     public static final String DATABASE_NAME = "meetapp";
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     public static final String EVENTO_TABLENAME = "evento";
     public static final String EVENTO_ID = "_id";
@@ -31,7 +31,7 @@ class Constants {
     public static final String PARTICIPANTE_ID = "_id";
     public static final String PARTICIPANTE_NOMBRE = "nombre";
     public static final String PARTICIPANTE_EVENTO_FK = "evento_fk";
-    public static final String PARTICIPANTE_PICTURE_ID = "picutre_id";
+    public static final String PARTICIPANTE_TELEFONO = "telefono";
 
     public static final String PAGO_TABLENAME = "pago";
     public static final String PAGO_ID = "_id";

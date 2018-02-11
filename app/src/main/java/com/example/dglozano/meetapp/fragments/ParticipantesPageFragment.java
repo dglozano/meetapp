@@ -116,12 +116,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         mParticipanteAdapter.notifyDataSetChanged();
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pedirPermisoContactos();
-            }
-        });
+        fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
     public void pedirPermisoContactos(){
@@ -151,11 +146,13 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
             }
             else {
                 Intent i = new Intent(getActivity(), ContactosActivity.class);
+                i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
                 startActivityForResult(i, CREAR_PARTICIPANTE);
             }
         }
         else {
             Intent i = new Intent(getActivity(), ContactosActivity.class);
+            i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
             startActivityForResult(i, CREAR_PARTICIPANTE);
         }
     }
@@ -220,11 +217,18 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
             case CREAR_PARTICIPANTE: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    participantesListDelEvento = dao.getAll();
+                    participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
                     restoreOriginalParticipantesList();
                 }
                 break;
             }
+        }
+    }
+
+    private class MyFabIconOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            pedirPermisoContactos();
         }
     }
 }

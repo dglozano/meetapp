@@ -23,19 +23,25 @@ import java.util.concurrent.ThreadLocalRandom;
 import android.widget.ListView;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
+import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 
 public class ContactosActivity extends AppCompatActivity {
 
-    ListView list;
-    Intent intentOrigen;
+    private ListView list;
+    private Intent intentOrigen;
     private Participante participante;
     private ArrayAdapter<String> adapter;
     private List<String> contactsDisplayed = new ArrayList();
-    private Dao<Participante> dao;
+    private DaoEventoMember<Participante> daoParticipante;
+    private DaoEvento daoEvento;
+    private Evento evento;
 
+    public static final String KEY_EVENTO_ID = "idEvento";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +53,12 @@ public class ContactosActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        dao = MockDaoParticipante.getInstance();
+        daoParticipante = new SQLiteDaoParticipante(this);
+        daoEvento = new SQLiteDaoEvento(this);
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
+        evento = daoEvento.getById(extras.getInt(KEY_EVENTO_ID));
 
         list = (ListView) findViewById(R.id.listView1);
 
@@ -58,8 +66,6 @@ public class ContactosActivity extends AppCompatActivity {
 
         LoadContactsAsycn lca = new LoadContactsAsycn();
         lca.execute();
-
-
     }
 
     @Override
@@ -102,13 +108,11 @@ public class ContactosActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
     class LoadContactsAsycn extends AsyncTask<Void, Void, ArrayList<String>> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         @Override
@@ -129,7 +133,6 @@ public class ContactosActivity extends AppCompatActivity {
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                 contacts.add(contactName + System.lineSeparator() + phNumber);
-
             }
             c.close();
 
@@ -145,28 +148,18 @@ public class ContactosActivity extends AppCompatActivity {
             adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, contactsDisplayed);
 
             list.setAdapter(adapter);
-
-
         }
-
     }
 
     public void guardar(ArrayList<String> check){
         for (String s : check){
             String[] partes = s.split(System.lineSeparator());
-            String Nombre = partes[0];
-            String Numero = partes[1];
+            String nombre = partes[0];
+            String numero = partes[1];
 
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 2 + 1);
+            participante = new Participante(nombre, numero);
 
-            participante = new Participante();
-
-            participante.setNombreApellido(Nombre);
-            participante.setPictureId(randomNum);
-            participante.setNumero(Numero);
-
-            dao.save(participante);
+            daoParticipante.save(participante, evento.getId());
         }
     }
-
 }
