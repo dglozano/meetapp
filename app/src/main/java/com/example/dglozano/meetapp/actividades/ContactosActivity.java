@@ -13,13 +13,14 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+
 import android.widget.ListView;
 
 import com.example.dglozano.meetapp.R;
@@ -36,7 +37,8 @@ public class ContactosActivity extends AppCompatActivity {
     private Intent intentOrigen;
     private Participante participante;
     private ArrayAdapter<String> adapter;
-    private List<String> contactsDisplayed = new ArrayList();
+    private List<String> todosLosContactos = new ArrayList<>();
+    private List<String> contactosDisplayed = new ArrayList<>();
     private DaoEventoMember<Participante> daoParticipante;
     private DaoEvento daoEvento;
     private Evento evento;
@@ -102,10 +104,60 @@ public class ContactosActivity extends AppCompatActivity {
         return save;
     }
 
+    private void search(String query) {
+        List<String> result = new ArrayList<>();
+        for(String c: todosLosContactos) {
+            if(c.toUpperCase().contains(query.toUpperCase())) {
+                result.add(c);
+            }
+        }
+        contactosDisplayed.clear();
+        contactosDisplayed.addAll(result);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void restoreOriginalContactosList() {
+        contactosDisplayed.clear();
+        contactosDisplayed.addAll(todosLosContactos);
+        adapter.notifyDataSetChanged();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_contactos, menu);
+        final MenuItem searchItem = menu.findItem(R.id.toolbar_search_contactos);
+        final SearchView searchView =
+                (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new ContactosActivity.MyOnQueryTextListener());
+        searchView.setOnCloseListener(new ContactosActivity.MyOnCloseListener());
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
+
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            search(query);
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String query) {
+            search(query);
+            if(query.trim().isEmpty()) {
+                restoreOriginalContactosList();
+            }
+            return false;
+        }
+    }
+
+    private class MyOnCloseListener implements SearchView.OnCloseListener {
+        @Override
+        public boolean onClose() {
+            restoreOriginalContactosList();
+            return false;
+        }
     }
 
     class LoadContactsAsycn extends AsyncTask<Void, Void, ArrayList<String>> {
@@ -143,9 +195,11 @@ public class ContactosActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> contacts) {
 
             super.onPostExecute(contacts);
-            contactsDisplayed = contacts;
+            todosLosContactos.addAll(contacts);
+            contactosDisplayed.addAll(contacts);
 
-            adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, contactsDisplayed);
+            adapter = new ArrayAdapter<String>(getApplicationContext(),
+                    android.R.layout.simple_list_item_multiple_choice, contactosDisplayed);
 
             list.setAdapter(adapter);
         }
