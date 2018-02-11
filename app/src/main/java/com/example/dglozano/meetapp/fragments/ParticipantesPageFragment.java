@@ -1,8 +1,10 @@
 package com.example.dglozano.meetapp.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.actividades.ContactosActivity;
+import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
 import com.example.dglozano.meetapp.dao.MockDaoEvento;
@@ -24,6 +27,8 @@ import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +40,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     private List<Participante> participantesListDisplayed = new ArrayList<>();
     private ParticipanteItemAdapter mParticipanteAdapter;
     private RecyclerView mParticipantesRecyclerView;
+    private final int CREAR_PARTICIPANTE = 1;
 
     private Dao<Participante> dao;
     private List<Participante> participantesListDelEvento;
@@ -93,6 +99,15 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         mParticipantesRecyclerView.setAdapter(mParticipanteAdapter);
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
+
+        FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), ContactosActivity.class);
+                startActivityForResult(i, CREAR_PARTICIPANTE);
+            }
+        });
     }
 
     private void search(String query) {
@@ -147,6 +162,20 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         public boolean onClose() {
             restoreOriginalParticipantesList();
             return false;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case CREAR_PARTICIPANTE: {
+                if(resultCode == RESULT_OK) {
+                    // TODO agregar toast
+                    participantesListDelEvento = dao.getAll();
+                    restoreOriginalParticipantesList();
+                }
+                break;
+            }
         }
     }
 }
