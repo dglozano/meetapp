@@ -130,6 +130,10 @@ public class EventoForm extends AppCompatActivity {
                 setResult(RESULT_OK, intentOrigen);
                 finish();
                 return true;
+            case android.R.id.home:
+                setResult(RESULT_CANCELED);
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -1,7 +1,9 @@
 package com.example.dglozano.meetapp.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,7 +22,7 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
 
     private List<Tarea> tareasList;
 
-    public class TareaViewHolder extends RecyclerView.ViewHolder {
+    public class TareaViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public TextView titleTextView, personasAsignadaTextView;
         private ImageView estadoImageView;
 
@@ -29,6 +31,14 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
             titleTextView = (TextView) view.findViewById(R.id.tv_tarea_row_title);
             personasAsignadaTextView = (TextView) view.findViewById(R.id.tv_tarea_row_persona_asignada);
             estadoImageView = (ImageView) view.findViewById(R.id.img_tarea_row_estado_icon);
+            view.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+            menu.add(this.getAdapterPosition(), 1, 0, R.string.texto_editar);
+            menu.add(Menu.NONE, 2, 1, R.string.texto_borrar);
         }
     }
 
