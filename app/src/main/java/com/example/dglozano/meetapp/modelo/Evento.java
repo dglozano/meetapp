@@ -1,5 +1,6 @@
 package com.example.dglozano.meetapp.modelo;
 
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
@@ -14,11 +15,13 @@ public class Evento {
     private String nombre;
     private LatLng lugar;
     private Date fecha;
+    private List<Participante> participantes;
 
     public Evento(String nombre, LatLng lugar, Date fecha) {
         this.nombre = nombre;
         this.lugar = lugar;
         this.fecha = fecha;
+        this.participantes = new ArrayList<>();
     }
 
     public boolean matches(String query) {
@@ -30,6 +33,7 @@ public class Evento {
     }
 
     public Evento() {
+        this.participantes = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -64,6 +68,27 @@ public class Evento {
         this.fecha = fecha;
     }
 
+    public void addParticipante(Participante p){
+        this.participantes.add(p);
+    }
+
+    public void addAllParticipantes(List<Participante> participantes){
+        this.participantes.addAll(participantes);
+    }
+
+    public void eliminarParticipante(Participante pEliminar){
+        for(Participante p: participantes){
+            if(p.getId() == pEliminar.getId()){
+                participantes.remove(p);
+                //TODO VER SI ACA HABRIA QUE BORRAR DE LA DB TAMBIEN O LO HACE LA ACTIVITY
+            }
+        }
+    }
+
+    public List<Participante> getParticipantes(){
+        return this.participantes;
+    }
+
     public static List<Evento> getEventosMock() {
         List<Evento> listaEventosMock = new ArrayList<>();
 
@@ -78,6 +103,7 @@ public class Evento {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         Evento evento = new Evento(nombre, lugar, fecha);
         listaEventosMock.add(evento);
 

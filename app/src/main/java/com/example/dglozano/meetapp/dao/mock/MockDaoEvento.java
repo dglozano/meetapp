@@ -1,11 +1,11 @@
 package com.example.dglozano.meetapp.dao.mock;
 
-import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 
 import java.util.List;
 
-public class MockDaoEvento implements Dao<Evento> {
+public class MockDaoEvento implements DaoEvento {
     private static final MockDaoEvento ourInstance = new MockDaoEvento();
 
     public static MockDaoEvento getInstance() {

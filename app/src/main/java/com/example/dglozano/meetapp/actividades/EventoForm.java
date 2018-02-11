@@ -14,7 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.fragments.DatePickerFragment;
 import com.example.dglozano.meetapp.modelo.Evento;
@@ -31,14 +31,14 @@ import java.util.Locale;
 
 public class EventoForm extends AppCompatActivity {
 
-    public static final String ID_KEY = "id";
+    public static final String KEY_EVENTO_ID = "id";
     private static final int PLACE_PICKER_REQUEST = 1;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private Intent intentOrigen;
     private Boolean flagNuevoEvento;
     private Evento evento;
-    private Dao<Evento> dao;
+    private DaoEvento daoEvento;
 
     private EditText et_nombre;
     private EditText et_lugar;
@@ -58,21 +58,21 @@ public class EventoForm extends AppCompatActivity {
 
 
         // TODO cambiar a daosqlite
-        dao = new SQLiteDaoEvento(this);
+        daoEvento = new SQLiteDaoEvento(this);
 
         getViews();
         setListeners();
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
-        final Integer id = (extras != null) ? extras.getInt(ID_KEY) : null;
+        final Integer id = (extras != null) ? extras.getInt(KEY_EVENTO_ID) : null;
         flagNuevoEvento = id == null;
 
         if(!flagNuevoEvento) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    evento = dao.getById(id);
+                    evento = daoEvento.getById(id);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -170,7 +170,7 @@ public class EventoForm extends AppCompatActivity {
 
         System.out.println(sdf.format(evento.getFecha()));
 
-        dao.save(evento);
+        daoEvento.save(evento);
     }
 
     private void showDatePickerDialog() {

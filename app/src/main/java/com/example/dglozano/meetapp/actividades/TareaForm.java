@@ -12,10 +12,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.mock.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
+import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
@@ -24,13 +27,15 @@ import java.util.List;
 
 public class TareaForm extends AppCompatActivity {
 
-    public static final String ID_KEY = "id";
+    public static final String KEY_TAREA_ID = "idTarea";
+    public static final String KEY_EVENTO_ID = "idEvento";
 
     private Intent intentOrigen;
     private Boolean flagNuevaTarea;
     private Tarea tarea;
-    private Dao<Tarea> dao;
-    private Dao<Participante> daoParticipante;
+    private DaoEvento daoEvento;
+    private DaoEventoMember<Tarea> daoTarea;
+    private DaoEventoMember<Participante> daoParticipante;
 
     private EditText et_titulo;
     private Spinner spinner_encargado;
@@ -39,7 +44,7 @@ public class TareaForm extends AppCompatActivity {
     private List<Participante> listaParticipantes;
     private ArrayAdapter<Participante> adapterParticipantes;
 
-    private final String SELECCIONAR = "Sin Asignar";
+    private Evento evento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +57,9 @@ public class TareaForm extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         // TODO reemplazar por daosqlite
-        dao = MockDaoTarea.getInstance();
-        daoParticipante = MockDaoParticipante.getInstance();
+        daoTarea = MockDaoTarea.getInstance();
+        daoParticipante = new SQLiteDaoParticipante(this);
+        daoEvento = new SQLiteDaoEvento(this);
 
         getViews();
         inicializarSpinner(0); //0 para que no seleccione nada
@@ -61,14 +67,15 @@ public class TareaForm extends AppCompatActivity {
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
         // TODO ver que la clave coincida
-        final Integer id = (extras != null) ? extras.getInt(ID_KEY) : null;
-        flagNuevaTarea = id == null;
+        final Integer idTarea = (extras != null) ? extras.getInt(KEY_TAREA_ID) : null;
+        evento = daoEvento.getById(extras.getInt(KEY_EVENTO_ID));
+        flagNuevaTarea = idTarea == null;
 
         if(!flagNuevaTarea) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    tarea = dao.getById(id);
+                    tarea = daoTarea.getById(idTarea);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -97,10 +104,10 @@ public class TareaForm extends AppCompatActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                List<Participante> lista = daoParticipante.getAll();
+                List<Participante> lista = daoParticipante.getAllDelEvento(evento.getId());
                 listaParticipantes.clear();
                 listaParticipantes.addAll(lista);
-                listaParticipantes.add(0, new Participante(-1, SELECCIONAR, 1));
+                listaParticipantes.add(0, Participante.getParticipanteSinAsignar());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -156,18 +163,13 @@ public class TareaForm extends AppCompatActivity {
             tarea = new Tarea();
         }
         if(flagNuevaTarea || !flagNuevaTarea && tarea.getEstadoTarea() != EstadoTarea.FINALIZADA) {
-            if(SELECCIONAR.equals(encargado.getNombreApellido())) {
-                tarea.setPersonaAsignada(Participante.getParticipanteSinAsignar());
-                estado = EstadoTarea.SIN_ASIGNAR;
-            } else {
-                tarea.setPersonaAsignada(encargado);
-                estado = EstadoTarea.EN_PROGRESO;
-            }
+            tarea.setPersonaAsignada(encargado);
+            estado = EstadoTarea.EN_PROGRESO;
         }
         tarea.setTitulo(titulo);
         tarea.setEstadoTarea(estado);
         tarea.setDescripcion(descripcion);
 
-        dao.save(tarea);
+        daoTarea.save(tarea, evento.getId());
     }
 }

@@ -1,6 +1,5 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,20 +10,17 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
-import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 
@@ -32,10 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-
-/**
- * Created by augusto on 03/02/2018.
- */
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +43,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
     private EventoItemAdapter mEventoItemAdapter;
     private RecyclerView mEventosRecyclerView;
 
-    private Dao<Evento> dao;
+    private DaoEvento daoEvento;
     private List<Evento> eventosDelUsuario;
 
 
@@ -79,8 +71,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
 
         //TODO cambiar a sqlite cuando se implemente
-        dao = new SQLiteDaoEvento(getActivity());
-        eventosDelUsuario = dao.getAll();
+        daoEvento = new SQLiteDaoEvento(getActivity());
+        eventosDelUsuario = daoEvento.getAll();
     }
 
     @Override
@@ -108,13 +100,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 //        registerForContextMenu(mEventosRecyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), EventoForm.class);
-                startActivityForResult(i, CREAR_EVENTO);
-            }
-        });
+        fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
 
@@ -193,6 +179,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 editarEvento(evento);
                 return true;
             case 2:
+                //TODO ELIMINAR?
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -202,7 +189,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     private void editarEvento(Evento evento) {
         Intent i = new Intent(getActivity(), EventoForm.class);
-        i.putExtra(EventoForm.ID_KEY, evento.getId());
+        i.putExtra(EventoForm.KEY_EVENTO_ID, evento.getId());
         startActivityForResult(i, EDITAR_EVENTO);
     }
 
@@ -212,7 +199,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
             case CREAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    eventosDelUsuario = dao.getAll();
+                    eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                 }
                 break;
@@ -220,11 +207,19 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
             case EDITAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    eventosDelUsuario = dao.getAll();
+                    eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                 }
                 break;
             }
+        }
+    }
+
+    private class MyFabIconOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(getActivity(), EventoForm.class);
+            startActivityForResult(i, CREAR_EVENTO);
         }
     }
 }

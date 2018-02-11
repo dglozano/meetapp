@@ -16,9 +16,10 @@ import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
-import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
-import com.example.dglozano.meetapp.dao.mock.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 
@@ -36,7 +37,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     private ParticipanteItemAdapter mParticipanteAdapter;
     private RecyclerView mParticipantesRecyclerView;
 
-    private Dao<Participante> dao;
+    private DaoEvento daoEvento;
+    private DaoEventoMember<Participante> daoParticipante;
     private List<Participante> participantesListDelEvento;
 
     private static final String EVENTO_ID = "EVENTO_ID";
@@ -65,10 +67,11 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //TODO cambiar a sqlite cuando se implemente
-        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
-        dao = MockDaoParticipante.getInstance();
-        participantesListDelEvento = dao.getAll();
+        daoParticipante = new SQLiteDaoParticipante(getActivity());
+        daoEvento = new SQLiteDaoEvento(getActivity());
+
+        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
+        participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
     }
 
     @Override
@@ -104,7 +107,6 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         }
         participantesListDisplayed.clear();
         participantesListDisplayed.addAll(result);
-        System.out.println(participantesListDisplayed);
         mParticipanteAdapter.notifyDataSetChanged();
     }
 

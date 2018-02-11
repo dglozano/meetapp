@@ -21,8 +21,9 @@ import android.widget.Toast;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.TareaItemAdapter;
-import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
@@ -50,7 +51,8 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
 
     private static final String EVENTO_ID = "EVENTO_ID";
 
-    private Dao<Tarea> dao;
+    private DaoEventoMember<Tarea> daoTarea;
+    private DaoEvento daoEvento;
     private Evento evento;
     private List<Tarea> tareasListDelEvento;
 
@@ -79,10 +81,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         setHasOptionsMenu(true);
 
         //TODO cambiar a sqlite cuando se implemente
-        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
-        dao = MockDaoTarea.getInstance();
-        System.out.println(evento.toString());
-        tareasListDelEvento = dao.getAll();
+        daoEvento = new SQLiteDaoEvento(getActivity());
+        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
+        daoTarea = MockDaoTarea.getInstance();
+        tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
     }
 
     @Override
@@ -109,13 +111,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         mTareaAdapter.notifyDataSetChanged();
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_tarea);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getActivity(), TareaForm.class);
-                startActivityForResult(i, CREAR_TAREA);
-            }
-        });
+        fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
     private void search(String query) {
@@ -198,7 +194,8 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
 
     private void editarTarea(Tarea tarea) {
         Intent i = new Intent(getActivity(), TareaForm.class);
-        i.putExtra(TareaForm.ID_KEY, tarea.getId());
+        i.putExtra(TareaForm.KEY_TAREA_ID, tarea.getId());
+        i.putExtra(TareaForm.KEY_EVENTO_ID, evento.getId());
         startActivityForResult(i, EDITAR_TAREA);
     }
 
@@ -208,7 +205,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             case CREAR_TAREA: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    tareasListDelEvento = dao.getAll();
+                    tareasListDelEvento = daoTarea.getAll();
                     restoreOriginalTareasList();
                 }
                 break;
@@ -216,11 +213,20 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             case EDITAR_TAREA: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    tareasListDelEvento = dao.getAll();
+                    tareasListDelEvento = daoTarea.getAll();
                     restoreOriginalTareasList();
                 }
                 break;
             }
+        }
+    }
+
+    private class MyFabIconOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(getActivity(), TareaForm.class);
+            i.putExtra(TareaForm.KEY_EVENTO_ID, evento.getId());
+            startActivityForResult(i, CREAR_TAREA);
         }
     }
 }

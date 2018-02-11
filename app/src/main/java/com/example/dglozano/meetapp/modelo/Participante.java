@@ -10,8 +10,7 @@ public class Participante {
     private String nombreApellido;
     private int pictureId;
 
-    public Participante(Integer id, String nombreApellido, int pictureId) {
-        this.id = id;
+    public Participante(String nombreApellido, int pictureId) {
         this.pictureId = pictureId;
         this.nombreApellido = nombreApellido;
     }
@@ -55,27 +54,6 @@ public class Participante {
         return this.nombreApellido.toUpperCase().contains(query.toUpperCase());
     }
 
-    public static List<Participante> getParticipantesMock() {
-        List<Participante> listaParticipantesMock = new ArrayList<>();
-
-        Participante participante = new Participante(1, "Diego Garcia Lozano", 1);
-        listaParticipantesMock.add(participante);
-
-        participante = new Participante(2, "Esteban Rebechi", 2);
-        listaParticipantesMock.add(participante);
-
-        participante = new Participante(3, "Andres Martinez", 2);
-        listaParticipantesMock.add(participante);
-
-        participante = new Participante(4, "Ariel Kohan", 0);
-        listaParticipantesMock.add(participante);
-
-        participante = new Participante(5, "Augusto Tibalt", 1);
-        listaParticipantesMock.add(participante);
-
-        return listaParticipantesMock;
-    }
-
     public static Participante getParticipanteSinAsignar() {
         return Participante.participanteSinAsignar;
     }
@@ -88,5 +66,38 @@ public class Participante {
         Participante that = (Participante) o;
 
         return id != null ? id.equals(that.id) : that.id == null;
+    }
+
+    public static List<Participante> getParticipantesMock(){
+        List<Participante> participantes = new ArrayList<>();
+        participantes.add(new Participante("Juan Perez", 2));
+        participantes.add(new Participante("Maria Garcia", 0));
+        participantes.add(new Participante("Jose Lopez", 1));
+        participantes.add(new Participante("Diego Garcia Lozano", 1));
+        participantes.add(new Participante("Esteban Rebechi", 2));
+        participantes.add(new Participante("Andres Martinez", 2));
+        participantes.add(new Participante("Ariel Kohan", 0));
+        participantes.add(new Participante("Augusto Tibalt", 1));
+        participantes.add(new Participante("Lucas Gamba", 0));
+        participantes.add(new Participante("Franco Soldano", 1));
+        participantes.add(new Participante("Mauro Pitton", 0));
+        participantes.add(new Participante("Bruno Pitton", 1));
+        participantes.add(new Participante("Nelson Acevedo", 2));
+        participantes.add(new Participante("Nereo Fernandez", 2));
+        participantes.add(new Participante("Yeimar Gomez Andrade", 0));
+        participantes.add(new Participante("Rodrigo Gomez", 1));
+        participantes.add(new Participante("Agustin Pane", 2));
+        participantes.add(new Participante("Fede Madoery", 1));
+        participantes.add(new Participante("Flaminia Castanio", 1));
+        participantes.add(new Participante("Juliana Rossi", 0));
+        participantes.add(new Participante("Gonzalo Etcheveksadfgay", 2));
+        participantes.add(new Participante("Kevin Raud", 1));
+        participantes.add(new Participante("El Colo", 0));
+        participantes.add(new Participante("Juan De Garay", 1));
+        participantes.add(new Participante("Lisandro Lopez", 0));
+        participantes.add(new Participante("General Paz", 2));
+        participantes.add(new Participante("Jose de San Martin", 1));
+        participantes.add(new Participante("Domingo Faustino Sarmiento", 0));
+        return participantes;
     }
 }

@@ -1,12 +1,13 @@
 package com.example.dglozano.meetapp.dao.mock;
 
 
-import com.example.dglozano.meetapp.dao.Dao;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
 import java.util.List;
 
-public class MockDaoTarea implements Dao<Tarea> {
+public class MockDaoTarea implements DaoEventoMember<Tarea> {
 
     private static final MockDaoTarea ourInstance = new MockDaoTarea();
 
@@ -29,7 +30,7 @@ public class MockDaoTarea implements Dao<Tarea> {
     }
 
     @Override
-    public void save(Tarea item) {
+    public void save(Tarea item, int eventoId) {
         if(item.getId() == null) {
             item.setId(getNextId());
         } else {
@@ -47,6 +48,11 @@ public class MockDaoTarea implements Dao<Tarea> {
 
     @Override
     public List<Tarea> getAll() {
+        return this.list;
+    }
+
+    @Override
+    public List<Tarea> getAllDelEvento(int idEvento) {
         return this.list;
     }
 

@@ -16,7 +16,8 @@ import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
-import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 
@@ -37,6 +38,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     private static final String EVENTO_ID = "EVENTO_ID";
     private Evento evento;
 
+    private DaoEvento daoEvento;
     private List<Pago> pagosListDelEvento = Pago.getPagosMock();
 
     public DivisionGastosPageFragment() {
@@ -62,7 +64,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
+        daoEvento = new SQLiteDaoEvento(getActivity());
+        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
     }
 
     @Override

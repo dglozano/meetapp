@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.modelo.Participante;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
@@ -22,11 +23,12 @@ import java.util.List;
  * Created by diegogarcialozano on 29/10/17.
  */
 
-public class SQLiteDaoEvento implements Dao<Evento> {
+public class SQLiteDaoEvento implements DaoEvento {
 
     private SQLiteDatabase db;
     private final Context context;
     private final MeetAppOpenHelper dbhelper;
+    private SQLiteDaoParticipante daoParticipante;
 
     /**
      * Constructor. Setea el contexto y obtiene la instancia del singleton del dbhelper
@@ -34,10 +36,9 @@ public class SQLiteDaoEvento implements Dao<Evento> {
      */
     public SQLiteDaoEvento(Context c){
         context = c;
-        //TODO BORRAR CUANDO SAQUEMOS MOCK DATA
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
-        this.createMockData();
+        daoParticipante = new SQLiteDaoParticipante(c);
     }
 
     /**
@@ -77,7 +78,8 @@ public class SQLiteDaoEvento implements Dao<Evento> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //TODO ADD PARTICIPANTES
+        evento.addAllParticipantes(daoParticipante.getAllDelEvento(evento.getId()));
+        System.out.println(evento.getParticipantes().size());
         //TODO ADD TAREAS
         //TODO ADD PAGOS
         return evento;
@@ -113,7 +115,6 @@ public class SQLiteDaoEvento implements Dao<Evento> {
         //cv.put(Constants.TRABAJO_CATEGORIAS_FK, p.getCategoria().getId());
         SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
         cv.put(Constants.EVENTO_FECHA, sdf.format(e.getFecha()));
-        System.out.println(e.getFecha().getTime() + "fechaintegerwrite");
         cv.put(Constants.EVENTO_LAT, e.getLugar().latitude);
         cv.put(Constants.EVENTO_LNG, e.getLugar().longitude);
         db.insert(Constants.EVENTO_TABLENAME,null, cv);
@@ -133,7 +134,7 @@ public class SQLiteDaoEvento implements Dao<Evento> {
         db.close();
     }
 
-    private void createMockData(){
+    public void createMockData(){
         List<Evento> eventos = Evento.getEventosMock();
         for(Evento e: eventos){
             save(e);

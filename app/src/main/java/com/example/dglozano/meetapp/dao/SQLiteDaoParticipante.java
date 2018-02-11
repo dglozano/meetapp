@@ -15,12 +15,13 @@ import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by diegogarcialozano on 29/10/17.
  */
 
-public class SQLiteDaoParticipante implements Dao<Participante> {
+public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
 
     private SQLiteDatabase db;
     private final Context context;
@@ -35,7 +36,6 @@ public class SQLiteDaoParticipante implements Dao<Participante> {
         //TODO BORRAR CUANDO SAQUEMOS MOCK DATA
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
-        this.createMockData();
     }
 
     /**
@@ -82,14 +82,14 @@ public class SQLiteDaoParticipante implements Dao<Participante> {
                 + Constants.PARTICIPANTE_ID + " = " +String.valueOf(id),null);
         // Nos movemos con el cursor por cada resultado (deberia ser uno solo)
         while(c.moveToNext()){
-            // Y creamos el evento con los datos correspondientes
+            // Y creamos el participante con los datos correspondientes
             participante = parseParticipanteFromCursor(c);
         }
         return participante;
     }
 
-    public Participante getAllParticipantesDelEvento(int eventoId){
-        Participante participante = null;
+    public List<Participante> getAllDelEvento(int eventoId){
+        List<Participante> participantes = new ArrayList<>();
         db = dbhelper.getReadableDatabase();
         /**
          * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
@@ -100,9 +100,10 @@ public class SQLiteDaoParticipante implements Dao<Participante> {
         // Nos movemos con el cursor por cada resultado
         while(c.moveToNext()){
             // Y creamos el evento con los datos correspondientes
-            participante = parseParticipanteFromCursor(c);
+            Participante participante = parseParticipanteFromCursor(c);
+            participantes.add(participante);
         }
-        return participante;
+        return participantes;
     }
 
     /**
@@ -111,11 +112,12 @@ public class SQLiteDaoParticipante implements Dao<Participante> {
      * @param p Evento a crear
      */
     @Override
-    public void save(Participante p) {
+    public void save(Participante p, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PARTICIPANTE_NOMBRE, p.getNombreApellido());
         cv.put(Constants.PARTICIPANTE_PICTURE_ID, p.getPictureId());
+        cv.put(Constants.PARTICIPANTE_EVENTO_FK, eventoId);
         db.insert(Constants.PARTICIPANTE_TABLENAME,null, cv);
         db.close();
     }
@@ -133,11 +135,15 @@ public class SQLiteDaoParticipante implements Dao<Participante> {
         db.close();
     }
 
-    private void createMockData(){
-        List<Evento> eventos = Evento.getEventosMock();
-        for(Evento e: eventos){
-            for(Participante p: e.getParticipantes()){
-                save(p);
+    public void createMockData(List<Evento> eventosYaGuardadosEnDb){
+        List<Participante> participantesMock = Participante.getParticipantesMock();
+        for(Evento e: eventosYaGuardadosEnDb){
+            int totalPart = ThreadLocalRandom.current().nextInt(0, participantesMock.size() + 1);
+            for(int i = 0; i < totalPart; i++){
+                int partRandom = ThreadLocalRandom.current().nextInt(0, participantesMock.size());
+                Participante p = participantesMock.get(partRandom);
+                e.addParticipante(p);
+                save(p, e.getId());
             }
         }
     }

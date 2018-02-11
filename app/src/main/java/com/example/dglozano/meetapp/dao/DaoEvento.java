@@ -1,0 +1,15 @@
+package com.example.dglozano.meetapp.dao;
+
+import com.example.dglozano.meetapp.modelo.Evento;
+
+import java.util.List;
+
+public interface DaoEvento {
+    Evento getById(int id);
+
+    void save(Evento item);
+
+    void delete(Evento item);
+
+    List<Evento> getAll();
+}

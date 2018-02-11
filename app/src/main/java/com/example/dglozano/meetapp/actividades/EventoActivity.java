@@ -16,6 +16,8 @@ import android.view.MenuItem;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
 import com.example.dglozano.meetapp.fragments.DivisionGastosPageFragment;
 import com.example.dglozano.meetapp.fragments.ParticipantesPageFragment;
@@ -47,6 +49,7 @@ public class EventoActivity extends AppCompatActivity {
     private Fragment fragmentBeingDisplayed;
 
     private Evento evento;
+    private DaoEvento daoEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +64,11 @@ public class EventoActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        daoEvento = new SQLiteDaoEvento(this);
+
         Intent intentOrigen = getIntent();
         int idEventoClickeado = intentOrigen.getExtras().getInt(EventoItemAdapter.EXTRA_EVENTO_ID);
-        evento = MockDaoEvento.getInstance().getById(idEventoClickeado);
+        evento = daoEvento.getById(idEventoClickeado);
         setTitle(evento.getNombre());
 
         // Create the adapter that will return a fragment for each of the three
