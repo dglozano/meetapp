@@ -9,6 +9,7 @@ public class Participante {
     private Integer id;
     private String nombreApellido;
     private int pictureId;
+    private String numeroTel;
 
     public Participante(Integer id, String nombreApellido, int pictureId) {
         this.id = id;
@@ -17,7 +18,7 @@ public class Participante {
     }
 
     public Participante() {
-        this.id = 0;
+        this.id = null;
         this.nombreApellido = "<Sin Asignar>";
         this.pictureId = 0;
     }
@@ -28,6 +29,14 @@ public class Participante {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getNumeroTel() {
+        return numeroTel;
+    }
+
+    public void setNumero(String numero) {
+        this.numeroTel = numero;
     }
 
     public String getNombreApellido() {

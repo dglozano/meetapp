@@ -1,6 +1,10 @@
 package com.example.dglozano.meetapp.actividades;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
@@ -21,6 +25,8 @@ import com.example.dglozano.meetapp.fragments.EventosPageFragment;
 import com.example.dglozano.meetapp.fragments.SettingsPageFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

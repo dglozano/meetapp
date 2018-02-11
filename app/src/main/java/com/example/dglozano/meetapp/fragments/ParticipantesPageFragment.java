@@ -1,8 +1,18 @@
 package com.example.dglozano.meetapp.fragments;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +23,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.actividades.ContactosActivity;
+import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
 import com.example.dglozano.meetapp.dao.Dao;
 import com.example.dglozano.meetapp.dao.MockDaoEvento;
@@ -25,6 +39,8 @@ import com.example.dglozano.meetapp.modelo.Participante;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ParticipantesPageFragment#newInstance} factory method to
@@ -32,9 +48,11 @@ import java.util.List;
  */
 public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private List<Participante> participantesListDisplayed = new ArrayList<>();
     private ParticipanteItemAdapter mParticipanteAdapter;
     private RecyclerView mParticipantesRecyclerView;
+    private final int CREAR_PARTICIPANTE = 1;
 
     private Dao<Participante> dao;
     private List<Participante> participantesListDelEvento;
@@ -93,6 +111,50 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         mParticipantesRecyclerView.setAdapter(mParticipanteAdapter);
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
+
+        FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pedirPermisoContactos();
+            }
+        });
+    }
+
+    public void pedirPermisoContactos(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+                        builder.setTitle("Acceso a Contactos");
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setMessage("La APP necesita acceso a sus contactos para que los pueda agregar como participantes a un evento");
+                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                requestPermissions(
+                                        new String[]
+                                                {Manifest.permission.READ_CONTACTS}
+                                        , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            }
+                        });
+                    builder.show();
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                }
+            }
+            else {
+                Intent i = new Intent(getActivity(), ContactosActivity.class);
+                startActivityForResult(i, CREAR_PARTICIPANTE);
+            }
+        }
+        else {
+            Intent i = new Intent(getActivity(), ContactosActivity.class);
+            startActivityForResult(i, CREAR_PARTICIPANTE);
+        }
     }
 
     private void search(String query) {
@@ -147,6 +209,20 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         public boolean onClose() {
             restoreOriginalParticipantesList();
             return false;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode) {
+            case CREAR_PARTICIPANTE: {
+                if(resultCode == RESULT_OK) {
+                    // TODO agregar toast
+                    participantesListDelEvento = dao.getAll();
+                    restoreOriginalParticipantesList();
+                }
+                break;
+            }
         }
     }
 }
