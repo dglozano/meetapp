@@ -62,9 +62,6 @@ public class ContactosActivity extends AppCompatActivity {
 
     }
 
-//   private static final String SELECTION =
-//            ContactsContract.CommonDataKinds.Phone.ACCOUNT_TYPE_AND_DATA_SET + " LIKE " +37;
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
@@ -131,8 +128,6 @@ public class ContactosActivity extends AppCompatActivity {
                 String phNumber = c
                         .getString(c
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                String cuenta = c
-//                        .getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.ACCOUNT_TYPE_AND_DATA_SET));
 
                 contacts.add(contactName + System.lineSeparator() + phNumber);
 
