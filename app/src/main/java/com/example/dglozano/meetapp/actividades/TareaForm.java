@@ -151,7 +151,7 @@ public class TareaForm extends AppCompatActivity {
         String titulo = et_titulo.getText().toString();
         String descripcion = et_descripcion.getText().toString();
         Participante encargado = (Participante) spinner_encargado.getSelectedItem();
-        EstadoTarea estado = null;
+        EstadoTarea estado = EstadoTarea.FINALIZADA;
         if(flagNuevaTarea) {
             tarea = new Tarea();
         }

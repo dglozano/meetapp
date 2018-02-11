@@ -1,5 +1,6 @@
 package com.example.dglozano.meetapp.fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +11,15 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
@@ -37,7 +42,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link EventosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventosPageFragment extends android.support.v4.app.Fragment {
+public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener{
 
     private final int CREAR_EVENTO = 1;
     private final int EDITAR_EVENTO = 2;
@@ -72,6 +77,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+
         //TODO cambiar a sqlite cuando se implemente
         dao = new SQLiteDaoEvento(getActivity());
         eventosDelUsuario = dao.getAll();
@@ -99,6 +105,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         mEventosRecyclerView.setAdapter(mEventoItemAdapter);
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
+//        registerForContextMenu(mEventosRecyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +116,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
             }
         });
     }
+
 
     private void search(String query) {
         List<Evento> result = new ArrayList<>();
@@ -166,7 +174,32 @@ public class EventosPageFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    // FIXME cuando se haga el menú contextual y se seleccione editar, usar este método
+//    @Override
+//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//        super.onCreateContextMenu(menu, v, menuInfo);
+//        Activity act = this.getActivity();
+//        MenuInflater inflater = act.getMenuInflater();
+//        inflater.inflate(R.menu.cm_evento, menu);
+//    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        Evento evento = eventosListDisplayed.get(item.getGroupId());
+
+        switch (item.getItemId()) {
+            case 1:
+                editarEvento(evento);
+                return true;
+            case 2:
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+
     private void editarEvento(Evento evento) {
         Intent i = new Intent(getActivity(), EventoForm.class);
         i.putExtra(EventoForm.ID_KEY, evento.getId());
