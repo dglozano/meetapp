@@ -31,6 +31,7 @@ class Constants {
     public static final String PARTICIPANTE_ID = "_id";
     public static final String PARTICIPANTE_NOMBRE = "nombre";
     public static final String PARTICIPANTE_EVENTO_FK = "evento_fk";
+    public static final String PARTICIPANTE_PICTURE_ID = "picutre_id";
 
     public static final String PAGO_TABLENAME = "pago";
     public static final String PAGO_ID = "_id";
