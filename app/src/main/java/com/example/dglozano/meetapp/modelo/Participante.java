@@ -17,7 +17,7 @@ public class Participante {
     }
 
     public Participante() {
-        this.id = 0;
+        this.id = null;
         this.nombreApellido = "<Sin Asignar>";
         this.pictureId = 0;
     }
