@@ -1,11 +1,15 @@
 package com.example.dglozano.meetapp.adapters;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.modelo.Participante;
@@ -23,11 +27,15 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
     public class ParticipanteViewHolder extends RecyclerView.ViewHolder {
         public TextView nombreTextView;
         private ImageView fotoImageView;
+        public ImageButton btnLlamarParticipante;
+        public ImageButton btnSmsParticipante;
 
         public ParticipanteViewHolder(View view) {
             super(view);
             nombreTextView = (TextView) view.findViewById(R.id.tv_participante_row_nombre);
             fotoImageView = (ImageView) view.findViewById(R.id.img_participante_row_picture);
+            btnLlamarParticipante = (ImageButton) view.findViewById(R.id.btn_llamar_participante);
+            btnSmsParticipante = (ImageButton) view.findViewById(R.id.btn_sms_participante);
         }
     }
 
@@ -45,8 +53,27 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
 
     @Override
     public void onBindViewHolder(ParticipanteViewHolder holder, int position) {
-        Participante participante = participantesList.get(position);
+        final Participante participante = participantesList.get(position);
         holder.nombreTextView.setText(participante.toString());
+        holder.btnLlamarParticipante.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String numero = participante.getNumeroTel();
+                String dial = "tel:"+numero;
+                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse(dial));
+                view.getContext().startActivity(intentCall);
+            }
+        });
+        holder.btnSmsParticipante.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String numero = participante.getNumeroTel();
+                String dial = "sms:"+numero;
+                Intent intentSMS = new Intent(Intent.ACTION_VIEW, Uri.parse(dial));
+                intentSMS.putExtra( "sms_body", "Te he agregado a un evento como organizador!" );
+                view.getContext().startActivity(intentSMS);
+            }
+        });
         switch(participante.getPictureId()){
             case 0:
                 holder.fotoImageView.setImageResource(R.drawable.ic_adb_black_36dp);
