@@ -85,7 +85,7 @@ public class Participante {
         participantes.add(new Participante("Jose Lopez", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
-        participantes.add(new Participante("Diego Garcia Lozano", numTelRandom));
+        participantes.add(new Participante("Diego Alejandro Garcia Lozano", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         participantes.add(new Participante("Esteban Rebechi", numTelRandom));
@@ -100,7 +100,7 @@ public class Participante {
         participantes.add(new Participante("Augusto Tibalt", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
-        participantes.add(new Participante("Lucas Gamba", numTelRandom));
+        participantes.add(new Participante("Lucas Jesus Dios Salvador Gamba", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         participantes.add(new Participante("Franco Soldano", numTelRandom));
@@ -118,7 +118,7 @@ public class Participante {
         participantes.add(new Participante("Nereo Fernandez", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
-        participantes.add(new Participante("Yeimar Gomez Andrade", numTelRandom));
+        participantes.add(new Participante("Yeimar El Negro de Whatsapp Gomez Andrade", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         participantes.add(new Participante("Rodrigo Gomez", numTelRandom));
@@ -136,7 +136,7 @@ public class Participante {
         participantes.add(new Participante("Juliana Rossi", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
-        participantes.add(new Participante("Gonzalo Etcheveksadfgay", numTelRandom));
+        participantes.add(new Participante("Gonzalo Etchevasdfadsfdsafsadsdeksadfgay", numTelRandom));
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         participantes.add(new Participante("Kevin Raud", numTelRandom));

@@ -29,6 +29,7 @@ public class SQLiteDaoEvento implements DaoEvento {
     private final Context context;
     private final MeetAppOpenHelper dbhelper;
     private SQLiteDaoParticipante daoParticipante;
+    private SQLiteDaoTarea daoTarea;
 
     /**
      * Constructor. Setea el contexto y obtiene la instancia del singleton del dbhelper
@@ -39,6 +40,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
         daoParticipante = new SQLiteDaoParticipante(c);
+        daoTarea = new SQLiteDaoTarea(c);
     }
 
     /**
@@ -79,8 +81,7 @@ public class SQLiteDaoEvento implements DaoEvento {
             e.printStackTrace();
         }
         evento.addAllParticipantes(daoParticipante.getAllDelEvento(evento.getId()));
-        System.out.println(evento.getParticipantes().size());
-        //TODO ADD TAREAS
+        evento.addAllTareas(daoTarea.getAllDelEvento(evento.getId()));
         //TODO ADD PAGOS
         return evento;
     }

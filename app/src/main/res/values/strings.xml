@@ -34,4 +34,6 @@
     <string name="texto_borrar">Borrar</string>
     <string name="titulo_contactos">Contactos</string>
     <string name="contactos_title">Contactos</string>
+    <string name="crear_evento">Crear evento</string>
+    <string name="crear_tarea">Crear tarea</string>
 </resources>

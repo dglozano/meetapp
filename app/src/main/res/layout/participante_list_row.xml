@@ -15,13 +15,17 @@
 
     <TextView
         android:id="@+id/tv_participante_row_nombre"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/btn_llamar_participante"
+        android:layout_alignTop="@id/btn_llamar_participante"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/btn_llamar_participante"
+        android:text="Juan Roman Carlos Salu Riquelme Perez Esquivel"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimaryDark"
+        android:singleLine="true"
+        android:ellipsize="marquee"
         android:textSize="15.5sp" />
 
     <ImageButton

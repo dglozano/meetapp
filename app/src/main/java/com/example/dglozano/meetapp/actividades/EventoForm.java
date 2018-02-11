@@ -45,7 +45,6 @@ public class EventoForm extends AppCompatActivity {
     private Place place;
     private EditText et_fecha;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +55,6 @@ public class EventoForm extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-
-        // TODO cambiar a daosqlite
         daoEvento = new SQLiteDaoEvento(this);
 
         getViews();
@@ -84,7 +81,6 @@ public class EventoForm extends AppCompatActivity {
             Thread t = new Thread(r);
             t.start();
         }
-
     }
 
     private void getViews() {
@@ -167,8 +163,6 @@ public class EventoForm extends AppCompatActivity {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-        System.out.println(sdf.format(evento.getFecha()));
 
         daoEvento.save(evento);
     }

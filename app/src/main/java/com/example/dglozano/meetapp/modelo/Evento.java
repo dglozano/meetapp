@@ -36,6 +36,7 @@ public class Evento {
 
     public Evento() {
         this.participantes = new ArrayList<>();
+        this.tareas = new ArrayList<>();
     }
 
     public Integer getId() {
