@@ -19,6 +19,8 @@
     <string name="dividir_gastos_title">Dividir Gastos</string>
     <string name="eventos_title">Eventos</string>
     <string name="participantes_title">Participantes</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="btitle">Load Contacts</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -30,4 +32,6 @@
     <string name="descripcion">Descripción</string>
     <string name="texto_editar">Editar</string>
     <string name="texto_borrar">Borrar</string>
+    <string name="titulo_contactos">Contactos</string>
+    <string name="contactos_title">Contactos</string>
 </resources>

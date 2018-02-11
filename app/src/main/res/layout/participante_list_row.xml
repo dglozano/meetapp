@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
@@ -15,18 +17,38 @@
         android:id="@+id/img_participante_row_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/btn_llamar_participante"
         android:src="@drawable/ic_child_care_black_36dp" />
 
     <TextView
         android:id="@+id/tv_participante_row_nombre"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_toRightOf="@id/img_participante_row_picture"
         android:text="Diego Garcia Lozano"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="15.5sp" />
+
+    <ImageButton
+        android:id="@+id/btn_llamar_participante"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn_sms_participante"
+        android:layout_toStartOf="@+id/btn_sms_participante"
+        android:backgroundTint="?android:attr/colorBackground"
+        app:srcCompat="@drawable/ic_call_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/btn_sms_participante"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:backgroundTint="?android:attr/colorBackground"
+        app:srcCompat="@drawable/ic_chat_black_24dp" />
+
 </RelativeLayout>
