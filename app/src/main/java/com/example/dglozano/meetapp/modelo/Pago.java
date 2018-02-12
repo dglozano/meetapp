@@ -1,9 +1,5 @@
 package com.example.dglozano.meetapp.modelo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 /**
  * Created by dglozano on 01/02/18.
  */

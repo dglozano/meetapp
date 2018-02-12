@@ -160,7 +160,7 @@ public class EventoForm extends AppCompatActivity {
         }
         try {
             evento.setFecha(sdf.parse(fecha));
-        } catch (ParseException e) {
+        } catch(ParseException e) {
             e.printStackTrace();
         }
 

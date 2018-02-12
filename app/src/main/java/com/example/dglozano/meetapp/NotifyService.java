@@ -8,7 +8,7 @@ import android.content.Intent;
 
 import com.example.dglozano.meetapp.actividades.EventoActivity;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
 
 public class NotifyService extends IntentService {
@@ -18,8 +18,9 @@ public class NotifyService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Integer idEvento = intent.getIntExtra("id", 0);
-        Evento evento = MockDaoEvento.getInstance().getById(idEvento); // FIXME cambiar este mock
+        SQLiteDaoEvento dao = new SQLiteDaoEvento(getApplicationContext());
+        Integer idEvento = intent.getExtras().getInt("id");
+        Evento evento = dao.getById(idEvento);
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent newIntent = new Intent(this.getApplicationContext(), EventoActivity.class);

@@ -66,7 +66,6 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
      *
      * @return A new instance of fragment TareasPageFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static TareasPageFragment newInstance(int eventoId) {
         TareasPageFragment fragment = new TareasPageFragment();
         Bundle args = new Bundle();
@@ -151,7 +150,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         Tarea tarea = tareasListDisplayed.get(item.getGroupId());
 
         Toast toast;
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case 1:
                 editarTarea(tarea);
                 toast = Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT);

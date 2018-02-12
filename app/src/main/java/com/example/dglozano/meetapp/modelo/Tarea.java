@@ -2,7 +2,6 @@ package com.example.dglozano.meetapp.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Tarea {
 
@@ -14,6 +13,7 @@ public class Tarea {
     private Double gasto;
 
     public Tarea() {
+        this.gasto = 0.0;
     }
 
     public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
@@ -21,6 +21,7 @@ public class Tarea {
         this.personaAsignada = personaAsignada;
         this.estadoTarea = estadoTarea;
         this.descripcion = descripcion;
+        this.gasto = 0.0;
     }
 
     public Tarea(String titulo, String descripcion) {
@@ -95,13 +96,17 @@ public class Tarea {
         return this.personaAsignada + " tiene que " + this.titulo;
     }
 
+    public boolean estaFinalizada() {
+        return this.estadoTarea == EstadoTarea.FINALIZADA;
+    }
+
     public static List<Tarea> getTareasMock() {
         List<Tarea> listaTareasMock = new ArrayList<>();
 
         listaTareasMock.add(new Tarea("Comprar 5kg Asado", "Somos 10 personas que vamos asi que comprar 5kg mas achuras"));
-        listaTareasMock.add(new Tarea("Comprar 2 cajones","Que no sean Quilmes por favor!"));
+        listaTareasMock.add(new Tarea("Comprar 2 cajones", "Que no sean Quilmes por favor!"));
         listaTareasMock.add(new Tarea("Comprar carbon", "Si conseguis leña mejor"));
-        listaTareasMock.add(new Tarea("Reservar salon","Que tenga aire acondicionado. Si no, no!"));
+        listaTareasMock.add(new Tarea("Reservar salon", "Que tenga aire acondicionado. Si no, no!"));
         listaTareasMock.add(new Tarea("Conseguir parlante", "Inalambrico bluetooth. Trae auxiliar tambien."));
         listaTareasMock.add(new Tarea("Comprar torta", "Chocotorta, torta oreo o lemon Pie"));
         listaTareasMock.add(new Tarea("Difundir fiesta", "Difundir por Instagram, FB y WhatsApp pasando la dirección por privado"));

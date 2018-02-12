@@ -1,7 +1,7 @@
 package com.example.dglozano.meetapp.fragments;
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -34,7 +34,7 @@ import java.util.List;
  * Use the {@link DivisionGastosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
+public class DivisionGastosPageFragment extends android.support.v4.app.Fragment {
 
     private List<Pago> pagosListDisplayed = new ArrayList<>();
     private PagoItemAdapter mPagoItemAdapter;
@@ -62,7 +62,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     public static DivisionGastosPageFragment newInstance(int eventoId) {
         DivisionGastosPageFragment fragment = new DivisionGastosPageFragment();
         Bundle args = new Bundle();
-        args.putInt(EVENTO_ID,eventoId);
+        args.putInt(EVENTO_ID, eventoId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,7 +88,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
-        mPagoItemAdapter =  new PagoItemAdapter(pagosListDisplayed);
+        mPagoItemAdapter = new PagoItemAdapter(pagosListDisplayed);
         //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -108,8 +108,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
 
     private void search(String query) {
         List<Pago> result = new ArrayList<>();
-        for(Pago p: pagosListDelEvento){
-            if(p.matches(query)){
+        for(Pago p : pagosListDelEvento) {
+            if(p.matches(query)) {
                 result.add(p);
             }
         }
@@ -119,7 +119,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         mPagoItemAdapter.notifyDataSetChanged();
     }
 
-    private void restoreOriginalPagosList(){
+    private void restoreOriginalPagosList() {
         pagosListDisplayed.clear();
         pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
@@ -136,8 +136,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     }
 
     private void calcularPagos() {
-        final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(),evento.getId());
-        if(evento.isDivisionGastosYaHecha()){
+        final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(), evento.getId());
+        if(evento.isDivisionGastosYaHecha()) {
             DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
                     evento.getGastosPorParticipante(), true)
                     .show(getActivity().getFragmentManager(), "dialog");
@@ -148,7 +148,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
                     calculadorDePagos.calcularPagos();
                     //FIXME ON CASCADE
                     evento.addAllPagos(calculadorDePagos.getListaPagos());
-                    for(Pago p: evento.getPagos()){
+                    for(Pago p : evento.getPagos()) {
                         daoPago.save(p, evento.getId());
                     }
                     evento.setDivisionGastosYaHecha(true);
@@ -171,7 +171,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
             Thread t = new Thread(r);
             t.start();
         } else {
-            Toast.makeText(getContext(), R.string.tareas_sin_finalizar, Toast.LENGTH_SHORT);
+            int codigoError = calculadorDePagos.getCodigoError();
+            Toast.makeText(getContext(), codigoError, Toast.LENGTH_SHORT);
         }
     }
 
@@ -186,7 +187,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         @Override
         public boolean onQueryTextChange(String query) {
             search(query);
-            if(query.trim().isEmpty()){
+            if(query.trim().isEmpty()) {
                 restoreOriginalPagosList();
             }
             return false;

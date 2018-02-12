@@ -58,7 +58,7 @@ public class Participante {
         return Participante.participanteSinAsignar;
     }
 
-    public boolean esSinAsignar(){
+    public boolean esSinAsignar() {
         return this.id == null;
     }
 
@@ -77,12 +77,7 @@ public class Participante {
         return id != null ? id.equals(that.id) : that.id == null;
     }
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    public static List<Participante> getParticipantesMock(){
+    public static List<Participante> getParticipantesMock() {
         List<Participante> participantes = new ArrayList<>();
         int numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         String numTelRandom = String.valueOf(numRandom);
