@@ -63,6 +63,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         tarea.setId(c.getInt(c.getColumnIndex(Constants.TAREA_ID)));
         tarea.setDescripcion(c.getString(c.getColumnIndex(Constants.TAREA_DESCRIPCION)));
         tarea.setTitulo(c.getString(c.getColumnIndex(Constants.TAREA_TITULO)));
+        tarea.setGasto(c.getDouble(c.getColumnIndex(Constants.TAREA_GASTO)));
         int estadoOrdinal = c.getInt(c.getColumnIndex(Constants.TAREA_ESTADO));
         tarea.setEstadoTarea(EstadoTarea.values()[estadoOrdinal]);
         if(tarea.getEstadoTarea() == EstadoTarea.SIN_ASIGNAR){
@@ -122,6 +123,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         ContentValues cv = new ContentValues();
         cv.put(Constants.TAREA_DESCRIPCION, t.getDescripcion());
         cv.put(Constants.TAREA_TITULO, t.getTitulo());
+        cv.put(Constants.TAREA_GASTO, t.getGasto());
         cv.put(Constants.TAREA_EVENTO_FK, eventoId);
         cv.put(Constants.TAREA_ESTADO, t.getEstadoTarea().ordinal());
         if(t.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR){
@@ -157,19 +159,27 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
                 Tarea tarea = tareasMock.get(tareaRandom);
                 tarea.setEstadoTarea(EstadoTarea.values()[estadoRandom]);
 
+                /**
+                 * Se asegura que los eventos Mock "Fiesta Universitaria" y "Fiesta de fin de anio"
+                 * tenga todas las tareas finalizadas
+                 */
+
+                if(e.getNombre().contains("Fiesta")){
+                    tarea.setEstadoTarea(EstadoTarea.FINALIZADA);
+                }
+
                 if(tarea.getEstadoTarea() == EstadoTarea.SIN_ASIGNAR){
                     tarea.setPersonaAsignada(Participante.getParticipanteSinAsignar());
                 } else {
                     tarea.setPersonaAsignada(listaParticipantes.get(partRandom));
                 }
 
+                tarea.setGasto(0.0);
                 if(tarea.getEstadoTarea() == EstadoTarea.FINALIZADA){
-                    double gastoint = ThreadLocalRandom.current().nextInt(0, 10000);
+                    double gastoint = ThreadLocalRandom.current().nextInt(1, 1500);
                     double gastodecimal = ThreadLocalRandom.current().nextInt(0, 100);
                     double gasto = gastoint + gastodecimal /100.00;
                     tarea.setGasto(gasto);
-                } else {
-                    tarea.setGasto(0.0);
                 }
                 save(tarea, e.getId());
             }

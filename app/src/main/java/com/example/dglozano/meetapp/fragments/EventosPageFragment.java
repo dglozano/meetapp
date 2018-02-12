@@ -69,8 +69,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-
-        //TODO cambiar a sqlite cuando se implemente
         daoEvento = new SQLiteDaoEvento(getActivity());
         eventosDelUsuario = daoEvento.getAll();
     }
@@ -95,9 +93,10 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mEventosRecyclerView.setAdapter(mEventoItemAdapter);
+        eventosListDisplayed.clear();
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
-//        registerForContextMenu(mEventosRecyclerView);
+        //registerForContextMenu(mEventosRecyclerView);
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
         fab.setOnClickListener(new MyFabIconOnClickListener());

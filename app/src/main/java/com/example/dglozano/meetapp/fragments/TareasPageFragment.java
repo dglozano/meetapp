@@ -106,6 +106,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mTareasRecyclerview.setAdapter(mTareaAdapter);
+        tareasListDisplayed.clear();
         tareasListDisplayed.addAll(tareasListDelEvento);
         mTareaAdapter.notifyDataSetChanged();
 

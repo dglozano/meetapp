@@ -72,6 +72,11 @@ public class Participante {
         return id != null ? id.equals(that.id) : that.id == null;
     }
 
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
     public static List<Participante> getParticipantesMock(){
         List<Participante> participantes = new ArrayList<>();
         int numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);

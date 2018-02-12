@@ -112,6 +112,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mParticipantesRecyclerView.setAdapter(mParticipanteAdapter);
+        participantesListDisplayed.clear();
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
 

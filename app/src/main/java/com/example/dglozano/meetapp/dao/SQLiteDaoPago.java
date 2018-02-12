@@ -12,6 +12,7 @@ import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
+import com.example.dglozano.meetapp.util.CalculadorDePagos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     private final Context context;
     private final MeetAppOpenHelper dbhelper;
     private SQLiteDaoParticipante daoParticipante;
-    private SQLiteDaoEvento daoEvento;
+    private SQLiteDaoTarea daoTarea;
 
     /**
      * Constructor. Setea el contexto y obtiene la instancia del singleton del dbhelper
@@ -34,7 +35,7 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
         daoParticipante = new SQLiteDaoParticipante(c);
-        daoEvento = new SQLiteDaoEvento(c);
+        daoTarea = new SQLiteDaoTarea(c);
     }
 
     /**
@@ -146,7 +147,13 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
 
     public void createMockData(List<Evento> eventosYaGuardadosEnDb){
         for(Evento e: eventosYaGuardadosEnDb){
-            // TODO GENERAR PAGOS DE LOS EVENTOS MOCKEADOS.
+            CalculadorDePagos cdp = new CalculadorDePagos(this.context, e.getId());
+            if(cdp.puedeCalcular()){
+                cdp.calcularPagos();
+                for(Pago p: cdp.getListaPagos()){
+                    save(p,e.getId());
+                }
+            }
         }
     }
 

@@ -24,6 +24,7 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.fragments.EventosPageFragment;
@@ -85,10 +86,12 @@ public class MainActivity extends AppCompatActivity {
         SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
         SQLiteDaoParticipante daoParticipante = new SQLiteDaoParticipante(this);
         SQLiteDaoTarea daoTarea = new SQLiteDaoTarea(this);
+        SQLiteDaoPago daoPago = new SQLiteDaoPago(this);
         if(daoEvento.getAll().isEmpty()){
             daoEvento.createMockData();
             daoParticipante.createMockData(daoEvento.getAll());
             daoTarea.createMockData(daoEvento.getAll());
+            daoPago.createMockData(daoEvento.getAll());
         }
     }
 

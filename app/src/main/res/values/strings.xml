@@ -36,4 +36,5 @@
     <string name="contactos_title">Contactos</string>
     <string name="crear_evento">Crear evento</string>
     <string name="crear_tarea">Crear tarea</string>
+    <string name="tareas_sin_finalizar">Hay tareas sin finalizar!</string>
 </resources>
