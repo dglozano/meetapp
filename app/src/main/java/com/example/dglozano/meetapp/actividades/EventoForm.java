@@ -14,8 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.fragments.DatePickerFragment;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -24,23 +24,26 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class EventoForm extends AppCompatActivity {
 
-    public static final String ID_KEY = "id";
+    public static final String KEY_EVENTO_ID = "id";
     private static final int PLACE_PICKER_REQUEST = 1;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private Intent intentOrigen;
     private Boolean flagNuevoEvento;
     private Evento evento;
-    private Dao<Evento> dao;
+    private DaoEvento daoEvento;
 
     private EditText et_nombre;
     private EditText et_lugar;
     private Place place;
     private EditText et_fecha;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +55,21 @@ public class EventoForm extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-
-        // TODO cambiar a daosqlite
-        dao = MockDaoEvento.getInstance();
+        daoEvento = new SQLiteDaoEvento(this);
 
         getViews();
         setListeners();
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
-        final Integer id = (extras != null) ? extras.getInt(ID_KEY) : null;
+        final Integer id = (extras != null) ? extras.getInt(KEY_EVENTO_ID) : null;
         flagNuevoEvento = id == null;
 
         if(!flagNuevoEvento) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
-                    evento = dao.getById(id);
+                    evento = daoEvento.getById(id);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -80,7 +81,6 @@ public class EventoForm extends AppCompatActivity {
             Thread t = new Thread(r);
             t.start();
         }
-
     }
 
     private void getViews() {
@@ -119,7 +119,8 @@ public class EventoForm extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        et_fecha.setText(evento.getFecha());
+
+        et_fecha.setText(sdf.format(evento.getFecha()));
     }
 
     @Override
@@ -157,18 +158,24 @@ public class EventoForm extends AppCompatActivity {
         if(place != null) {
             evento.setLugar(place.getLatLng());
         }
-        evento.setFecha(fecha);
+        try {
+            evento.setFecha(sdf.parse(fecha));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        dao.save(evento);
+        daoEvento.save(evento);
     }
 
     private void showDatePickerDialog() {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // month + 1 porque los meses van del 0 al 11
-                final String selectedDate = day + " / " + (month + 1) + " / " + year;
-                et_fecha.setText(selectedDate);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                String formatedDate = sdf.format(calendar.getTime());
+                et_fecha.setText(formatedDate);
             }
         });
         newFragment.show(getFragmentManager(), "datePicker");
@@ -183,8 +190,7 @@ public class EventoForm extends AppCompatActivity {
         if(requestCode == PLACE_PICKER_REQUEST) {
             if(resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(this, data);
-                // TODO Ver si se muestra el nombre o la dirección
-                et_lugar.setText(place.getAddress());
+                et_lugar.setText(place.getName());
             }
         }
     }

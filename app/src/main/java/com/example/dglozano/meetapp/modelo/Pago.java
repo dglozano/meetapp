@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Pago {
 
-    private int id;
+    private Integer id;
     private EstadoPago estadoPago;
     private Participante pagador;
     private Participante cobrador;
@@ -23,11 +23,15 @@ public class Pago {
         this.monto = monto;
     }
 
-    public int getId() {
+    public Pago(){
+
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -72,57 +76,5 @@ public class Pago {
             matches = true;
         }
         return matches;
-    }
-
-    public static List<Pago> getPagosMock() {
-        List<Pago> listaPagosMock = new ArrayList<>();
-        List<Participante> listaParticipantesMock = Participante.getParticipantesMock();
-
-        Participante pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        Participante cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        Pago pago = new Pago(EstadoPago.NO_PAGADO, pag, cob, 1225);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.NO_PAGADO, pag, cob, 10.25);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.NO_PAGADO, pag, cob, 77.13);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.NO_PAGADO, pag, cob, 18.56);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.PAGADO, pag, cob, 25.00);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.PAGADO, pag, cob, 80.75);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.PAGADO, pag, cob, 155.00);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.PAGADO, pag, cob, 100.00);
-        listaPagosMock.add(pago);
-
-        pag = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        cob = listaParticipantesMock.get(new Random().nextInt(listaParticipantesMock.size()));
-        pago = new Pago(EstadoPago.PAGADO, pag, cob, 250.25);
-        listaPagosMock.add(pago);
-
-        return listaPagosMock;
     }
 }

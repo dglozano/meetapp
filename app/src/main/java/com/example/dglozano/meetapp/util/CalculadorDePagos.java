@@ -1,11 +1,15 @@
 package com.example.dglozano.meetapp.util;
 
+import android.content.Context;
 import android.util.Pair;
 
-import com.example.dglozano.meetapp.dao.MockDaoParticipante;
-import com.example.dglozano.meetapp.dao.MockDaoTarea;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
+import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoPago;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
+import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
@@ -21,15 +25,35 @@ import java.util.List;
 public class CalculadorDePagos {
 
     private List<Pago> listaPagos;
+    private int idEvento;
+    private SQLiteDaoEvento daoEvento;
+    private SQLiteDaoTarea daoTarea;
+    private SQLiteDaoParticipante daoParticipante;
+    private double gastoTotal;
+    private double gastoPorParticipante;
+
+    public CalculadorDePagos(Context c, int idEvento){
+        this.idEvento = idEvento;
+        this.daoEvento = new SQLiteDaoEvento(c);
+        this.daoParticipante = new SQLiteDaoParticipante(c);
+        this.daoTarea = new SQLiteDaoTarea(c);
+    }
 
     public List<Pago> getListaPagos() {
         return listaPagos;
     }
 
+    public double getGastoTotal() {
+        return gastoTotal;
+    }
+
+    public double getGastoPorParticipante() {
+        return gastoPorParticipante;
+    }
+
     public boolean puedeCalcular() {
         boolean puede = true;
-        // FIXME quitar este mock
-        List<Tarea> tareasDelEvento = MockDaoTarea.getInstance().getAll();
+        List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
         for(Tarea tarea : tareasDelEvento) {
             if(!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
                 puede = false;
@@ -39,21 +63,14 @@ public class CalculadorDePagos {
     }
 
     public void calcularPagos() {
-        // TODO obtener tareas y participantes del evento
-
-        // FIXME quitar este mock
-        List<Tarea> tareasDelEvento = MockDaoTarea.getInstance().getAll();
-        List<Participante> participantesDelEvento = MockDaoParticipante.getInstance().getAll();
+        List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
+        List<Participante> participantesDelEvento = daoParticipante.getAllDelEvento(idEvento);
 
         HashMap<Participante, Double> gastosPorParticipante = new HashMap<>();
         for(Tarea tarea : tareasDelEvento) {
-            if(!tarea.getPersonaAsignada().equals(Participante.getParticipanteSinAsignar())) {
+            if(!tarea.getPersonaAsignada().esSinAsignar()) {
                 Double gasto = gastosPorParticipante.get(tarea.getPersonaAsignada());
-                if(gasto == null) {
-                    gasto = tarea.getGasto();
-                } else {
-                    gasto += tarea.getGasto();
-                }
+                gasto = gasto == null ? tarea.getGasto() : gasto+tarea.getGasto();
                 gastosPorParticipante.put(tarea.getPersonaAsignada(), gasto);
             }
         }
@@ -70,11 +87,13 @@ public class CalculadorDePagos {
         }
 
         // calcula el promedio, es decir, lo que debería gastar cada participante para quedar saldados
-        double promedio = 0;
+        double sumaTotal = 0.0;
         for(Double g : gastosPorParticipante.values()) {
-            promedio += g;
+            sumaTotal += g;
         }
-        promedio = promedio / gastosPorParticipante.values().size();
+        double promedio = sumaTotal / gastosPorParticipante.values().size();
+        this.gastoTotal = sumaTotal;
+        this.gastoPorParticipante = promedio;
 
         // ajusta el promedio a dos decimales
         promedio = promedio * 100;

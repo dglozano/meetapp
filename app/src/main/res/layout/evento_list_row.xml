@@ -18,31 +18,62 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:text="Peña ISI"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/colorPrimaryDark" />
 
-    <TextView
-        android:id="@+id/tv_fecha_evento"
+    <LinearLayout
+        android:id="@+id/linearlayouthorizontal1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tv_titulo_evento"
-        android:layout_marginTop="9dp" />
+        android:layout_below="@id/tv_titulo_evento"
+        android:layout_marginTop="9dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_organizadores_evento"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tv_fecha_evento"
-        android:layout_marginTop="9dp" />
+        <TextView
+            android:id="@+id/tv_lugar_evento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="safsdfasadfsdafsafssadfsadfsfsdafsafsadfsadfafdsfdsf" />
 
-    <TextView
-        android:id="@+id/tv_tareas_completas_evento"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_fecha_evento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:maxLines="1"
+            android:text="30/05/2018"
+            android:textAlignment="textEnd" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearlayouthorizontal2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/tv_organizadores_evento"
-        android:layout_alignBottom="@+id/tv_organizadores_evento"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginTop="9dp"
+        android:layout_below="@id/linearlayouthorizontal1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_organizadores_evento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="0.5"
+            android:text="5 Organizadores" />
+
+        <TextView
+            android:id="@+id/tv_tareas_completas_evento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="1 de 5 Tareas"
+            android:textAlignment="textEnd" />
+
+    </LinearLayout>
 
 </RelativeLayout>
