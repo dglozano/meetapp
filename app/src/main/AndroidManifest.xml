@@ -3,8 +3,8 @@
           package="com.example.dglozano.meetapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -36,12 +36,10 @@
             android:parentActivityName=".actividades.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
-            <!--
-            intent-filter>
+            <!--intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter
-            -->
+            </intent-filter-->
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -63,11 +61,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".actividades.EventoActivity"/>
         </activity>
-
-        <service
-            android:name=".NotifyService"
-            android:exported="false">
-        </service>
+        <activity
+            android:name=".actividades.ContactosActivity"
+            android:parentActivityName=".actividades.EventoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".actividades.EventoActivity"/>
+        </activity>
     </application>
 
 </manifest>
