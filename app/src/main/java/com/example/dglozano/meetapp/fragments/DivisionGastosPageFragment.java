@@ -3,6 +3,7 @@ package com.example.dglozano.meetapp.fragments;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,12 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
+import com.example.dglozano.meetapp.util.CalculadorDePagos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +43,11 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     private static final String EVENTO_ID = "EVENTO_ID";
     private Evento evento;
 
-    private List<Pago> pagosListDelEvento = Pago.getPagosMock();
+    private DaoEvento daoEvento;
+    private DaoEventoMember<Pago> daoPago;
+    private List<Pago> pagosListDelEvento;
+
+    private FloatingActionButton fab;
 
     public DivisionGastosPageFragment() {
         // Required empty public constructor
@@ -62,7 +72,10 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
+        daoEvento = new SQLiteDaoEvento(getActivity());
+        daoPago = new SQLiteDaoPago(getActivity());
+        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
+        pagosListDelEvento = daoPago.getAllDelEvento(evento.getId());
     }
 
     @Override
@@ -85,8 +98,12 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mPagosRecyclerView.setAdapter(mPagoItemAdapter);
+        pagosListDisplayed.clear();
         pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
+
+        fab = view.findViewById(R.id.fab_btn_dividir_gastos);
+        fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
     private void search(String query) {
@@ -118,6 +135,46 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         searchView.setOnCloseListener(new DivisionGastosPageFragment.MyOnCloseListener());
     }
 
+    private void calcularPagos() {
+        final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(),evento.getId());
+        if(evento.isDivisionGastosYaHecha()){
+            DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
+                    evento.getGastosPorParticipante(), true)
+                    .show(getActivity().getFragmentManager(), "dialog");
+        } else if(calculadorDePagos.puedeCalcular()) {
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
+                    calculadorDePagos.calcularPagos();
+                    //FIXME ON CASCADE
+                    evento.addAllPagos(calculadorDePagos.getListaPagos());
+                    for(Pago p: evento.getPagos()){
+                        daoPago.save(p, evento.getId());
+                    }
+                    evento.setDivisionGastosYaHecha(true);
+                    evento.setGastosTotales(calculadorDePagos.getGastoTotal());
+                    evento.setGastosPorParticipante(calculadorDePagos.getGastoPorParticipante());
+                    //daoEvento.save(evento);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
+                                    evento.getGastosPorParticipante(), false)
+                                    .show(getActivity().getFragmentManager(), "dialog");
+                            pagosListDelEvento = calculadorDePagos.getListaPagos();
+                            restoreOriginalPagosList();
+                            fab.setImageResource(R.drawable.ic_info_white_24dp);
+                        }
+                    });
+                }
+            };
+            Thread t = new Thread(r);
+            t.start();
+        } else {
+            Toast.makeText(getContext(), R.string.tareas_sin_finalizar, Toast.LENGTH_SHORT);
+        }
+    }
+
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
 
         @Override
@@ -128,7 +185,6 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
 
         @Override
         public boolean onQueryTextChange(String query) {
-            System.out.println("Entro)");
             search(query);
             if(query.trim().isEmpty()){
                 restoreOriginalPagosList();
@@ -142,6 +198,13 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         public boolean onClose() {
             restoreOriginalPagosList();
             return false;
+        }
+    }
+
+    private class MyFabIconOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            calcularPagos();
         }
     }
 }

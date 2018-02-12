@@ -30,9 +30,10 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.ContactosActivity;
 import com.example.dglozano.meetapp.actividades.TareaForm;
 import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
-import com.example.dglozano.meetapp.dao.Dao;
-import com.example.dglozano.meetapp.dao.MockDaoEvento;
-import com.example.dglozano.meetapp.dao.MockDaoParticipante;
+import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
+import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 
@@ -54,7 +55,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
     private RecyclerView mParticipantesRecyclerView;
     private final int CREAR_PARTICIPANTE = 1;
 
-    private Dao<Participante> dao;
+    private DaoEvento daoEvento;
+    private DaoEventoMember<Participante> daoParticipante;
     private List<Participante> participantesListDelEvento;
 
     private static final String EVENTO_ID = "EVENTO_ID";
@@ -83,10 +85,11 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        //TODO cambiar a sqlite cuando se implemente
-        evento = MockDaoEvento.getInstance().getById(getArguments().getInt(EVENTO_ID));
-        dao = MockDaoParticipante.getInstance();
-        participantesListDelEvento = dao.getAll();
+        daoParticipante = new SQLiteDaoParticipante(getActivity());
+        daoEvento = new SQLiteDaoEvento(getActivity());
+
+        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
+        participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
     }
 
     @Override
@@ -109,16 +112,12 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
                 getActivity().getApplicationContext(),
                 LinearLayoutManager.VERTICAL));
         mParticipantesRecyclerView.setAdapter(mParticipanteAdapter);
+        participantesListDisplayed.clear();
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
 
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pedirPermisoContactos();
-            }
-        });
+        fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
     public void pedirPermisoContactos(){
@@ -148,11 +147,13 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
             }
             else {
                 Intent i = new Intent(getActivity(), ContactosActivity.class);
+                i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
                 startActivityForResult(i, CREAR_PARTICIPANTE);
             }
         }
         else {
             Intent i = new Intent(getActivity(), ContactosActivity.class);
+            i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
             startActivityForResult(i, CREAR_PARTICIPANTE);
         }
     }
@@ -166,7 +167,6 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         }
         participantesListDisplayed.clear();
         participantesListDisplayed.addAll(result);
-        System.out.println(participantesListDisplayed);
         mParticipanteAdapter.notifyDataSetChanged();
     }
 
@@ -218,11 +218,18 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
             case CREAR_PARTICIPANTE: {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
-                    participantesListDelEvento = dao.getAll();
+                    participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
                     restoreOriginalParticipantesList();
                 }
                 break;
             }
+        }
+    }
+
+    private class MyFabIconOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            pedirPermisoContactos();
         }
     }
 }

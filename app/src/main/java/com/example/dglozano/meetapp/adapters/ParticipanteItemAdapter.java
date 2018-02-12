@@ -26,14 +26,12 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
 
     public class ParticipanteViewHolder extends RecyclerView.ViewHolder {
         public TextView nombreTextView;
-        private ImageView fotoImageView;
         public ImageButton btnLlamarParticipante;
         public ImageButton btnSmsParticipante;
 
         public ParticipanteViewHolder(View view) {
             super(view);
             nombreTextView = (TextView) view.findViewById(R.id.tv_participante_row_nombre);
-            fotoImageView = (ImageView) view.findViewById(R.id.img_participante_row_picture);
             btnLlamarParticipante = (ImageButton) view.findViewById(R.id.btn_llamar_participante);
             btnSmsParticipante = (ImageButton) view.findViewById(R.id.btn_sms_participante);
         }
@@ -74,17 +72,6 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
                 view.getContext().startActivity(intentSMS);
             }
         });
-        switch(participante.getPictureId()){
-            case 0:
-                holder.fotoImageView.setImageResource(R.drawable.ic_adb_black_36dp);
-                break;
-            case 1:
-                holder.fotoImageView.setImageResource(R.drawable.ic_face_black_36dp);
-                break;
-            case 2:
-                holder.fotoImageView.setImageResource(R.drawable.ic_child_care_black_36dp);
-                break;
-        }
     }
 
     @Override

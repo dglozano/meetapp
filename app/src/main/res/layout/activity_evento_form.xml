@@ -31,10 +31,10 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="2dp"
-            android:text="@string/evento_title"
+            android:text="@string/crear_evento"
             android:textAppearance="@android:style/TextAppearance.Material.Large"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="30sp"/>
+            android:textSize="30sp" />
 
         <View
             android:id="@+id/settings_separator"
