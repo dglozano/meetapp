@@ -46,6 +46,11 @@ public class MockDaoParticipante implements DaoEventoMember<Participante> {
     }
 
     @Override
+    public void update(Participante item) {
+
+    }
+
+    @Override
     public List<Participante> getAll() {
         return this.list;
     }

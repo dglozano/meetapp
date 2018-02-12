@@ -47,6 +47,11 @@ public class MockDaoTarea implements DaoEventoMember<Tarea> {
     }
 
     @Override
+    public void update(Tarea item) {
+
+    }
+
+    @Override
     public List<Tarea> getAll() {
         return this.list;
     }

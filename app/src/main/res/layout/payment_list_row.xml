@@ -27,11 +27,13 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/tv_payment_row_monto"
+        android:layout_toLeftOf="@id/img_payment_row_estado_icon"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -43,12 +45,14 @@
                 android:layout_weight="0.75"
                 android:text="Diego Garcia Lozano"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
+                android:maxLines="3"
+                android:ellipsize="end"
                 android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="3dp">
@@ -68,6 +72,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginTop="3dp"
                 android:layout_weight="0.75"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 android:paddingLeft="3dp"
                 android:text="Esteban Rebechi"
                 android:textAppearance="@android:style/TextAppearance.Material.Small"

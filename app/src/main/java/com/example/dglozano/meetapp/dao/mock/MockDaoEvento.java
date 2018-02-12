@@ -37,6 +37,11 @@ public class MockDaoEvento implements DaoEvento {
     }
 
     @Override
+    public void update(Evento item) {
+
+    }
+
+    @Override
     public void delete(Evento item) {
         for(Evento e: this.list){
             if(e.getId() == item.getId()) list.remove(e);
