@@ -3,6 +3,8 @@
           package="com.example.dglozano.meetapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:allowBackup="true"
@@ -62,6 +64,10 @@
                 android:value=".actividades.EventoActivity"/>
         </activity>
 
+        <service
+            android:name=".NotifyService"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>
