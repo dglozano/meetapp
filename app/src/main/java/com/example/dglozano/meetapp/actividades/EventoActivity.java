@@ -18,7 +18,6 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
-import com.example.dglozano.meetapp.dao.mock.MockDaoEvento;
 import com.example.dglozano.meetapp.fragments.DivisionGastosPageFragment;
 import com.example.dglozano.meetapp.fragments.ParticipantesPageFragment;
 import com.example.dglozano.meetapp.fragments.TareasPageFragment;

@@ -11,6 +11,7 @@ public class Tarea {
     private Participante personaAsignada;
     private EstadoTarea estadoTarea;
     private String descripcion;
+    private Double gasto;
 
     public Tarea() {
     }
@@ -27,6 +28,7 @@ public class Tarea {
         this.personaAsignada = Participante.getParticipanteSinAsignar();
         this.estadoTarea = EstadoTarea.SIN_ASIGNAR;
         this.descripcion = descripcion;
+        this.gasto = 0.0;
     }
 
     public Integer getId() {
@@ -78,6 +80,14 @@ public class Tarea {
             matches = true;
         }
         return matches;
+    }
+
+    public Double getGasto() {
+        return gasto;
+    }
+
+    public void setGasto(Double gasto) {
+        this.gasto = gasto;
     }
 
     @Override

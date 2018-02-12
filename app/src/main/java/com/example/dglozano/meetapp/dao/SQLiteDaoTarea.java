@@ -162,6 +162,15 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
                 } else {
                     tarea.setPersonaAsignada(listaParticipantes.get(partRandom));
                 }
+
+                if(tarea.getEstadoTarea() == EstadoTarea.FINALIZADA){
+                    double gastoint = ThreadLocalRandom.current().nextInt(0, 10000);
+                    double gastodecimal = ThreadLocalRandom.current().nextInt(0, 100);
+                    double gasto = gastoint + gastodecimal /100.00;
+                    tarea.setGasto(gasto);
+                } else {
+                    tarea.setGasto(0.0);
+                }
                 save(tarea, e.getId());
             }
         }

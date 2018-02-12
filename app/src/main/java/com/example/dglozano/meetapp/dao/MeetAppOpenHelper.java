@@ -36,6 +36,7 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.TAREA_TITULO + " string,"
             + Constants.TAREA_DESCRIPCION + " text,"
             + Constants.TAREA_ESTADO + " integer,"
+            + Constants.TAREA_GASTO + " real,"
             + Constants.TAREA_EVENTO_FK + " integer,"
             + Constants.TAREA_PARTICIPANTE_FK + " integer,"
             + "FOREIGN KEY("+Constants.TAREA_EVENTO_FK+") " +
@@ -50,6 +51,9 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.PAGO_ESTADO + " integer,"
             + Constants.PAGO_PARTICIPANTE_COBRADOR_FK + " integer,"
             + Constants.PAGO_PARTICIPANTE_PAGADOR_FK + " integer,"
+            + Constants.PAGO_EVENTO_FK + " integer,"
+            + "FOREIGN KEY("+Constants.PAGO_EVENTO_FK+") " +
+            "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + "),"
             + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_COBRADOR_FK+") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + "),"
             + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_PAGADOR_FK+") " +

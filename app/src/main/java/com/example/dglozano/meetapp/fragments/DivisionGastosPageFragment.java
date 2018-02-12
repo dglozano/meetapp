@@ -17,7 +17,9 @@ import android.view.ViewGroup;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.PagoItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 
@@ -39,7 +41,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     private Evento evento;
 
     private DaoEvento daoEvento;
-    private List<Pago> pagosListDelEvento = Pago.getPagosMock();
+    private DaoEventoMember<Pago> daoPago;
+    private List<Pago> pagosListDelEvento;
 
     public DivisionGastosPageFragment() {
         // Required empty public constructor
@@ -65,7 +68,9 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         setHasOptionsMenu(true);
 
         daoEvento = new SQLiteDaoEvento(getActivity());
+        daoPago = new SQLiteDaoPago(getActivity());
         evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
+        pagosListDelEvento = daoPago.getAllDelEvento(evento.getId());
     }
 
     @Override
@@ -131,7 +136,6 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
 
         @Override
         public boolean onQueryTextChange(String query) {
-            System.out.println("Entro)");
             search(query);
             if(query.trim().isEmpty()){
                 restoreOriginalPagosList();

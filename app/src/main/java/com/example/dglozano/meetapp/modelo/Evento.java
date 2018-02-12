@@ -3,6 +3,7 @@ package com.example.dglozano.meetapp.modelo;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Evento {
     private Date fecha;
     private List<Participante> participantes;
     private List<Tarea> tareas;
+    private List<Pago> pagos;
 
     public Evento(String nombre, LatLng lugar, Date fecha) {
         this.nombre = nombre;
@@ -24,6 +26,7 @@ public class Evento {
         this.fecha = fecha;
         this.participantes = new ArrayList<>();
         this.tareas = new ArrayList<>();
+        this.pagos = new ArrayList<>();
     }
 
     public boolean matches(String query) {
@@ -37,6 +40,7 @@ public class Evento {
     public Evento() {
         this.participantes = new ArrayList<>();
         this.tareas = new ArrayList<>();
+        this.pagos = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -104,6 +108,27 @@ public class Evento {
         for(Tarea t: tareas){
             if(t.getId() == tEliminar.getId()){
                 tareas.remove(t);
+                //TODO ON DELETE CASCADE
+            }
+        }
+    }
+
+    public List<Pago> getPagos(){
+        return this.pagos;
+    }
+
+    public void addPago(Pago p){
+        this.pagos.add(p);
+    }
+
+    public void addAllPagos(List<Pago> pagos){
+        this.pagos.addAll(pagos);
+    }
+
+    public void eliminarPago(Pago pEliminar){
+        for(Pago p: pagos){
+            if(p.getId() == pEliminar.getId()){
+                tareas.remove(p);
                 //TODO ON DELETE CASCADE
             }
         }
