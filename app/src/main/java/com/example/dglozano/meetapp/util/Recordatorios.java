@@ -8,6 +8,7 @@ import android.content.Intent;
 import com.example.dglozano.meetapp.NotifyService;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -16,34 +17,23 @@ public class Recordatorios {
     public Recordatorios() {
     }
 
-    public void crearRecordatorioEvento(Context context, Integer idEvento, Integer año, Integer mes, Integer dia) {
-        this.recordatorioEvento(false, context, idEvento, año, mes, dia);
-    }
-
-    public void actualizarRecordatorioEvento(Context context, Integer idEvento, Integer año, Integer mes, Integer dia) {
-        this.recordatorioEvento(true, context, idEvento, año, mes, dia);
-    }
-
-    private void recordatorioEvento(boolean cancelar, Context context, Integer idEvento, Integer año, Integer mes, Integer dia) {
+    public void recordatorioEvento(Context context, int idEvento, Date fecha) {
         Context ctx = context.getApplicationContext();
         Intent myIntent = new Intent(ctx.getApplicationContext(), NotifyService.class);
         myIntent.putExtra("id", idEvento);
         AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getService(ctx, idEvento, myIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getService(ctx, idEvento, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        if(cancelar) {
-            alarmManager.cancel(pendingIntent);
-        }
+        // se obtiene el dia anterior (si se pone fecha 0 en el constructor se obtiene el último día del mes anterior)
+        fecha = new Date(fecha.getYear(), fecha.getMonth(), fecha.getDate() - 1);
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.HOUR, 8);
-        calendar.set(Calendar.AM_PM, Calendar.PM);
-        calendar.set(Calendar.DAY_OF_MONTH, dia);
-        calendar.set(Calendar.MONTH, mes - 1);
-        calendar.set(Calendar.YEAR, año);
-
+        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.DAY_OF_MONTH, fecha.getDate());
+        calendar.set(Calendar.MONTH, fecha.getMonth());
+        calendar.set(Calendar.YEAR, fecha.getYear() + 1900);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }

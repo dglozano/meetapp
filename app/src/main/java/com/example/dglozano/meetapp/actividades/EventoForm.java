@@ -18,6 +18,7 @@ import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.fragments.DatePickerFragment;
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.util.Recordatorios;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -164,7 +165,16 @@ public class EventoForm extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        daoEvento.save(evento);
+        Recordatorios recordatorios = new Recordatorios();
+        if(flagNuevoEvento) {
+            int id = (int) daoEvento.save(evento);
+            if(evento.getFecha() != null)
+                recordatorios.recordatorioEvento(this, id, evento.getFecha());
+        } else {
+            daoEvento.update(evento);
+            if(evento.getFecha() != null)
+                recordatorios.recordatorioEvento(this, evento.getId(), evento.getFecha());
+        }
     }
 
     private void showDatePickerDialog() {

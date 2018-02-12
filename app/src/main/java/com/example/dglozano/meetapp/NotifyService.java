@@ -20,20 +20,22 @@ public class NotifyService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         SQLiteDaoEvento dao = new SQLiteDaoEvento(getApplicationContext());
         Integer idEvento = intent.getExtras().getInt("id");
-        Evento evento = dao.getById(idEvento);
+        if(idEvento != null) {
+            Evento evento = dao.getById(idEvento);
 
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent newIntent = new Intent(this.getApplicationContext(), EventoActivity.class);
-        newIntent.putExtra(EventoItemAdapter.EXTRA_EVENTO_ID, idEvento);
-        PendingIntent pi = PendingIntent.getActivity(this, 0, newIntent, 0);
-        int icon = android.R.drawable.sym_def_app_icon;
-        Notification not = new Notification.Builder(this)
-                .setSmallIcon(icon)
-                .setAutoCancel(true)
-                .setContentIntent(pi)
-                .setContentTitle("Un evento mañana!")
-                .setContentText(evento.getNombre())
-                .build();
-        nm.notify(1, not);
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            Intent newIntent = new Intent(this.getApplicationContext(), EventoActivity.class);
+            newIntent.putExtra(EventoItemAdapter.EXTRA_EVENTO_ID, idEvento);
+            PendingIntent pi = PendingIntent.getActivity(this, 0, newIntent, 0);
+            int icon = android.R.drawable.sym_def_app_icon;
+            Notification not = new Notification.Builder(this)
+                    .setSmallIcon(icon)
+                    .setAutoCancel(true)
+                    .setContentIntent(pi)
+                    .setContentTitle("Un evento mañana!")
+                    .setContentText(evento.getNombre())
+                    .build();
+            nm.notify(1, not);
+        }
     }
 }
