@@ -29,7 +29,7 @@ public class Recordatorios {
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MINUTE, 11);
+        calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 20);
         calendar.set(Calendar.DAY_OF_MONTH, fecha.getDate());
         calendar.set(Calendar.MONTH, fecha.getMonth());
