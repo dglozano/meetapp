@@ -19,7 +19,7 @@ public class NotifyService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Integer idEvento = intent.getIntExtra("id", 0);
-        Evento evento = MockDaoEvento.getInstance().getById(idEvento);
+        Evento evento = MockDaoEvento.getInstance().getById(idEvento); // FIXME cambiar este mock
 
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent newIntent = new Intent(this.getApplicationContext(), EventoActivity.class);
