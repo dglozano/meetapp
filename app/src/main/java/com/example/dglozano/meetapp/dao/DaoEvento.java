@@ -9,6 +9,8 @@ public interface DaoEvento {
 
     void save(Evento item);
 
+    void update(Evento item);
+
     void delete(Evento item);
 
     List<Evento> getAll();

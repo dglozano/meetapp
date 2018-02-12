@@ -11,7 +11,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
+import com.example.dglozano.meetapp.modelo.Tarea;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
@@ -82,6 +84,11 @@ public class SQLiteDaoEvento implements DaoEvento {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        int divisionHechaInt = c.getInt(c.getColumnIndex(Constants.EVENTO_DIVISION_YA_REALIZADA));
+        boolean divisionHechaFlag = (divisionHechaInt == 0) ? false : true;
+        evento.setDivisionGastosYaHecha(divisionHechaFlag);
+        evento.setGastosTotales(c.getDouble(c.getColumnIndex(Constants.EVENTO_GASTO_TOTAL)));
+        evento.setGastosPorParticipante(c.getDouble(c.getColumnIndex(Constants.EVENTO_GASTO_POR_PARTICIPANTE)));
         evento.addAllParticipantes(daoParticipante.getAllDelEvento(evento.getId()));
         evento.addAllTareas(daoTarea.getAllDelEvento(evento.getId()));
         evento.addAllPagos(daoPago.getAllDelEvento(evento.getId()));
@@ -119,7 +126,41 @@ public class SQLiteDaoEvento implements DaoEvento {
         cv.put(Constants.EVENTO_FECHA, sdf.format(e.getFecha()));
         cv.put(Constants.EVENTO_LAT, e.getLugar().latitude);
         cv.put(Constants.EVENTO_LNG, e.getLugar().longitude);
+        cv.put(Constants.EVENTO_GASTO_TOTAL, e.getGastosTotales());
+        cv.put(Constants.EVENTO_GASTO_POR_PARTICIPANTE, e.getGastosPorParticipante());
+        cv.put(Constants.EVENTO_DIVISION_YA_REALIZADA, e.isDivisionGastosYaHecha());
         db.insert(Constants.EVENTO_TABLENAME,null, cv);
+        db.close();
+    }
+
+    @Override
+    public void update(Evento e) {
+        db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.EVENTO_NAME, e.getNombre());
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
+        cv.put(Constants.EVENTO_FECHA, sdf.format(e.getFecha()));
+        cv.put(Constants.EVENTO_LAT, e.getLugar().latitude);
+        cv.put(Constants.EVENTO_LNG, e.getLugar().longitude);
+        cv.put(Constants.EVENTO_GASTO_TOTAL, e.getGastosTotales());
+        cv.put(Constants.EVENTO_GASTO_POR_PARTICIPANTE, e.getGastosPorParticipante());
+        cv.put(Constants.EVENTO_DIVISION_YA_REALIZADA, e.isDivisionGastosYaHecha());
+        for(Participante p: e.getParticipantes())
+            if(p.getId() == null)
+                daoParticipante.save(p, e.getId());
+            else
+                daoParticipante.update(p);
+        for(Tarea t: e.getTareas())
+            if(t.getId() == null)
+                daoTarea.save(t, e.getId());
+            else
+                daoTarea.update(t);
+        for(Pago p: e.getPagos())
+            if(p.getId() == null)
+                daoPago.save(p, e.getId());
+            else
+                daoPago.update(p);
+        db.update(Constants.EVENTO_TABLENAME, cv, Constants.EVENTO_ID +"="+ e.getId(), null);
         db.close();
     }
 

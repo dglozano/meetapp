@@ -29,6 +29,8 @@ public class CalculadorDePagos {
     private SQLiteDaoEvento daoEvento;
     private SQLiteDaoTarea daoTarea;
     private SQLiteDaoParticipante daoParticipante;
+    private double gastoTotal;
+    private double gastoPorParticipante;
 
     public CalculadorDePagos(Context c, int idEvento){
         this.idEvento = idEvento;
@@ -39,6 +41,14 @@ public class CalculadorDePagos {
 
     public List<Pago> getListaPagos() {
         return listaPagos;
+    }
+
+    public double getGastoTotal() {
+        return gastoTotal;
+    }
+
+    public double getGastoPorParticipante() {
+        return gastoPorParticipante;
     }
 
     public boolean puedeCalcular() {
@@ -77,11 +87,13 @@ public class CalculadorDePagos {
         }
 
         // calcula el promedio, es decir, lo que debería gastar cada participante para quedar saldados
-        double promedio = 0.0;
+        double sumaTotal = 0.0;
         for(Double g : gastosPorParticipante.values()) {
-            promedio += g;
+            sumaTotal += g;
         }
-        promedio = promedio / gastosPorParticipante.values().size();
+        double promedio = sumaTotal / gastosPorParticipante.values().size();
+        this.gastoTotal = sumaTotal;
+        this.gastoPorParticipante = promedio;
 
         // ajusta el promedio a dos decimales
         promedio = promedio * 100;

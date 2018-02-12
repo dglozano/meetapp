@@ -1,7 +1,5 @@
 package com.example.dglozano.meetapp.dao;
 
-import com.example.dglozano.meetapp.modelo.Evento;
-
 import java.util.List;
 
 /**
@@ -14,6 +12,8 @@ public interface DaoEventoMember<T> {
     void save(T item, int eventoId);
 
     void delete(T item);
+
+    void update(T item);
 
     List<T> getAll();
 

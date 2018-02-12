@@ -37,4 +37,8 @@
     <string name="crear_evento">Crear evento</string>
     <string name="crear_tarea">Crear tarea</string>
     <string name="tareas_sin_finalizar">Hay tareas sin finalizar!</string>
+    <string name="success_division_msg">La división de gastos del evento se ha realizado con éxito.</string>
+    <string name="success_division_info_msg">La división de gastos del evento ya ha sido realizada anteriormente.</string>
+    <string name="alert_success_total_msg">Gastos totales:</string>
+    <string name="alert_success_individual_msg">Gasto por Participante:</string>
 </resources>

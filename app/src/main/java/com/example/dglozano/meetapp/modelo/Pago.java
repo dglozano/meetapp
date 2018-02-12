@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class Pago {
 
-    private int id;
+    private Integer id;
     private EstadoPago estadoPago;
     private Participante pagador;
     private Participante cobrador;
@@ -27,11 +27,11 @@ public class Pago {
 
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

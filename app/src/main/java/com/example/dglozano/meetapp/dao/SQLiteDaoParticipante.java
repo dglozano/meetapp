@@ -126,6 +126,16 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
         db.close();
     }
 
+    @Override
+    public void update(Participante p) {
+        db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.PARTICIPANTE_NOMBRE, p.getNombreApellido());
+        cv.put(Constants.PARTICIPANTE_TELEFONO, p.getNumeroTel());
+        db.update(Constants.PARTICIPANTE_TABLENAME, cv, Constants.PARTICIPANTE_ID +"="+ p.getId(), null);
+        db.close();
+    }
+
     public void createMockData(List<Evento> eventosYaGuardadosEnDb){
         List<Participante> participantesMock = Participante.getParticipantesMock();
         for(Evento e: eventosYaGuardadosEnDb){

@@ -146,6 +146,21 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         db.close();
     }
 
+    @Override
+    public void update(Tarea t) {
+        db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.TAREA_DESCRIPCION, t.getDescripcion());
+        cv.put(Constants.TAREA_TITULO, t.getTitulo());
+        cv.put(Constants.TAREA_GASTO, t.getGasto());
+        cv.put(Constants.TAREA_ESTADO, t.getEstadoTarea().ordinal());
+        if(t.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR){
+            cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
+        }
+        db.update(Constants.TAREA_TABLENAME, cv, Constants.TAREA_ID +"="+ t.getId(), null);
+        db.close();
+    }
+
     public void createMockData(List<Evento> eventosYaGuardadosEnDb){
         List<Tarea> tareasMock = Tarea.getTareasMock();
         for(Evento e: eventosYaGuardadosEnDb){

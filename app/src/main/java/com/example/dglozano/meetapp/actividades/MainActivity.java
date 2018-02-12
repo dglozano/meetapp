@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             daoEvento.createMockData();
             daoParticipante.createMockData(daoEvento.getAll());
             daoTarea.createMockData(daoEvento.getAll());
-            daoPago.createMockData(daoEvento.getAll());
+            //daoPago.createMockData(daoEvento.getAll());
         }
     }
 

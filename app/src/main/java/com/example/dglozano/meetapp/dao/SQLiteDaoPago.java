@@ -145,6 +145,18 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
         db.close();
     }
 
+    @Override
+    public void update(Pago p) {
+        db = dbhelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Constants.PAGO_MONTO, p.getMonto());
+        cv.put(Constants.PAGO_ESTADO, p.getEstadoPago().ordinal());
+        cv.put(Constants.PAGO_PARTICIPANTE_COBRADOR_FK, p.getCobrador().getId());
+        cv.put(Constants.PAGO_PARTICIPANTE_PAGADOR_FK, p.getPagador().getId());
+        db.update(Constants.PAGO_TABLENAME, cv, Constants.PAGO_ID +"="+ p.getId(), null);
+        db.close();
+    }
+
     public void createMockData(List<Evento> eventosYaGuardadosEnDb){
         for(Evento e: eventosYaGuardadosEnDb){
             CalculadorDePagos cdp = new CalculadorDePagos(this.context, e.getId());

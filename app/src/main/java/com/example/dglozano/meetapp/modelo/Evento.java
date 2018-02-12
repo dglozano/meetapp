@@ -19,6 +19,9 @@ public class Evento {
     private List<Participante> participantes;
     private List<Tarea> tareas;
     private List<Pago> pagos;
+    private boolean divisionGastosYaHecha;
+    private double gastosTotales;
+    private double gastosPorParticipante;
 
     public Evento(String nombre, LatLng lugar, Date fecha) {
         this.nombre = nombre;
@@ -27,6 +30,14 @@ public class Evento {
         this.participantes = new ArrayList<>();
         this.tareas = new ArrayList<>();
         this.pagos = new ArrayList<>();
+        this.divisionGastosYaHecha = false;
+    }
+
+    public Evento() {
+        this.participantes = new ArrayList<>();
+        this.tareas = new ArrayList<>();
+        this.pagos = new ArrayList<>();
+        this.divisionGastosYaHecha = false;
     }
 
     public boolean matches(String query) {
@@ -37,10 +48,28 @@ public class Evento {
         return matches;
     }
 
-    public Evento() {
-        this.participantes = new ArrayList<>();
-        this.tareas = new ArrayList<>();
-        this.pagos = new ArrayList<>();
+    public double getGastosTotales() {
+        return gastosTotales;
+    }
+
+    public void setGastosTotales(double gastosTotales) {
+        this.gastosTotales = gastosTotales;
+    }
+
+    public double getGastosPorParticipante() {
+        return gastosPorParticipante;
+    }
+
+    public void setGastosPorParticipante(double gastosPorParticipante) {
+        this.gastosPorParticipante = gastosPorParticipante;
+    }
+
+    public boolean isDivisionGastosYaHecha() {
+        return divisionGastosYaHecha;
+    }
+
+    public void setDivisionGastosYaHecha(boolean divisionGastosYaHecha) {
+        this.divisionGastosYaHecha = divisionGastosYaHecha;
     }
 
     public Integer getId() {
@@ -113,8 +142,8 @@ public class Evento {
         }
     }
 
-    public List<Pago> getPagos(){
-        return this.pagos;
+    public List<Tarea> getTareas(){
+        return this.tareas;
     }
 
     public void addPago(Pago p){
@@ -134,8 +163,8 @@ public class Evento {
         }
     }
 
-    public List<Tarea> getTareas(){
-        return this.tareas;
+    public List<Pago> getPagos(){
+        return this.pagos;
     }
 
     public static List<Evento> getEventosMock() {

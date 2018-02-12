@@ -19,6 +19,9 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.EVENTO_NAME +  " string,"
             + Constants.EVENTO_LAT + " real,"
             + Constants.EVENTO_LNG + " real,"
+            + Constants.EVENTO_DIVISION_YA_REALIZADA + " boolean,"
+            + Constants.EVENTO_GASTO_TOTAL + " real,"
+            + Constants.EVENTO_GASTO_POR_PARTICIPANTE + " real,"
             + Constants.EVENTO_FECHA + " string);";
 
     private static final String SQL_CREATE_PARTICIPANTE= "CREATE TABLE "

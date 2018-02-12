@@ -47,6 +47,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     private DaoEventoMember<Pago> daoPago;
     private List<Pago> pagosListDelEvento;
 
+    private FloatingActionButton fab;
+
     public DivisionGastosPageFragment() {
         // Required empty public constructor
     }
@@ -100,7 +102,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
 
-        FloatingActionButton fab = view.findViewById(R.id.fab_btn_dividir_gastos);
+        fab = view.findViewById(R.id.fab_btn_dividir_gastos);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
@@ -135,16 +137,33 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
 
     private void calcularPagos() {
         final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(),evento.getId());
-        if(calculadorDePagos.puedeCalcular()) {
+        if(evento.isDivisionGastosYaHecha()){
+            DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
+                    evento.getGastosPorParticipante(), true)
+                    .show(getActivity().getFragmentManager(), "dialog");
+        } else if(calculadorDePagos.puedeCalcular()) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
                     calculadorDePagos.calcularPagos();
+                    //FIXME ON CASCADE
+                    evento.addAllPagos(calculadorDePagos.getListaPagos());
+                    for(Pago p: evento.getPagos()){
+                        daoPago.save(p, evento.getId());
+                    }
+                    evento.setDivisionGastosYaHecha(true);
+                    evento.setGastosTotales(calculadorDePagos.getGastoTotal());
+                    evento.setGastosPorParticipante(calculadorDePagos.getGastoPorParticipante());
+                    //daoEvento.save(evento);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
+                                    evento.getGastosPorParticipante(), false)
+                                    .show(getActivity().getFragmentManager(), "dialog");
                             pagosListDelEvento = calculadorDePagos.getListaPagos();
                             restoreOriginalPagosList();
+                            fab.setImageResource(R.drawable.ic_info_white_24dp);
                         }
                     });
                 }
