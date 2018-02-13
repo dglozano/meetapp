@@ -172,7 +172,8 @@ public class TareaForm extends AppCompatActivity {
         tarea.setTitulo(titulo);
         tarea.setDescripcion(descripcion);
         tarea.setPersonaAsignada(encargado);
-        //TODO UPDATE EN DB SI NO ES NUEVA TAREA
-        daoTarea.save(tarea, evento.getId());
+
+        if(flagNuevaTarea) daoTarea.save(tarea, evento.getId());
+        else daoTarea.update(tarea);
     }
 }
