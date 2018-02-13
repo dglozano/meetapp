@@ -51,4 +51,5 @@
     <string name="evento_creado">Evento creado exitosamente</string>
     <string name="tarea_creada">Tarea creada exitosamente</string>
     <string name="tarea_editada">Tarea editada exitosamente</string>
+    <string name="participante_agregado">Participante agregado exitosamente</string>
 </resources>
