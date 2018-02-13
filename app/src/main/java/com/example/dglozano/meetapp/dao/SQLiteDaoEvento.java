@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -67,6 +68,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         }
         c.close();
         db.close();
+        Collections.sort(eventos);
         return eventos;
     }
 

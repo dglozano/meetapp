@@ -1,16 +1,16 @@
 package com.example.dglozano.meetapp.modelo;
 
-import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
+import android.support.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Evento {
+public class Evento implements Comparable<Evento> {
 
     private Integer id;
     private String nombre;
@@ -104,66 +104,66 @@ public class Evento {
         this.fecha = fecha;
     }
 
-    public void addParticipante(Participante p){
+    public void addParticipante(Participante p) {
         this.participantes.add(p);
     }
 
-    public void addAllParticipantes(List<Participante> participantes){
+    public void addAllParticipantes(List<Participante> participantes) {
         this.participantes.addAll(participantes);
     }
 
-    public void eliminarParticipante(Participante pEliminar){
-        for(Participante p: participantes){
-            if(p.getId() == pEliminar.getId()){
+    public void eliminarParticipante(Participante pEliminar) {
+        for(Participante p : participantes) {
+            if(p.getId() == pEliminar.getId()) {
                 participantes.remove(p);
                 //TODO ON DELETE CASCADE
             }
         }
     }
 
-    public List<Participante> getParticipantes(){
+    public List<Participante> getParticipantes() {
         return this.participantes;
     }
 
-    public void addTarea(Tarea t){
+    public void addTarea(Tarea t) {
         this.tareas.add(t);
     }
 
-    public void addAllTareas(List<Tarea> tareas){
+    public void addAllTareas(List<Tarea> tareas) {
         this.tareas.addAll(tareas);
     }
 
-    public void eliminarTarea(Tarea tEliminar){
-        for(Tarea t: tareas){
-            if(t.getId() == tEliminar.getId()){
+    public void eliminarTarea(Tarea tEliminar) {
+        for(Tarea t : tareas) {
+            if(t.getId() == tEliminar.getId()) {
                 tareas.remove(t);
                 //TODO ON DELETE CASCADE
             }
         }
     }
 
-    public List<Tarea> getTareas(){
+    public List<Tarea> getTareas() {
         return this.tareas;
     }
 
-    public void addPago(Pago p){
+    public void addPago(Pago p) {
         this.pagos.add(p);
     }
 
-    public void addAllPagos(List<Pago> pagos){
+    public void addAllPagos(List<Pago> pagos) {
         this.pagos.addAll(pagos);
     }
 
-    public void eliminarPago(Pago pEliminar){
-        for(Pago p: pagos){
-            if(p.getId() == pEliminar.getId()){
+    public void eliminarPago(Pago pEliminar) {
+        for(Pago p : pagos) {
+            if(p.getId() == pEliminar.getId()) {
                 tareas.remove(p);
                 //TODO ON DELETE CASCADE
             }
         }
     }
 
-    public List<Pago> getPagos(){
+    public List<Pago> getPagos() {
         return this.pagos;
     }
 
@@ -178,7 +178,7 @@ public class Evento {
         Date fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch (ParseException e) {
+        } catch(ParseException e) {
             e.printStackTrace();
         }
 
@@ -191,7 +191,7 @@ public class Evento {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch (ParseException e) {
+        } catch(ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -203,7 +203,7 @@ public class Evento {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch (ParseException e) {
+        } catch(ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -215,7 +215,7 @@ public class Evento {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch (ParseException e) {
+        } catch(ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -227,7 +227,7 @@ public class Evento {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch (ParseException e) {
+        } catch(ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -244,5 +244,10 @@ public class Evento {
         Evento evento = (Evento) o;
 
         return id != null ? id.equals(evento.id) : evento.id == null;
+    }
+
+    @Override
+    public int compareTo(@NonNull Evento evento) {
+        return this.fecha.compareTo(evento.fecha);
     }
 }

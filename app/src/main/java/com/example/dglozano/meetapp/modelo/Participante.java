@@ -1,10 +1,12 @@
 package com.example.dglozano.meetapp.modelo;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Participante {
+public class Participante implements Comparable<Participante> {
     private static Participante participanteSinAsignar = new Participante();
 
     private Integer id;
@@ -166,5 +168,10 @@ public class Participante {
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         return participantes;
+    }
+
+    @Override
+    public int compareTo(@NonNull Participante participante) {
+        return this.getNombreApellido().compareToIgnoreCase(participante.getNombreApellido());
     }
 }

@@ -1,9 +1,11 @@
 package com.example.dglozano.meetapp.modelo;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Tarea {
+public class Tarea implements Comparable<Tarea> {
 
     private Integer id;
     private String titulo;
@@ -125,5 +127,24 @@ public class Tarea {
         Tarea tarea = (Tarea) o;
 
         return id != null ? id.equals(tarea.id) : tarea.id == null;
+    }
+
+    @Override
+    public int compareTo(@NonNull Tarea tarea) {
+        if(this.estadoTarea.equals(tarea.getEstadoTarea())) {
+            return this.titulo.compareToIgnoreCase(tarea.getTitulo());
+        } else {
+            switch(this.estadoTarea) {
+                case SIN_ASIGNAR:
+                    return -1;
+                case EN_PROGRESO:
+                    if(tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) return -1;
+                    if(tarea.getEstadoTarea().equals(EstadoTarea.SIN_ASIGNAR)) return 1;
+                    break;
+                case FINALIZADA:
+                    return 1;
+            }
+        }
+        return 0;
     }
 }
