@@ -52,8 +52,8 @@ public class CalculadorDePagos {
     }
 
     public boolean puedeCalcular() {
-        boolean puede = true;
         List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
+        boolean puede = !tareasDelEvento.isEmpty();
         for(Tarea tarea : tareasDelEvento) {
             if(!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
                 puede = false;

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
@@ -39,6 +40,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
     private List<Pago> pagosListDisplayed = new ArrayList<>();
     private PagoItemAdapter mPagoItemAdapter;
     private RecyclerView mPagosRecyclerView;
+    private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
     private Evento evento;
@@ -87,9 +89,10 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_dividir_gastos);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
         mPagoItemAdapter =  new PagoItemAdapter(pagosListDisplayed);
-        //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mPagosRecyclerView.setLayoutManager(mLayoutManager);
@@ -101,7 +104,9 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
         pagosListDisplayed.clear();
         pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
-
+        if(pagosListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         fab = view.findViewById(R.id.fab_btn_dividir_gastos);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
@@ -164,6 +169,9 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment{
                             pagosListDelEvento = calculadorDePagos.getListaPagos();
                             restoreOriginalPagosList();
                             fab.setImageResource(R.drawable.ic_info_white_24dp);
+                            if(!pagosListDelEvento.isEmpty()){
+                                mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
+                            }
                         }
                     });
                 }

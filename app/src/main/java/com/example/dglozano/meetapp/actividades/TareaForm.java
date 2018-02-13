@@ -58,7 +58,6 @@ public class TareaForm extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        // TODO reemplazar por daosqlite
         daoTarea = new SQLiteDaoTarea(this);
         daoParticipante = new SQLiteDaoParticipante(this);
         daoEvento = new SQLiteDaoEvento(this);

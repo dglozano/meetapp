@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
@@ -48,6 +49,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
     private List<Tarea> tareasListDisplayed = new ArrayList<>();
     private TareaItemAdapter mTareaAdapter;
     private RecyclerView mTareasRecyclerview;
+    private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
 
@@ -95,9 +97,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_tareas);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mTareasRecyclerview = view.findViewById(R.id.recvw_tareas_list);
         mTareaAdapter = new TareaItemAdapter(tareasListDisplayed);
-        //TODO: ver que mostrar si no hay tareas aun
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mTareasRecyclerview.setLayoutManager(mLayoutManager);
@@ -109,7 +112,9 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         tareasListDisplayed.clear();
         tareasListDisplayed.addAll(tareasListDelEvento);
         mTareaAdapter.notifyDataSetChanged();
-
+        if(tareasListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_tarea);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
@@ -160,6 +165,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             case 2:
                 toast = Toast.makeText(this.getContext(), "Tarea borrada", Toast.LENGTH_SHORT);
                 toast.show();
+                //TODO DAO
+                if(tareasListDelEvento.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -207,6 +216,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
                 if(resultCode == RESULT_OK) {
                     // TODO agregar toast
                     tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                     restoreOriginalTareasList();
                 }
                 break;
