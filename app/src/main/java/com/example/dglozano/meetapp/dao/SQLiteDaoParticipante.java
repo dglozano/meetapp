@@ -109,14 +109,15 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
      * @param p Evento a crear
      */
     @Override
-    public void save(Participante p, int eventoId) {
+    public long save(Participante p, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PARTICIPANTE_NOMBRE, p.getNombreApellido());
         cv.put(Constants.PARTICIPANTE_EVENTO_FK, eventoId);
         cv.put(Constants.PARTICIPANTE_TELEFONO, p.getNumeroTel());
-        db.insert(Constants.PARTICIPANTE_TABLENAME, null, cv);
+        long id = db.insert(Constants.PARTICIPANTE_TABLENAME, null, cv);
         db.close();
+        return id;
     }
 
     /**

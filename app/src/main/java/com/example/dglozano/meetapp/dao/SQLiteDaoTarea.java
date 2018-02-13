@@ -124,7 +124,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
      * @param t Tarea a crear
      */
     @Override
-    public void save(Tarea t, int eventoId) {
+    public long save(Tarea t, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.TAREA_DESCRIPCION, t.getDescripcion());
@@ -135,8 +135,9 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         if(t.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR) {
             cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
         }
-        db.insert(Constants.TAREA_TABLENAME, null, cv);
+        long id = db.insert(Constants.TAREA_TABLENAME, null, cv);
         db.close();
+        return id;
     }
 
     /**

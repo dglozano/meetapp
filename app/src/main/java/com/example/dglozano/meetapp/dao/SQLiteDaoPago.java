@@ -120,7 +120,7 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
      * @param p Pago a crear
      */
     @Override
-    public void save(Pago p, int eventoId) {
+    public long save(Pago p, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PAGO_MONTO, p.getMonto());
@@ -128,8 +128,9 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
         cv.put(Constants.PAGO_EVENTO_FK, eventoId);
         cv.put(Constants.PAGO_PARTICIPANTE_COBRADOR_FK, p.getCobrador().getId());
         cv.put(Constants.PAGO_PARTICIPANTE_PAGADOR_FK, p.getPagador().getId());
-        db.insert(Constants.PAGO_TABLENAME,null, cv);
+        long id = db.insert(Constants.PAGO_TABLENAME,null, cv);
         db.close();
+        return id;
     }
 
     /**
