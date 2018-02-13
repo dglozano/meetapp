@@ -41,4 +41,7 @@
     <string name="success_division_info_msg">La división de gastos del evento ya ha sido realizada anteriormente.</string>
     <string name="alert_success_total_msg">Gastos totales:</string>
     <string name="alert_success_individual_msg">Gasto por Participante:</string>
+    <string name="emtpy_msg_division_gastos">Aún no has dividido los gastos del evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
+    <string name="emtpy_msg_eventos">Aún no has creado ningun evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
+    <string name="emtpy_msg_tareas">Aún no has creado tareas para el evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
 </resources>

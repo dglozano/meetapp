@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
@@ -42,6 +43,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
     private List<Evento> eventosListDisplayed = new ArrayList<>();
     private EventoItemAdapter mEventoItemAdapter;
     private RecyclerView mEventosRecyclerView;
+
+    private LinearLayout mLayoutEmptyMsg;
 
     private DaoEvento daoEvento;
     private List<Evento> eventosDelUsuario;
@@ -82,9 +85,10 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_eventos);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
         mEventoItemAdapter = new EventoItemAdapter(eventosListDisplayed, getActivity());
-        //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mEventosRecyclerView.setLayoutManager(mLayoutManager);
@@ -97,7 +101,9 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
         //registerForContextMenu(mEventosRecyclerView);
-
+        if(eventosDelUsuario.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
@@ -179,6 +185,12 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 return true;
             case 2:
                 //TODO ELIMINAR?
+                //ELIMINAR EVENTO
+                //dao eliminar
+                //notifydatasetchange
+                if(eventosDelUsuario.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -200,6 +212,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                     // TODO agregar toast
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                 }
                 break;
             }

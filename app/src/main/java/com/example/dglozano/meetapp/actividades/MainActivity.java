@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
          * Create mock data
          * TODO: borrar esto cuando no usemos mas mock
          */
-        SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
+        /*SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
         SQLiteDaoParticipante daoParticipante = new SQLiteDaoParticipante(this);
         SQLiteDaoTarea daoTarea = new SQLiteDaoTarea(this);
         SQLiteDaoPago daoPago = new SQLiteDaoPago(this);
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             daoParticipante.createMockData(daoEvento.getAll());
             daoTarea.createMockData(daoEvento.getAll());
             //daoPago.createMockData(daoEvento.getAll());
-        }
+        }*/
     }
 
     @Override
