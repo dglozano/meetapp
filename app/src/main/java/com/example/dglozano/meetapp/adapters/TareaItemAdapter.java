@@ -38,8 +38,9 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
             menu.add(this.getAdapterPosition(), 3, 0, R.string.agregar_gasto);
-            menu.add(this.getAdapterPosition(), 1, 1, R.string.texto_editar);
-            menu.add(Menu.NONE, 2, 2, R.string.texto_borrar);
+            menu.add(this.getAdapterPosition(), 4, 1, R.string.dar_por_finalizada);
+            menu.add(this.getAdapterPosition(), 1, 2, R.string.texto_editar);
+            menu.add(Menu.NONE, 2, 3, R.string.texto_borrar);
         }
     }
 

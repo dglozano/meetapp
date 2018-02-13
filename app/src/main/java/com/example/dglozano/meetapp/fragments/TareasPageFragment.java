@@ -25,6 +25,7 @@ import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
+import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
@@ -158,6 +159,9 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             case 3:
                 agregarGasto(tarea);
                 return true;
+            case 4:
+                darPorFinalizada(tarea);
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -192,6 +196,19 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
     private void agregarGasto(Tarea tarea) {
         AgregarGastoFragment f = AgregarGastoFragment.newInstance(tarea.getId());
         f.show(getFragmentManager(), "dialog");
+    }
+
+    private void darPorFinalizada(Tarea tarea) {
+        if(tarea.getEstadoTarea().equals(EstadoTarea.SIN_ASIGNAR)) {
+            Toast.makeText(getContext(), R.string.tarea_no_asignada, Toast.LENGTH_LONG).show();
+        } else if(tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
+            Toast.makeText(getContext(), R.string.tarea_ya_finalizada, Toast.LENGTH_LONG).show();
+        } else {
+            tarea.setEstadoTarea(EstadoTarea.FINALIZADA);
+            daoTarea.update(tarea);
+            tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
+            restoreOriginalTareasList();
+        }
     }
 
     private void editarTarea(Tarea tarea) {

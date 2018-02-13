@@ -44,4 +44,7 @@
     <string name="alert_success_individual_msg">Gasto por Participante:</string>
     <string name="agregar_gasto">Agregar gasto</string>
     <string name="gastos_actuales_de_la_tarea">Gastos actuales de la tarea:</string>
+    <string name="dar_por_finalizada">Dar por finalizada</string>
+    <string name="tarea_no_asignada">La tarea no fue asignada a ningun participante</string>
+    <string name="tarea_ya_finalizada">La tarea ya se encuentra finalizada</string>
 </resources>
