@@ -47,4 +47,7 @@
     <string name="tarea_creada">Tarea creada exitosamente</string>
     <string name="tarea_editada">Tarea editada exitosamente</string>
     <string name="participante_agregado">Participante agregado exitosamente</string>
+    <string name="titulo_dialog">Solicitud de permisos</string>
+    <string name="solicitud_permiso_foto">Para poder capturar una foto es necesario que le des los permisos necesarios a la aplicación.</string>
+    <string name="cargar_imagen">Cargar Foto</string>
 </resources>
