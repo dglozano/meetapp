@@ -17,7 +17,6 @@ import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
-import com.example.dglozano.meetapp.dao.mock.MockDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
@@ -58,7 +57,6 @@ public class TareaForm extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        // TODO reemplazar por daosqlite
         daoTarea = new SQLiteDaoTarea(this);
         daoParticipante = new SQLiteDaoParticipante(this);
         daoEvento = new SQLiteDaoEvento(this);
@@ -160,26 +158,22 @@ public class TareaForm extends AppCompatActivity {
         String titulo = et_titulo.getText().toString();
         String descripcion = et_descripcion.getText().toString();
         Participante encargado = adapterParticipantes.getItem(spinner_encargado.getSelectedItemPosition());
-        //EstadoTarea estado = EstadoTarea.FINALIZADA;
-        // TODO VER LO DEL ESTADO Y EL SEGUNDO IF QUE ES MEDIO RARO
         if(flagNuevaTarea) {
             tarea = new Tarea();
         }
-        /*if(flagNuevaTarea || !flagNuevaTarea && tarea.getEstadoTarea() != EstadoTarea.FINALIZADA) {
-            tarea.setPersonaAsignada(encargado);
-            estado = EstadoTarea.EN_PROGRESO;
-        }*/
-        tarea.setTitulo(titulo);
-        if(flagNuevaTarea){
-            if(encargado.esSinAsignar()){
+        if(flagNuevaTarea || !flagNuevaTarea && !tarea.estaFinalizada()) {
+            // si se crea una nueva o se edita una finalizada (ya que si se edita una finalizada no debería cambiar el estado a pesar de cambiar el encargado)
+            if(encargado.esSinAsignar()) {
                 tarea.setEstadoTarea(EstadoTarea.SIN_ASIGNAR);
             } else {
                 tarea.setEstadoTarea(EstadoTarea.EN_PROGRESO);
             }
         }
+        tarea.setTitulo(titulo);
         tarea.setDescripcion(descripcion);
         tarea.setPersonaAsignada(encargado);
-        //TODO UPDATE EN DB SI NO ES NUEVA TAREA
-        daoTarea.save(tarea, evento.getId());
+
+        if(flagNuevaTarea) daoTarea.save(tarea, evento.getId());
+        else daoTarea.update(tarea);
     }
 }

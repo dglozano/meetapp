@@ -1,11 +1,14 @@
 package com.example.dglozano.meetapp.modelo;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Participante {
+public class Participante implements Comparable<Participante> {
     private static Participante participanteSinAsignar = new Participante();
+    private static final String NOMBRE_CREADOR_EVENTO = "Yo";
 
     private Integer id;
     private String nombreApellido;
@@ -19,6 +22,14 @@ public class Participante {
     public Participante() {
         this.id = null;
         this.nombreApellido = "<Sin Asignar>";
+    }
+
+    public static Participante participanteCreadorEvento() {
+        return new Participante(NOMBRE_CREADOR_EVENTO, "");
+    }
+
+    public boolean esCreadorEvento() {
+        return this.nombreApellido.equals(NOMBRE_CREADOR_EVENTO);
     }
 
     public Integer getId() {
@@ -58,8 +69,13 @@ public class Participante {
         return Participante.participanteSinAsignar;
     }
 
-    public boolean esSinAsignar(){
+    public boolean esSinAsignar() {
         return this.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
@@ -72,12 +88,7 @@ public class Participante {
         return id != null ? id.equals(that.id) : that.id == null;
     }
 
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    public static List<Participante> getParticipantesMock(){
+    public static List<Participante> getParticipantesMock() {
         List<Participante> participantes = new ArrayList<>();
         int numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         String numTelRandom = String.valueOf(numRandom);
@@ -166,5 +177,12 @@ public class Participante {
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         return participantes;
+    }
+
+    @Override
+    public int compareTo(@NonNull Participante participante) {
+        if(this.esCreadorEvento()) return -1;
+        else if(participante.esCreadorEvento()) return 1;
+        else return this.getNombreApellido().compareToIgnoreCase(participante.getNombreApellido());
     }
 }

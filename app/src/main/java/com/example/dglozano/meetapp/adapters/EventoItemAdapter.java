@@ -11,17 +11,16 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoActivity;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by augusto on 01/02/2018.
@@ -34,7 +33,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
 
     public static final String EXTRA_EVENTO_ID = "com.example.dglozano.meetapp.adapters.EXTRA_EVENTO_ID";
 
-    public class EventoViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener{
+    public class EventoViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         TextView tituloEventoTV, fechaEventoTV, cantOrganizadoresTV, tareasRestantesTV, lugarEventoTV;
 
         public EventoViewHolder(View view) {
@@ -42,7 +41,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
             tituloEventoTV = (TextView) view.findViewById(R.id.tv_titulo_evento);
             lugarEventoTV = (TextView) view.findViewById(R.id.tv_lugar_evento);
             fechaEventoTV = (TextView) view.findViewById(R.id.tv_fecha_evento);
-            cantOrganizadoresTV =  (TextView) view.findViewById(R.id.tv_organizadores_evento);
+            cantOrganizadoresTV = (TextView) view.findViewById(R.id.tv_organizadores_evento);
             tareasRestantesTV = (TextView) view.findViewById(R.id.tv_tareas_completas_evento);
             view.setOnCreateContextMenuListener(this);
         }
@@ -82,15 +81,14 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
                     evento.getLugar().longitude,
                     1);
             Address bestMatch = (matches == null || matches.isEmpty()) ? null : matches.get(0);
-            System.out.println(bestMatch.toString());
-            if(bestMatch != null){
+            if(bestMatch != null) {
                 String direccion = bestMatch.getAddressLine(0);
                 lugarAMostrar = String.format("%s, %s, %s",
                         direccion.substring(0, direccion.indexOf(',')),
                         bestMatch.getLocality(),
                         bestMatch.getCountryCode());
             }
-        } catch (IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
         holder.lugarEventoTV.setText(lugarAMostrar);
@@ -98,8 +96,8 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         holder.cantOrganizadoresTV.setText(evento.getParticipantes().size() + " Organizadores");
         int totalTareas = evento.getTareas().size();
         int tareasHechas = 0;
-        for(Tarea t: evento.getTareas()){
-            if(t.getEstadoTarea() == EstadoTarea.FINALIZADA){
+        for(Tarea t : evento.getTareas()) {
+            if(t.getEstadoTarea() == EstadoTarea.FINALIZADA) {
                 tareasHechas++;
             }
         }

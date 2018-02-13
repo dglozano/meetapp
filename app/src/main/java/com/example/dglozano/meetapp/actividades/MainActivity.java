@@ -1,39 +1,26 @@
 package com.example.dglozano.meetapp.actividades;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.dao.DaoEvento;
-import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.fragments.EventosPageFragment;
 import com.example.dglozano.meetapp.fragments.SettingsPageFragment;
-import com.example.dglozano.meetapp.modelo.EstadoTarea;
-import com.example.dglozano.meetapp.modelo.Participante;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     /**
@@ -79,15 +66,11 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDotsMain);
         tabLayout.setupWithViewPager(mViewPager, true);
 
-        /**
-         * Create mock data
-         * TODO: borrar esto cuando no usemos mas mock
-         */
         SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
         SQLiteDaoParticipante daoParticipante = new SQLiteDaoParticipante(this);
         SQLiteDaoTarea daoTarea = new SQLiteDaoTarea(this);
         SQLiteDaoPago daoPago = new SQLiteDaoPago(this);
-        if(daoEvento.getAll().isEmpty()){
+        if(daoEvento.getAll().isEmpty()) {
             daoEvento.createMockData();
             daoParticipante.createMockData(daoEvento.getAll());
             daoTarea.createMockData(daoEvento.getAll());
@@ -97,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case R.id.menu_item_settings:
                 // User chose the "Settings" item, show the app settings UI...
                 System.out.println("Hizo click en settings");
@@ -133,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position){
+            switch(position) {
                 case FRAGMENT_ID_LISTA_EVENTOS:
                     fragmentBeingDisplayed = EventosPageFragment.newInstance();
                     break;

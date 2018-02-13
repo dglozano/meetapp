@@ -66,7 +66,6 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
      *
      * @return A new instance of fragment TareasPageFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static TareasPageFragment newInstance(int eventoId) {
         TareasPageFragment fragment = new TareasPageFragment();
         Bundle args = new Bundle();
@@ -150,16 +149,14 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         Integer pos = item.getItemId();
         Tarea tarea = tareasListDisplayed.get(item.getGroupId());
 
-        Toast toast;
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case 1:
                 editarTarea(tarea);
-                toast = Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT);
-                toast.show();
                 return true;
             case 2:
-                toast = Toast.makeText(this.getContext(), "Tarea borrada", Toast.LENGTH_SHORT);
-                toast.show();
+                return true;
+            case 3:
+                agregarGasto(tarea);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -192,6 +189,11 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         }
     }
 
+    private void agregarGasto(Tarea tarea) {
+        AgregarGastoFragment f = AgregarGastoFragment.newInstance(tarea.getId());
+        f.show(getFragmentManager(), "dialog");
+    }
+
     private void editarTarea(Tarea tarea) {
         Intent i = new Intent(getActivity(), TareaForm.class);
         i.putExtra(TareaForm.KEY_TAREA_ID, tarea.getId());
@@ -205,7 +207,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         switch(requestCode) {
             case CREAR_TAREA: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT).show();
                     tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
                     restoreOriginalTareasList();
                 }
@@ -213,7 +215,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             }
             case EDITAR_TAREA: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), "Tarea borrada", Toast.LENGTH_SHORT).show();
                     tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
                     restoreOriginalTareasList();
                 }
