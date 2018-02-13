@@ -47,4 +47,8 @@
     <string name="dar_por_finalizada">Dar por finalizada</string>
     <string name="tarea_no_asignada">La tarea no fue asignada a ningun participante</string>
     <string name="tarea_ya_finalizada">La tarea ya se encuentra finalizada</string>
+    <string name="evento_editado">Evento editado exitosamente</string>
+    <string name="evento_creado">Evento creado exitosamente</string>
+    <string name="tarea_creada">Tarea creada exitosamente</string>
+    <string name="tarea_editada">Tarea editada exitosamente</string>
 </resources>

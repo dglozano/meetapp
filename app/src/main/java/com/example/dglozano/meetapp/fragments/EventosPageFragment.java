@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
@@ -34,7 +35,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link EventosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener{
+public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener {
 
     private final int CREAR_EVENTO = 1;
     private final int EDITAR_EVENTO = 2;
@@ -173,7 +174,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
         Evento evento = eventosListDisplayed.get(item.getGroupId());
 
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case 1:
                 editarEvento(evento);
                 return true;
@@ -197,7 +198,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         switch(requestCode) {
             case CREAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.evento_creado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                 }
@@ -205,7 +206,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
             }
             case EDITAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.evento_editado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                 }

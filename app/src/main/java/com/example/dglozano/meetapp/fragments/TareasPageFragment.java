@@ -224,7 +224,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         switch(requestCode) {
             case CREAR_TAREA: {
                 if(resultCode == RESULT_OK) {
-                    Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getContext(), R.string.tarea_creada, Toast.LENGTH_SHORT).show();
                     tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
                     restoreOriginalTareasList();
                 }
@@ -232,7 +232,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
             }
             case EDITAR_TAREA: {
                 if(resultCode == RESULT_OK) {
-                    Toast.makeText(this.getContext(), "Tarea borrada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getContext(), R.string.tarea_editada, Toast.LENGTH_SHORT).show();
                     tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
                     restoreOriginalTareasList();
                 }
