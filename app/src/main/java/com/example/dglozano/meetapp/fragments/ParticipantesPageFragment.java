@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.ContactosActivity;
@@ -117,38 +118,36 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
-    public void pedirPermisoContactos(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-                        builder.setTitle("Acceso a Contactos");
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setMessage("La APP necesita acceso a sus contactos para que los pueda agregar como participantes a un evento");
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @TargetApi(Build.VERSION_CODES.M)
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                requestPermissions(
-                                        new String[]
-                                                {Manifest.permission.READ_CONTACTS}
-                                        , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                            }
-                        });
+    public void pedirPermisoContactos() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+                    builder.setTitle("Acceso a Contactos");
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setMessage("La APP necesita acceso a sus contactos para que los pueda agregar como participantes a un evento");
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(
+                                    new String[]
+                                            {Manifest.permission.READ_CONTACTS}
+                                    , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                        }
+                    });
                     builder.show();
                 } else {
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.READ_CONTACTS},
                             MY_PERMISSIONS_REQUEST_READ_CONTACTS);
                 }
-            }
-            else {
+            } else {
                 Intent i = new Intent(getActivity(), ContactosActivity.class);
                 i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
                 startActivityForResult(i, CREAR_PARTICIPANTE);
             }
-        }
-        else {
+        } else {
             Intent i = new Intent(getActivity(), ContactosActivity.class);
             i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
             startActivityForResult(i, CREAR_PARTICIPANTE);
@@ -214,7 +213,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         switch(requestCode) {
             case CREAR_PARTICIPANTE: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.participante_agregado, Toast.LENGTH_SHORT).show();
                     participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
                     restoreOriginalParticipantesList();
                 }
