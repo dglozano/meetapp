@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Participante implements Comparable<Participante> {
     private static Participante participanteSinAsignar = new Participante();
+    private static final String NOMBRE_CREADOR_EVENTO = "Yo";
 
     private Integer id;
     private String nombreApellido;
@@ -21,6 +22,14 @@ public class Participante implements Comparable<Participante> {
     public Participante() {
         this.id = null;
         this.nombreApellido = "<Sin Asignar>";
+    }
+
+    public static Participante participanteCreadorEvento() {
+        return new Participante(NOMBRE_CREADOR_EVENTO, "");
+    }
+
+    public boolean esCreadorEvento() {
+        return this.nombreApellido.equals(NOMBRE_CREADOR_EVENTO);
     }
 
     public Integer getId() {
@@ -172,6 +181,8 @@ public class Participante implements Comparable<Participante> {
 
     @Override
     public int compareTo(@NonNull Participante participante) {
-        return this.getNombreApellido().compareToIgnoreCase(participante.getNombreApellido());
+        if(this.esCreadorEvento()) return -1;
+        else if(participante.esCreadorEvento()) return 1;
+        else return this.getNombreApellido().compareToIgnoreCase(participante.getNombreApellido());
     }
 }

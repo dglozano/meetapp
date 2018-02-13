@@ -15,9 +15,12 @@ import android.widget.EditText;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.fragments.DatePickerFragment;
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.util.Recordatorios;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -31,7 +34,6 @@ import java.util.Calendar;
 import java.util.Locale;
 
 public class EventoForm extends AppCompatActivity {
-
     public static final String KEY_EVENTO_ID = "id";
     private static final int PLACE_PICKER_REQUEST = 1;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -40,6 +42,7 @@ public class EventoForm extends AppCompatActivity {
     private Boolean flagNuevoEvento;
     private Evento evento;
     private DaoEvento daoEvento;
+    private DaoEventoMember<Participante> daoParticipante;
 
     private EditText et_nombre;
     private EditText et_lugar;
@@ -57,6 +60,7 @@ public class EventoForm extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         daoEvento = new SQLiteDaoEvento(this);
+        daoParticipante = new SQLiteDaoParticipante(this);
 
         getViews();
         setListeners();
@@ -170,6 +174,7 @@ public class EventoForm extends AppCompatActivity {
             int id = (int) daoEvento.save(evento);
             if(evento.getFecha() != null)
                 recordatorios.recordatorioEvento(this, id, evento.getFecha());
+            daoParticipante.save(Participante.participanteCreadorEvento(), id);
         } else {
             daoEvento.update(evento);
             if(evento.getFecha() != null)
