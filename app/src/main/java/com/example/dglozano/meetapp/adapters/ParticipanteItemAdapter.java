@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.modelo.Participante;
@@ -53,25 +51,31 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
     public void onBindViewHolder(ParticipanteViewHolder holder, int position) {
         final Participante participante = participantesList.get(position);
         holder.nombreTextView.setText(participante.toString());
-        holder.btnLlamarParticipante.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String numero = participante.getNumeroTel();
-                String dial = "tel:"+numero;
-                Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse(dial));
-                view.getContext().startActivity(intentCall);
-            }
-        });
-        holder.btnSmsParticipante.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String numero = participante.getNumeroTel();
-                String dial = "sms:"+numero;
-                Intent intentSMS = new Intent(Intent.ACTION_VIEW, Uri.parse(dial));
-                intentSMS.putExtra( "sms_body", "Te he agregado a un evento como organizador!" );
-                view.getContext().startActivity(intentSMS);
-            }
-        });
+
+        if(participante.esCreadorEvento()) {
+            holder.btnLlamarParticipante.setVisibility(View.INVISIBLE);
+            holder.btnSmsParticipante.setVisibility(View.INVISIBLE);
+        } else {
+            holder.btnLlamarParticipante.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String numero = participante.getNumeroTel();
+                    String dial = "tel:" + numero;
+                    Intent intentCall = new Intent(Intent.ACTION_DIAL, Uri.parse(dial));
+                    view.getContext().startActivity(intentCall);
+                }
+            });
+            holder.btnSmsParticipante.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String numero = participante.getNumeroTel();
+                    String dial = "sms:" + numero;
+                    Intent intentSMS = new Intent(Intent.ACTION_VIEW, Uri.parse(dial));
+                    intentSMS.putExtra("sms_body", "Te he agregado a un evento como organizador!");
+                    view.getContext().startActivity(intentSMS);
+                }
+            });
+        }
     }
 
     @Override

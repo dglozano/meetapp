@@ -21,8 +21,6 @@
     <string name="participantes_title">Participantes</string>
     <string name="hello_world">Hello world!</string>
     <string name="btitle">Load Contacts</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_guardar">Guardar</string>
     <string name="title_activity_tarea_form">TareaForm</string>
@@ -37,6 +35,7 @@
     <string name="crear_evento">Crear evento</string>
     <string name="crear_tarea">Crear tarea</string>
     <string name="tareas_sin_finalizar">Hay tareas sin finalizar!</string>
+    <string name="tareas_sin_encargado">Hay tareas sin encargado!</string>
     <string name="success_division_msg">La división de gastos del evento se ha realizado con éxito.</string>
     <string name="success_division_info_msg">La división de gastos del evento ya ha sido realizada anteriormente.</string>
     <string name="alert_success_total_msg">Gastos totales:</string>
@@ -44,4 +43,7 @@
     <string name="emtpy_msg_division_gastos">Aún no has dividido los gastos del evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
     <string name="emtpy_msg_eventos">Aún no has creado ningun evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
     <string name="emtpy_msg_tareas">Aún no has creado tareas para el evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
+    <string name="agregar_gasto">Agregar gasto</string>
+    <string name="gastos_actuales_de_la_tarea">Gastos actuales de la tarea:</string>
+    <string name="no_hay_tareas_msg_error">Aún no hay tareas en el evento!</string>
 </resources>

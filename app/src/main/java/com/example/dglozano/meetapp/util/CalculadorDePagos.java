@@ -3,13 +3,12 @@ package com.example.dglozano.meetapp.util;
 import android.content.Context;
 import android.util.Pair;
 
-import com.example.dglozano.meetapp.dao.DaoEvento;
+import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoPago;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
-import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
@@ -31,8 +30,9 @@ public class CalculadorDePagos {
     private SQLiteDaoParticipante daoParticipante;
     private double gastoTotal;
     private double gastoPorParticipante;
+    private int codigoError;
 
-    public CalculadorDePagos(Context c, int idEvento){
+    public CalculadorDePagos(Context c, int idEvento) {
         this.idEvento = idEvento;
         this.daoEvento = new SQLiteDaoEvento(c);
         this.daoParticipante = new SQLiteDaoParticipante(c);
@@ -53,13 +53,24 @@ public class CalculadorDePagos {
 
     public boolean puedeCalcular() {
         List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
-        boolean puede = !tareasDelEvento.isEmpty();
+        if(tareasDelEvento.isEmpty()){
+            codigoError = R.string.no_hay_tareas_msg_error;
+            return false;
+        }
         for(Tarea tarea : tareasDelEvento) {
             if(!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
-                puede = false;
+                codigoError = R.string.tareas_sin_finalizar;
+                return false;
+            } else if(tarea.getPersonaAsignada().esSinAsignar()) {
+                codigoError = R.string.tareas_sin_encargado;
+                return false;
             }
         }
-        return puede;
+        return true;
+    }
+
+    public int getCodigoError() {
+        return this.codigoError;
     }
 
     public void calcularPagos() {
@@ -70,7 +81,7 @@ public class CalculadorDePagos {
         for(Tarea tarea : tareasDelEvento) {
             if(!tarea.getPersonaAsignada().esSinAsignar()) {
                 Double gasto = gastosPorParticipante.get(tarea.getPersonaAsignada());
-                gasto = gasto == null ? tarea.getGasto() : gasto+tarea.getGasto();
+                gasto = gasto == null ? tarea.getGasto() : gasto + tarea.getGasto();
                 gastosPorParticipante.put(tarea.getPersonaAsignada(), gasto);
             }
         }

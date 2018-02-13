@@ -37,8 +37,9 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-            menu.add(this.getAdapterPosition(), 1, 0, R.string.texto_editar);
-            menu.add(Menu.NONE, 2, 1, R.string.texto_borrar);
+            menu.add(this.getAdapterPosition(), 3, 0, R.string.agregar_gasto);
+            menu.add(this.getAdapterPosition(), 1, 1, R.string.texto_editar);
+            menu.add(Menu.NONE, 2, 2, R.string.texto_borrar);
         }
     }
 
@@ -59,7 +60,7 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
         Tarea tarea = tareasList.get(position);
         holder.titleTextView.setText(tarea.getTitulo());
         holder.personasAsignadaTextView.setText(tarea.getPersonaAsignada().toString());
-        switch(tarea.getEstadoTarea()){
+        switch(tarea.getEstadoTarea()) {
             case SIN_ASIGNAR:
                 holder.estadoImageView.setImageResource(R.drawable.ic_person_add_black_24dp);
                 break;

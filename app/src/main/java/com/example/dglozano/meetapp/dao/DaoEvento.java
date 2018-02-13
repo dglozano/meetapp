@@ -7,7 +7,7 @@ import java.util.List;
 public interface DaoEvento {
     Evento getById(int id);
 
-    void save(Evento item);
+    long save(Evento item);
 
     void update(Evento item);
 

@@ -19,9 +19,13 @@ import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.DaoEvento;
@@ -184,10 +188,24 @@ public class ContactosActivity extends AppCompatActivity {
                         .getString(c
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                contacts.add(contactName + System.lineSeparator() + phNumber);
+                if (contacts.size()==0) {
+                    contacts.add(contactName + System.lineSeparator() + phNumber);
+                }
+                else {
+                    boolean flag = false;
+                    for (String cn : contacts){
+                        String[] partes = cn.split(System.lineSeparator());
+                        if (partes[0].equals(contactName)){
+                            flag = true;
+                        }
+                    }
+                    if (!flag){
+                        contacts.add(contactName + System.lineSeparator() + phNumber);
+                    }
+                }
             }
             c.close();
-
+            Collections.sort(contacts);
             return contacts;
         }
 
