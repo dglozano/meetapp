@@ -172,7 +172,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
             t.start();
         } else {
             int codigoError = calculadorDePagos.getCodigoError();
-            Toast.makeText(getContext(), codigoError, Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), codigoError, Toast.LENGTH_SHORT).show();
         }
     }
 
