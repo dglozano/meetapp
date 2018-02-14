@@ -54,7 +54,7 @@ public class EventoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evento);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_evento_act);
         setSupportActionBar(myToolbar);
 
         // Get a support ActionBar corresponding to this toolbar
@@ -77,12 +77,8 @@ public class EventoActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        // para que recree cada vez que se mueve
 
-        /**
-         * Esto es para que aparezcan los puntito abajo que indican en que pagina se esta
-         */
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDotsTareasParticipantesGastos);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_evento);
         tabLayout.setupWithViewPager(mViewPager, true);
     }
 
@@ -117,6 +113,7 @@ public class EventoActivity extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+        private String[] titles = {"TAREAS","PARTICIPANTES","PAGOS"};
 
         @Override
         public Fragment getItem(int position) {
@@ -138,6 +135,11 @@ public class EventoActivity extends AppCompatActivity {
         public int getCount() {
             // Show 3 total pages.
             return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
         }
     }
 }

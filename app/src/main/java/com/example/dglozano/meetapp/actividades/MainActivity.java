@@ -58,12 +58,6 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        /**
-         * Esto es para que aparezcan los puntito abajo que indican en que pagina se esta
-         */
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDotsMain);
-        tabLayout.setupWithViewPager(mViewPager, true);
-
         SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
         SQLiteDaoParticipante daoParticipante = new SQLiteDaoParticipante(this);
         SQLiteDaoTarea daoTarea = new SQLiteDaoTarea(this);
@@ -116,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
+            // Show 1 total pages.
             return 1;
         }
     }
