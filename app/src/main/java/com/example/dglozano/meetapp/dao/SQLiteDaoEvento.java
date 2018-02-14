@@ -102,9 +102,6 @@ public class SQLiteDaoEvento implements DaoEvento {
     public Evento getById(int id) {
         Evento evento = null;
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.EVENTO_TABLENAME + " WHERE "
                 + Constants.EVENTO_ID + " = " + String.valueOf(id), null);
@@ -151,21 +148,6 @@ public class SQLiteDaoEvento implements DaoEvento {
         cv.put(Constants.EVENTO_GASTO_TOTAL, e.getGastosTotales());
         cv.put(Constants.EVENTO_GASTO_POR_PARTICIPANTE, e.getGastosPorParticipante());
         cv.put(Constants.EVENTO_DIVISION_YA_REALIZADA, e.isDivisionGastosYaHecha());
-        for(Participante p : e.getParticipantes())
-            if(p.getId() == null)
-                daoParticipante.save(p, e.getId());
-            else
-                daoParticipante.update(p);
-        for(Tarea t : e.getTareas())
-            if(t.getId() == null)
-                daoTarea.save(t, e.getId());
-            else
-                daoTarea.update(t);
-        for(Pago p : e.getPagos())
-            if(p.getId() == null)
-                daoPago.save(p, e.getId());
-            else
-                daoPago.update(p);
         db.update(Constants.EVENTO_TABLENAME, cv, Constants.EVENTO_ID + "=" + e.getId(), null);
         db.close();
     }
@@ -179,7 +161,6 @@ public class SQLiteDaoEvento implements DaoEvento {
     @Override
     public void delete(Evento e) {
         db = dbhelper.getWritableDatabase();
-        //TODO BORRAR PARTICIPANTES PAGOS Y TAREAS PRIMERO
         db.delete(Constants.EVENTO_TABLENAME, Constants.EVENTO_ID + "=" + e.getId(), null);
         db.close();
     }
@@ -190,6 +171,4 @@ public class SQLiteDaoEvento implements DaoEvento {
             save(e);
         }
     }
-
-    //TODO UPDATE?
 }

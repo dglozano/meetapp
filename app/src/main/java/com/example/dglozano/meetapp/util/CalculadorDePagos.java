@@ -6,7 +6,6 @@ import android.util.Pair;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
-import com.example.dglozano.meetapp.modelo.EstadoPago;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
@@ -50,6 +49,10 @@ public class CalculadorDePagos {
 
     public boolean puedeCalcular() {
         List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
+        if(tareasDelEvento.isEmpty()){
+            codigoError = R.string.no_hay_tareas_msg_error;
+            return false;
+        }
         for(Tarea tarea : tareasDelEvento) {
             if(!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
                 codigoError = R.string.tareas_sin_finalizar;
@@ -143,7 +146,7 @@ public class CalculadorDePagos {
             deudasPorParticipante.add(new Pair(acreedor.first, acreedor.second + monto));
 
             // crea pago
-            pagos.add(new Pago(EstadoPago.NO_PAGADO, deudor.first, acreedor.first, monto));
+            pagos.add(new Pago(deudor.first, acreedor.first, monto));
 
             // aumenta contador si ya están saldados
             deudorDeberiaPagar = Math.abs(deudor.second - monto);

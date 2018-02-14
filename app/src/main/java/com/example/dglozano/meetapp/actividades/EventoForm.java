@@ -205,7 +205,7 @@ public class EventoForm extends AppCompatActivity {
         if(requestCode == PLACE_PICKER_REQUEST) {
             if(resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(this, data);
-                et_lugar.setText(place.getName());
+                et_lugar.setText(place.getAddress());
             }
         }
     }

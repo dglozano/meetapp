@@ -3,6 +3,7 @@ package com.example.dglozano.meetapp.adapters;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
 
     private List<Participante> participantesList;
 
-    public class ParticipanteViewHolder extends RecyclerView.ViewHolder {
+    public class ParticipanteViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         public TextView nombreTextView;
         public ImageButton btnLlamarParticipante;
         public ImageButton btnSmsParticipante;
@@ -32,6 +33,12 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
             nombreTextView = (TextView) view.findViewById(R.id.tv_participante_row_nombre);
             btnLlamarParticipante = (ImageButton) view.findViewById(R.id.btn_llamar_participante);
             btnSmsParticipante = (ImageButton) view.findViewById(R.id.btn_sms_participante);
+            view.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(this.getAdapterPosition(), 6, 0, R.string.texto_borrar);
         }
     }
 
@@ -56,6 +63,8 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
             holder.btnLlamarParticipante.setVisibility(View.INVISIBLE);
             holder.btnSmsParticipante.setVisibility(View.INVISIBLE);
         } else {
+            holder.btnLlamarParticipante.setVisibility(View.VISIBLE);
+            holder.btnSmsParticipante.setVisibility(View.VISIBLE);
             holder.btnLlamarParticipante.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,7 +80,7 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
                     String numero = participante.getNumeroTel();
                     String dial = "sms:" + numero;
                     Intent intentSMS = new Intent(Intent.ACTION_VIEW, Uri.parse(dial));
-                    intentSMS.putExtra("sms_body", "Te he agregado a un evento como organizador!");
+                    intentSMS.putExtra("sms_body", R.string.sms_msg);
                     view.getContext().startActivity(intentSMS);
                 }
             });

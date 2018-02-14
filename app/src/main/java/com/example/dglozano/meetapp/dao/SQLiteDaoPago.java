@@ -6,17 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
-import com.example.dglozano.meetapp.modelo.EstadoPago;
-import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
-import com.example.dglozano.meetapp.modelo.Tarea;
 import com.example.dglozano.meetapp.util.CalculadorDePagos;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class SQLiteDaoPago implements DaoEventoMember<Pago> {
 
@@ -67,8 +63,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
         Pago pago = new Pago();
         pago.setId(c.getInt(c.getColumnIndex(Constants.PAGO_ID)));
         pago.setMonto(c.getDouble(c.getColumnIndex(Constants.PAGO_MONTO)));
-        int estadoOrdinal = c.getInt(c.getColumnIndex(Constants.PAGO_ESTADO));
-        pago.setEstadoPago(EstadoPago.values()[estadoOrdinal]);
         int idParticipantePagador = c.getInt(c.getColumnIndex(Constants.PAGO_PARTICIPANTE_PAGADOR_FK));
         int idParticipanteCobrador = c.getInt(c.getColumnIndex(Constants.PAGO_PARTICIPANTE_COBRADOR_FK));
         Participante cobrador = daoParticipante.getById(idParticipanteCobrador);
@@ -81,9 +75,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     public Pago getById(int id){
         Pago pago = null;
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.PAGO_TABLENAME + " WHERE "
                 + Constants.PAGO_ID + " = " +String.valueOf(id),null);
@@ -99,9 +90,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     public List<Pago> getAllDelEvento(int eventoId){
         List<Pago> pagos = new ArrayList<>();
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.PAGO_TABLENAME + " WHERE "
                 + Constants.PAGO_EVENTO_FK + " = " +String.valueOf(eventoId),null);
@@ -120,16 +108,16 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
      * @param p Pago a crear
      */
     @Override
-    public void save(Pago p, int eventoId) {
+    public long save(Pago p, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PAGO_MONTO, p.getMonto());
-        cv.put(Constants.PAGO_ESTADO, p.getEstadoPago().ordinal());
         cv.put(Constants.PAGO_EVENTO_FK, eventoId);
         cv.put(Constants.PAGO_PARTICIPANTE_COBRADOR_FK, p.getCobrador().getId());
         cv.put(Constants.PAGO_PARTICIPANTE_PAGADOR_FK, p.getPagador().getId());
-        db.insert(Constants.PAGO_TABLENAME,null, cv);
+        long id = db.insert(Constants.PAGO_TABLENAME,null, cv);
         db.close();
+        return id;
     }
 
     /**
@@ -140,7 +128,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     @Override
     public void delete(Pago p) {
         db = dbhelper.getWritableDatabase();
-        //TODO VER QUE HACER SI HAY PAGOS CON ESTE PARTICIPANTE
         db.delete(Constants.PAGO_TABLENAME, Constants.PAGO_ID + "=" + p.getId(), null);
         db.close();
     }
@@ -150,7 +137,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PAGO_MONTO, p.getMonto());
-        cv.put(Constants.PAGO_ESTADO, p.getEstadoPago().ordinal());
         cv.put(Constants.PAGO_PARTICIPANTE_COBRADOR_FK, p.getCobrador().getId());
         cv.put(Constants.PAGO_PARTICIPANTE_PAGADOR_FK, p.getPagador().getId());
         db.update(Constants.PAGO_TABLENAME, cv, Constants.PAGO_ID +"="+ p.getId(), null);
@@ -168,6 +154,4 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
             }
         }
     }
-
-    //TODO UPDATE?
 }

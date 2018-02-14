@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -23,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
@@ -31,8 +34,10 @@ import com.example.dglozano.meetapp.adapters.ParticipanteItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
 
 import java.util.ArrayList;
@@ -45,7 +50,8 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link ParticipantesPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
+public class ParticipantesPageFragment extends android.support.v4.app.Fragment
+        implements DialogDeletePagos.NoticeDialogListener{
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private List<Participante> participantesListDisplayed = new ArrayList<>();
@@ -55,10 +61,12 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
     private DaoEvento daoEvento;
     private DaoEventoMember<Participante> daoParticipante;
+    private DaoEventoMember<Pago> daoPagos;
     private List<Participante> participantesListDelEvento;
+    private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
-    private Evento evento;
+    private int eventoId;
 
     public ParticipantesPageFragment() {
         // Required empty public constructor
@@ -85,9 +93,9 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
         daoParticipante = new SQLiteDaoParticipante(getActivity());
         daoEvento = new SQLiteDaoEvento(getActivity());
+        daoPagos = new SQLiteDaoPago(getActivity());
 
-        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
-        participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
+        eventoId = getArguments().getInt(EVENTO_ID);
     }
 
     @Override
@@ -99,9 +107,11 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_participantes);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
         mParticipanteAdapter = new ParticipanteItemAdapter(participantesListDisplayed);
-        //TODO: VER QUE MOSTRAR CUANDO NO HAY PARTICIPANTES TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mParticipantesRecyclerView.setLayoutManager(mLayoutManager);
@@ -113,29 +123,31 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         participantesListDisplayed.clear();
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
-
+        if(participantesListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
-    public void pedirPermisoContactos() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                if(ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-                    builder.setTitle("Acceso a Contactos");
-                    builder.setPositiveButton(android.R.string.ok, null);
-                    builder.setMessage("La APP necesita acceso a sus contactos para que los pueda agregar como participantes a un evento");
-                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @TargetApi(Build.VERSION_CODES.M)
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            requestPermissions(
-                                    new String[]
-                                            {Manifest.permission.READ_CONTACTS}
-                                    , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                        }
-                    });
+    public void pedirPermisoContactos(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+                        builder.setTitle(R.string.permisos_contactos_dialog_title);
+                        builder.setPositiveButton(android.R.string.ok, null);
+                        builder.setMessage(R.string.permisos_contactos_dialog_msg);
+                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                requestPermissions(
+                                        new String[]
+                                                {Manifest.permission.READ_CONTACTS}
+                                        , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                            }
+                        });
                     builder.show();
                 } else {
                     ActivityCompat.requestPermissions(getActivity(),
@@ -144,12 +156,12 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
                 }
             } else {
                 Intent i = new Intent(getActivity(), ContactosActivity.class);
-                i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
+                i.putExtra(ContactosActivity.KEY_EVENTO_ID, eventoId);
                 startActivityForResult(i, CREAR_PARTICIPANTE);
             }
         } else {
             Intent i = new Intent(getActivity(), ContactosActivity.class);
-            i.putExtra(ContactosActivity.KEY_EVENTO_ID, evento.getId());
+            i.putExtra(ContactosActivity.KEY_EVENTO_ID, eventoId);
             startActivityForResult(i, CREAR_PARTICIPANTE);
         }
     }
@@ -180,6 +192,56 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
 
         searchView.setOnQueryTextListener(new ParticipantesPageFragment.MyOnQueryTextListener());
         searchView.setOnCloseListener(new ParticipantesPageFragment.MyOnCloseListener());
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Evento evento = daoEvento.getById(eventoId);
+        Integer pos = item.getItemId();
+        if(pos == 6) {
+            Participante participante = participantesListDisplayed.get(item.getGroupId());
+            // El dialogo llama a los metodos onDialogPositiveClick o onDialogNeativeClick
+            // con el id del elemento del context menu clickeado.
+            if(evento.isDivisionGastosYaHecha()){
+                DialogFragment df = DialogDeletePagos.newInstance(pos, participante.getId());
+                df.setTargetFragment(this,1);
+                df.show(getFragmentManager(), "tag");
+            } else {
+                accionesContextMenu(participante);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int idAccion, int idParticipante) {
+        Participante participante = daoParticipante.getById(idParticipante);
+        Evento evento = daoEvento.getById(eventoId);
+        for(Pago p: daoPagos.getAllDelEvento(eventoId)){
+            daoPagos.delete(p);
+        }
+        evento.setGastosPorParticipante(0.0);
+        evento.setGastosTotales(0.0);
+        evento.setDivisionGastosYaHecha(false);
+        daoEvento.update(evento);
+        accionesContextMenu(participante);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idParticipante) {
+        Toast.makeText(this.getContext(), R.string.participante_no_borrado, Toast.LENGTH_SHORT).show();
+    }
+
+    private void accionesContextMenu(Participante participante) {
+        Toast.makeText(this.getContext(), R.string.participante_borrado, Toast.LENGTH_SHORT).show();
+        daoParticipante.delete(participante);
+        participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+        restoreOriginalParticipantesList();
+        if(participantesListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
     }
 
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
@@ -213,8 +275,9 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment {
         switch(requestCode) {
             case CREAR_PARTICIPANTE: {
                 if(resultCode == RESULT_OK) {
-                    Toast.makeText(this.getContext(), R.string.participante_agregado, Toast.LENGTH_SHORT).show();
-                    participantesListDelEvento = daoParticipante.getAllDelEvento(evento.getId());
+                    Toast.makeText(this.getContext(), R.string.participante_creado, Toast.LENGTH_SHORT).show();
+                    participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                     restoreOriginalParticipantesList();
                 }
                 break;

@@ -54,7 +54,7 @@ public class EventoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evento);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_evento_act);
         setSupportActionBar(myToolbar);
 
         // Get a support ActionBar corresponding to this toolbar
@@ -78,21 +78,13 @@ public class EventoActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        /**
-         * Esto es para que aparezcan los puntito abajo que indican en que pagina se esta
-         */
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDotsTareasParticipantesGastos);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_evento);
         tabLayout.setupWithViewPager(mViewPager, true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                System.out.println("Hizo click en settings");
-                return true;
-
             case R.id.toolbar_search:
                 // User chose the Search option.
                 return true;
@@ -121,6 +113,7 @@ public class EventoActivity extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
+        private String[] titles = {"TAREAS","PARTICIPANTES","PAGOS"};
 
         @Override
         public Fragment getItem(int position) {
@@ -142,6 +135,11 @@ public class EventoActivity extends AppCompatActivity {
         public int getCount() {
             // Show 3 total pages.
             return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return titles[position];
         }
     }
 }

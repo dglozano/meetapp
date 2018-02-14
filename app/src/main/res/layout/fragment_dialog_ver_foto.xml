@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/header_alert_ver_foto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="12dp"
+        android:scaleType="center"
+        android:text="Un nombre de una tarea muy muy muy larga"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Material.Title"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:id="@+id/empty_msg_layout_foto_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/alert_dialog_foto_img_empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_photo_camera_black_48dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lineSpacingExtra="4sp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="@string/emtpy_msg_foto_dialog"
+            android:textAlignment="center"
+            android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/alert_dialog_foto_img_picture"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/alert_dialog_foto_button_ok"
+        style="@android:style/Widget.Material.Button.Borderless.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:backgroundTint="@android:color/white"
+        android:text="@android:string/ok"
+        android:textAlignment="center"
+        android:textColor="?attr/colorPrimaryDark" />
+</android.support.v7.widget.LinearLayoutCompat>

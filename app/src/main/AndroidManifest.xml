@@ -27,7 +27,7 @@
 
         <activity
             android:name=".actividades.MainActivity"
-            android:label="@string/app_name"
+            android:label="Eventos"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -40,11 +40,6 @@
             android:label="Nombre del Evento"
             android:parentActivityName=".actividades.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
-            <!--intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter-->
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -53,6 +48,7 @@
         <activity
             android:name=".actividades.EventoForm"
             android:parentActivityName=".actividades.EventoActivity"
+            android:label="Formulario de Evento"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -61,6 +57,7 @@
         <activity
             android:name=".actividades.TareaForm"
             android:parentActivityName=".actividades.EventoActivity"
+            android:label="Formulario de Tarea"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -69,6 +66,7 @@
         <activity
             android:name=".actividades.ContactosActivity"
             android:parentActivityName=".actividades.EventoActivity"
+            android:label="Contactos"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

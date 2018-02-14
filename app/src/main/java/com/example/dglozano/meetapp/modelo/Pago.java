@@ -7,13 +7,11 @@ package com.example.dglozano.meetapp.modelo;
 public class Pago {
 
     private Integer id;
-    private EstadoPago estadoPago;
     private Participante pagador;
     private Participante cobrador;
     private double monto;
 
-    public Pago(EstadoPago estadoPago, Participante pagador, Participante cobrador, double monto) {
-        this.estadoPago = estadoPago;
+    public Pago(Participante pagador, Participante cobrador, double monto) {
         this.pagador = pagador;
         this.cobrador = cobrador;
         this.monto = monto;
@@ -29,14 +27,6 @@ public class Pago {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public EstadoPago getEstadoPago() {
-        return estadoPago;
-    }
-
-    public void setEstadoPago(EstadoPago estadoPago) {
-        this.estadoPago = estadoPago;
     }
 
     public Participante getPagador() {

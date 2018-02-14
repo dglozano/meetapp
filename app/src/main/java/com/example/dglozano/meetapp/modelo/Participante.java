@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Participante implements Comparable<Participante> {
-    private static Participante participanteSinAsignar = new Participante();
     private static final String NOMBRE_CREADOR_EVENTO = "Yo";
 
     private Integer id;
@@ -66,7 +65,7 @@ public class Participante implements Comparable<Participante> {
     }
 
     public static Participante getParticipanteSinAsignar() {
-        return Participante.participanteSinAsignar;
+        return new Participante();
     }
 
     public boolean esSinAsignar() {
