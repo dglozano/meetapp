@@ -111,7 +111,7 @@ public class ContactosActivity extends AppCompatActivity {
     private void search(String query) {
         List<Contacto> result = new ArrayList<>();
         for(Contacto c: todosLosContactos) {
-            if(c.getNombre().contains(query.toUpperCase())) {
+            if(c.getNombre().toUpperCase().contains(query.toUpperCase())) {
                 result.add(c);
             }
         }
