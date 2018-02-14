@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.DaoEvento;
@@ -175,9 +176,15 @@ public class TareaForm extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.menu_item_Ok:
+                if (!et_titulo.getText().toString().matches("")){
                 guardar();
                 setResult(RESULT_OK, intentOrigen);
                 finish();
+                }
+                else {
+                    Toast toast = Toast.makeText(this, "Algunos campos se encuentran en blanco", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
                 return true;
             case android.R.id.home:
                 setResult(RESULT_CANCELED);
