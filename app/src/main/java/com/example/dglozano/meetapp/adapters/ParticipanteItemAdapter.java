@@ -63,6 +63,8 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
             holder.btnLlamarParticipante.setVisibility(View.INVISIBLE);
             holder.btnSmsParticipante.setVisibility(View.INVISIBLE);
         } else {
+            holder.btnLlamarParticipante.setVisibility(View.VISIBLE);
+            holder.btnSmsParticipante.setVisibility(View.VISIBLE);
             holder.btnLlamarParticipante.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
