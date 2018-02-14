@@ -127,7 +127,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
         }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
-        fab.setOnClickListener(new MyFabIconOnClickListener());
+        fab.setOnClickListener(new MyFabIconOnClickListener(this));
     }
 
     public void pedirPermisoContactos(){
@@ -226,12 +226,22 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         evento.setGastosTotales(0.0);
         evento.setDivisionGastosYaHecha(false);
         daoEvento.update(evento);
-        accionesContextMenu(participante);
+        if(idAccion == -1){
+            pedirPermisoContactos();
+        } else {
+            accionesContextMenu(participante);
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idParticipante) {
-        Toast.makeText(this.getContext(), R.string.participante_no_borrado, Toast.LENGTH_SHORT).show();
+        switch(idAccion){
+            case -1:
+                Toast.makeText(this.getContext(), R.string.participante_no_creado, Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                Toast.makeText(this.getContext(), R.string.participante_no_borrado, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void accionesContextMenu(Participante participante) {
@@ -286,9 +296,23 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     }
 
     private class MyFabIconOnClickListener implements View.OnClickListener {
+
+        android.support.v4.app.Fragment fragment;
+
+        public MyFabIconOnClickListener(android.support.v4.app.Fragment f){
+            this.fragment = f;
+        }
+
         @Override
         public void onClick(View view) {
-            pedirPermisoContactos();
+            Evento evento = daoEvento.getById(eventoId);
+            if(evento.isDivisionGastosYaHecha()){
+                DialogFragment df = DialogDeletePagos.newInstance(-1, -1);
+                df.setTargetFragment(fragment,1);
+                df.show(getFragmentManager(), "tag");
+            } else {
+                pedirPermisoContactos();
+            }
         }
     }
 }
