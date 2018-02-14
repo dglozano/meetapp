@@ -69,4 +69,6 @@
     <string name="sms_msg">\"Te he agregado a un evento como participante!\"</string>
     <string name="ver_foto">Ver Foto</string>
     <string name="emtpy_msg_foto_dialog">Esta tarea no tiene ninguna foto para mostrar todavía.</string>
+    <string name="tarea_no_creada">La tarea no ha sido creada</string>
+    <string name="participante_no_creado">No se ha podido añadir el participante</string>
 </resources>

@@ -128,7 +128,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
         }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_tarea);
-        fab.setOnClickListener(new MyFabIconOnClickListener());
+        fab.setOnClickListener(new MyFabIconOnClickListener(this));
     }
 
     private void search(String query) {
@@ -194,12 +194,22 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
         evento.setGastosTotales(0.0);
         evento.setDivisionGastosYaHecha(false);
         daoEvento.update(evento);
-        accionesContextMenu(idAccion, tarea);
+        if(idAccion == -1){
+            Intent i = new Intent(getActivity(), TareaForm.class);
+            i.putExtra(TareaForm.KEY_EVENTO_ID, eventoId);
+            i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, true);
+            startActivityForResult(i, CREAR_TAREA);
+        } else {
+            accionesContextMenu(idAccion, tarea);
+        }
     }
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idTarea) {
         switch(idAccion) {
+            case -1:
+                Toast.makeText(this.getContext(), R.string.tarea_no_creada, Toast.LENGTH_SHORT).show();
+                break;
             case 1:
                 Toast.makeText(this.getContext(), R.string.tarea_no_editada, Toast.LENGTH_SHORT).show();
                 break;
@@ -322,12 +332,25 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
     }
 
     private class MyFabIconOnClickListener implements View.OnClickListener {
+
+        android.support.v4.app.Fragment fragment;
+
+        public MyFabIconOnClickListener(android.support.v4.app.Fragment f){
+            this.fragment = f;
+        }
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(getActivity(), TareaForm.class);
-            i.putExtra(TareaForm.KEY_EVENTO_ID, eventoId);
-            i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, true);
-            startActivityForResult(i, CREAR_TAREA);
+            Evento evento = daoEvento.getById(eventoId);
+            if(evento.isDivisionGastosYaHecha()){
+                DialogFragment df = DialogDeletePagos.newInstance(-1, -1);
+                df.setTargetFragment(fragment,1);
+                df.show(getFragmentManager(), "tag");
+            } else {
+                Intent i = new Intent(getActivity(), TareaForm.class);
+                i.putExtra(TareaForm.KEY_EVENTO_ID, eventoId);
+                i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, true);
+                startActivityForResult(i, CREAR_TAREA);
+            }
         }
     }
 
