@@ -14,11 +14,9 @@ import android.view.MenuItem;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
-import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.fragments.EventosPageFragment;
-import com.example.dglozano.meetapp.fragments.SettingsPageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -79,15 +77,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.menu_item_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                System.out.println("Hizo click en settings");
-                return true;
-
             case R.id.toolbar_search_main:
                 // User chose the Search option.
                 return true;
-
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
@@ -118,9 +110,6 @@ public class MainActivity extends AppCompatActivity {
                 case FRAGMENT_ID_LISTA_EVENTOS:
                     fragmentBeingDisplayed = EventosPageFragment.newInstance();
                     break;
-                case FRAGMENT_ID_SETTINGS:
-                    fragmentBeingDisplayed = SettingsPageFragment.newInstance();
-                    break;
             }
             return fragmentBeingDisplayed;
         }
@@ -128,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 2 total pages.
-            return 2;
+            return 1;
         }
     }
 }

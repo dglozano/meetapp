@@ -89,11 +89,6 @@ public class EventoActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                System.out.println("Hizo click en settings");
-                return true;
-
             case R.id.toolbar_search:
                 // User chose the Search option.
                 return true;
