@@ -48,6 +48,7 @@
         <activity
             android:name=".actividades.EventoForm"
             android:parentActivityName=".actividades.EventoActivity"
+            android:label="Formulario de Evento"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -56,6 +57,7 @@
         <activity
             android:name=".actividades.TareaForm"
             android:parentActivityName=".actividades.EventoActivity"
+            android:label="Formulario de Tarea"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -64,6 +66,7 @@
         <activity
             android:name=".actividades.ContactosActivity"
             android:parentActivityName=".actividades.EventoActivity"
+            android:label="Contactos"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
