@@ -66,4 +66,6 @@
     <string name="solicitud_permiso_foto">Para poder capturar una foto es necesario que le des los permisos necesarios a la aplicación.</string>
     <string name="cargar_imagen">Cargar Foto</string>
     <string name="sms_msg">\"Te he agregado a un evento como participante!\"</string>
+    <string name="ver_foto">Ver Foto</string>
+    <string name="emtpy_msg_foto_dialog">Esta tarea no tiene ninguna foto para mostrar todavía.</string>
 </resources>

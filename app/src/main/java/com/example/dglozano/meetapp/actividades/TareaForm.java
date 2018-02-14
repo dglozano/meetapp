@@ -70,7 +70,7 @@ public class TareaForm extends AppCompatActivity {
     private List<Participante> listaParticipantes;
     private ArrayAdapter<Participante> adapterParticipantes;
 
-    private Evento evento;
+    private Integer eventoId;
     private Bitmap imageBitmap;
 
     @Override
@@ -91,7 +91,7 @@ public class TareaForm extends AppCompatActivity {
         Bundle extras = intentOrigen.getExtras();
         flagNuevaTarea = extras.getBoolean(KEY_TAREA_NUEVA_FLAG);
         final Integer idTarea = extras.getInt(KEY_TAREA_ID);
-        evento = daoEvento.getById(extras.getInt(KEY_EVENTO_ID));
+        eventoId = extras.getInt(KEY_EVENTO_ID);
 
 
         getViews();
@@ -136,7 +136,7 @@ public class TareaForm extends AppCompatActivity {
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                List<Participante> lista = daoParticipante.getAllDelEvento(evento.getId());
+                List<Participante> lista = daoParticipante.getAllDelEvento(eventoId);
                 listaParticipantes.clear();
                 listaParticipantes.addAll(lista);
                 listaParticipantes.add(0, Participante.getParticipanteSinAsignar());
@@ -164,7 +164,7 @@ public class TareaForm extends AppCompatActivity {
 
         // Mostrar o no la imagen
         try {
-            loadImageFromStorage(evento.getId(), tarea.getId());
+            loadImageFromStorage(eventoId, tarea.getId());
             imgFoto.setVisibility(View.VISIBLE);
         } catch(FileNotFoundException e) {
             imgFoto.setVisibility(View.GONE);
@@ -217,7 +217,7 @@ public class TareaForm extends AppCompatActivity {
         tarea.setDescripcion(descripcion);
         tarea.setPersonaAsignada(encargado);
 
-        if(flagNuevaTarea) daoTarea.save(tarea, evento.getId());
+        if(flagNuevaTarea) daoTarea.save(tarea, eventoId);
         else daoTarea.update(tarea);
     }
 
@@ -305,7 +305,7 @@ public class TareaForm extends AppCompatActivity {
         File directory = getApplicationContext().getDir("imagenes", Context.MODE_PRIVATE);
         if(!directory.exists())
             directory.mkdir();
-        File mypath = new File(directory, "evento_" + evento.getId() + "tarea_" + tarea.getId() + ".jpg");
+        File mypath = new File(directory, "evento_" + eventoId + "tarea_" + tarea.getId() + ".jpg");
         try {
             FileOutputStream fos = new FileOutputStream(mypath);
             imageTarea.compress(Bitmap.CompressFormat.PNG, 90, fos);

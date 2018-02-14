@@ -1,7 +1,10 @@
 package com.example.dglozano.meetapp.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +36,9 @@ import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,10 +167,10 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
         Integer pos = item.getItemId();
         // El dialogo llama a los metodos onDialogPositiveClick o onDialogNeativeClick
         // con el id del elemento del context menu clickeado.
-        if(pos <= 4){
+        if(pos <= 5){
             Tarea tarea = tareasListDisplayed.get(item.getGroupId());
-            //si el ID del item del menu clickeado es del 1 al 4, pertence a este fragment
-            if(evento.isDivisionGastosYaHecha()){
+            //si el ID del item del menu clickeado es del 1 al 5, pertence a este fragment
+            if(evento.isDivisionGastosYaHecha() && pos <= 3){
                 DialogFragment df = DialogDeletePagos.newInstance(pos, tarea.getId());
                 df.setTargetFragment(this,1);
                 df.show(getFragmentManager(), "tag");
@@ -228,7 +234,15 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
             case 4:
                 darPorFinalizada(tarea);
                 break;
+            case 5:
+                verFoto(tarea);
         }
+    }
+
+    private void verFoto(Tarea tarea) {
+        DialogFragment df = DialogVerFotoTarea.newInstance(eventoId, tarea.getId(), tarea.getTitulo());
+        df.setTargetFragment(this,1);
+        df.show(getFragmentManager(), "tag");
     }
 
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
