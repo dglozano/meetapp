@@ -92,7 +92,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         }
         holder.lugarEventoTV.setText(lugarAMostrar);
         holder.fechaEventoTV.setText(sdf.format(evento.getFecha()));
-        holder.cantOrganizadoresTV.setText(evento.getParticipantes().size() + " Organizadores");
+        holder.cantOrganizadoresTV.setText(evento.getParticipantes().size() + " Participantes");
         int totalTareas = evento.getTareas().size();
         int tareasHechas = 0;
         for(Tarea t : evento.getTareas()) {

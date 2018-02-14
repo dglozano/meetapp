@@ -36,4 +36,13 @@ public class Recordatorios {
         calendar.set(Calendar.YEAR, fecha.getYear() + 1900);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
+
+    public void eliminarRecordatorio(Context context, int idEvento) {
+        Context ctx = context.getApplicationContext();
+        Intent myIntent = new Intent(ctx.getApplicationContext(), NotifyService.class);
+        myIntent.putExtra("id", idEvento);
+        AlarmManager alarmManager = (AlarmManager) ctx.getSystemService(ALARM_SERVICE);
+        PendingIntent pendingIntent = PendingIntent.getService(ctx, idEvento, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.cancel(pendingIntent);
+    }
 }

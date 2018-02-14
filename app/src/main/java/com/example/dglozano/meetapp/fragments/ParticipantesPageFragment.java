@@ -149,14 +149,12 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
                             new String[]{Manifest.permission.READ_CONTACTS},
                             MY_PERMISSIONS_REQUEST_READ_CONTACTS);
                 }
-            }
-            else {
+            } else {
                 Intent i = new Intent(getActivity(), ContactosActivity.class);
                 i.putExtra(ContactosActivity.KEY_EVENTO_ID, eventoId);
                 startActivityForResult(i, CREAR_PARTICIPANTE);
             }
-        }
-        else {
+        } else {
             Intent i = new Intent(getActivity(), ContactosActivity.class);
             i.putExtra(ContactosActivity.KEY_EVENTO_ID, eventoId);
             startActivityForResult(i, CREAR_PARTICIPANTE);
@@ -268,6 +266,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
                 if(resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), R.string.participante_creado, Toast.LENGTH_SHORT).show();
                     participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+
                     restoreOriginalParticipantesList();
                 }
                 break;

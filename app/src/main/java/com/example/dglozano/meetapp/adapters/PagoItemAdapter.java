@@ -58,12 +58,12 @@ public class PagoItemAdapter extends RecyclerView.Adapter<PagoItemAdapter.PagoVi
     @Override
     public void onBindViewHolder(PagoViewHolder holder, int position) {
         Pago pago = pagosList.get(position);
-        DecimalFormat df = new DecimalFormat("$ ###,###.00");
+        DecimalFormat df = new DecimalFormat("$ ###,##0.00");
         holder.montoTextView.setText(df.format(pago.getMonto()));
         holder.pagadorTextView.setText(pago.getPagador().toString());
         holder.arrowImageView.setImageResource(R.drawable.ic_subdirectory_arrow_right_black_24dp);
         holder.cobradorTextView.setText(pago.getCobrador().toString());
-        switch (pago.getEstadoPago()) {
+        switch(pago.getEstadoPago()) {
             case PAGADO:
                 holder.estadoIconImageView.setImageResource(R.drawable.ic_check_circle_black_24dp);
                 break;

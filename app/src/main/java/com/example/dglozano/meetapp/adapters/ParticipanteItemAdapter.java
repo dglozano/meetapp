@@ -38,7 +38,7 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(this.getAdapterPosition(), 4, 0, R.string.texto_borrar);
+            menu.add(this.getAdapterPosition(), 5, 0, R.string.texto_borrar);
         }
     }
 

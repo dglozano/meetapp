@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Pair;
 
 import com.example.dglozano.meetapp.R;
-import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoPago;
@@ -25,7 +24,6 @@ public class CalculadorDePagos {
 
     private List<Pago> listaPagos;
     private int idEvento;
-    private SQLiteDaoEvento daoEvento;
     private SQLiteDaoTarea daoTarea;
     private SQLiteDaoParticipante daoParticipante;
     private double gastoTotal;
@@ -34,7 +32,6 @@ public class CalculadorDePagos {
 
     public CalculadorDePagos(Context c, int idEvento) {
         this.idEvento = idEvento;
-        this.daoEvento = new SQLiteDaoEvento(c);
         this.daoParticipante = new SQLiteDaoParticipante(c);
         this.daoTarea = new SQLiteDaoTarea(c);
     }
@@ -117,13 +114,16 @@ public class CalculadorDePagos {
             deudasPorParticipante.add(new Pair(participante, promedio - gastosPorParticipante.get(participante)));
         }
 
+        for(Pair<Participante, Double> participanteDoublePair : deudasPorParticipante) {
+            System.out.println(participanteDoublePair.first + ": " + participanteDoublePair.second);
+        }
         listaPagos = pagos(deudasPorParticipante, 0.009);
     }
 
     private List<Pago> pagos(List<Pair<Participante, Double>> deudasPorParticipante, double tolerancia) {
         List<Pago> pagos = new ArrayList<>();
         int resueltos = 0;
-        while(resueltos != deudasPorParticipante.size()) {
+        while(resueltos < deudasPorParticipante.size()) {
             // Desde deuda más alta a deuda más baja (negativa)
             Collections.sort(deudasPorParticipante, new Comparator<Pair<Participante, Double>>() {
                 @Override
@@ -156,7 +156,6 @@ public class CalculadorDePagos {
                 resueltos++;
             if(acreedorDeberiaRecibir <= tolerancia)
                 resueltos++;
-
         }
         // limita las transacciones por la tolerancia
         Iterator<Pago> iterator = pagos.iterator();

@@ -36,7 +36,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link EventosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener{
+public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener {
 
     private final int CREAR_EVENTO = 1;
     private final int EDITAR_EVENTO = 2;
@@ -171,7 +171,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
         Evento evento = eventosListDisplayed.get(item.getGroupId());
 
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case 1:
                 editarEvento(evento);
                 return true;
