@@ -25,6 +25,7 @@ import com.example.dglozano.meetapp.adapters.EventoItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.util.Recordatorios;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,6 +181,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 eventosDelUsuario.clear();
                 eventosDelUsuario.addAll(daoEvento.getAll());
                 restoreOriginalEventosList();
+                Recordatorios recordatorios = new Recordatorios();
+                recordatorios.eliminarRecordatorio(getContext(),evento.getId());
                 if(eventosDelUsuario.isEmpty()){
                     mLayoutEmptyMsg.setVisibility(View.VISIBLE);
                 }
