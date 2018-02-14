@@ -43,7 +43,7 @@ public class DialogDivisionGastosSuccess extends DialogFragment {
         double gastoTotal = getArguments().getDouble("gastoTotal");
         double gastoCadaParticipante = getArguments().getDouble("gastoCadaParticipante");
         boolean divisionYaHecha = getArguments().getBoolean("divisionYaHecha");
-        DecimalFormat df = new DecimalFormat("$ ###,###.00");
+        DecimalFormat df = new DecimalFormat("$ ###,##0.00");
         String msgBaseGastoTotal = getString(R.string.alert_success_total_msg) + " ";
         String msgBaseGastoCadaParticipante = getString(R.string.alert_success_individual_msg) + " ";
         String msgGastoTotal = msgBaseGastoTotal + " " + df.format(gastoTotal);
