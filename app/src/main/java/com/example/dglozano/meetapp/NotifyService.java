@@ -35,11 +35,6 @@ public class NotifyService extends IntentService {
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             Intent newIntent = new Intent(this.getApplicationContext(), EventoActivity.class);
             newIntent.putExtra(EventoItemAdapter.EXTRA_EVENTO_ID, idEvento);
-            String url = "http://maps.google.com/maps?saddr=-31.617026,-60.675302&daddr="+direccion.latitude+","+direccion.longitude+"&mode=driving";
-            Uri gmmIntentUri = Uri.parse(url);
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            mapIntent.setPackage("com.google.android.apps.maps");
-            mapIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             PendingIntent pi = PendingIntent.getActivity(this, 0, newIntent, 0);
 
             int icon = android.R.drawable.sym_def_app_icon;
@@ -49,7 +44,6 @@ public class NotifyService extends IntentService {
                     .setContentIntent(pi)
                     .setContentTitle("Un evento mañana!")
                     .setContentText(evento.getNombre())
-                    .addAction(new Notification.Action(R.drawable.ic_navigation_black_24dp, "Llevame hasta el evento", PendingIntent.getActivity(this, 0, mapIntent, 0)))
                     .build();
             nm.notify(1, not);
         }
