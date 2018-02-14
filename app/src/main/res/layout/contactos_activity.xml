@@ -15,6 +15,7 @@
         android:theme="@style/ToolbarStyle"
         app:titleTextColor="@android:color/white" />
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,11 +25,12 @@
         android:paddingRight="20dp"
         android:paddingTop="20dp">
 
-        <ListView
-            android:id="@+id/listView1"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recvw_contactos_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/settings_separator" />
-
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:scrollbars="vertical" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
