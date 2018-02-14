@@ -70,10 +70,14 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         tarea.setGasto(c.getDouble(c.getColumnIndex(Constants.TAREA_GASTO)));
         int estadoOrdinal = c.getInt(c.getColumnIndex(Constants.TAREA_ESTADO));
         tarea.setEstadoTarea(EstadoTarea.values()[estadoOrdinal]);
-        if(tarea.getEstadoTarea() == EstadoTarea.SIN_ASIGNAR) {
+        System.out.println("tarea " + tarea.getTitulo());
+        System.out.println("part " +c.getInt(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK)));
+        System.out.println("part null " +c.isNull(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK)));
+        if(c.isNull(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK))){
             tarea.setPersonaAsignada(Participante.getParticipanteSinAsignar());
+            tarea.setEstadoTarea(EstadoTarea.SIN_ASIGNAR);
         } else {
-            int idParticipanteAsignado = c.getInt(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK));
+            Integer idParticipanteAsignado = c.getInt(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK));
             Participante p = daoParticipante.getById(idParticipanteAsignado);
             tarea.setPersonaAsignada(p);
         }
@@ -83,9 +87,6 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
     public Tarea getById(int id) {
         Tarea tarea = null;
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.TAREA_TABLENAME + " WHERE "
                 + Constants.TAREA_ID + " = " + String.valueOf(id), null);
@@ -101,9 +102,6 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
     public List<Tarea> getAllDelEvento(int eventoId) {
         List<Tarea> tareas = new ArrayList<>();
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.TAREA_TABLENAME + " WHERE "
                 + Constants.TAREA_EVENTO_FK + " = " + String.valueOf(eventoId), null);
@@ -124,7 +122,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
      * @param t Tarea a crear
      */
     @Override
-    public void save(Tarea t, int eventoId) {
+    public long save(Tarea t, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.TAREA_DESCRIPCION, t.getDescripcion());
@@ -132,11 +130,14 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         cv.put(Constants.TAREA_GASTO, t.getGasto());
         cv.put(Constants.TAREA_EVENTO_FK, eventoId);
         cv.put(Constants.TAREA_ESTADO, t.getEstadoTarea().ordinal());
-        if(t.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR) {
+        if(t.getPersonaAsignada().esSinAsignar()){
+            cv.putNull(Constants.TAREA_PARTICIPANTE_FK);
+        } else {
             cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
         }
-        db.insert(Constants.TAREA_TABLENAME, null, cv);
+        long id = db.insert(Constants.TAREA_TABLENAME, null, cv);
         db.close();
+        return id;
     }
 
     /**
@@ -148,7 +149,6 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
     @Override
     public void delete(Tarea t) {
         db = dbhelper.getWritableDatabase();
-        //TODO VER QUE HACER SI HAY PAGOS CON ESTE PARTICIPANTE
         db.delete(Constants.TAREA_TABLENAME, Constants.TAREA_ID + "=" + t.getId(), null);
         db.close();
     }
@@ -207,6 +207,4 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
             }
         }
     }
-
-    //TODO UPDATE?
 }

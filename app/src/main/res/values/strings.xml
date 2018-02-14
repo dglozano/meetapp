@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Meetapp</string>
     <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
     <string name="settings_title">Preferencias</string>
     <string name="settings_username_pholder"><![CDATA[<Username>]]></string>
     <string name="chb_settings_notif_tareas">Recibir notificaciones cuando alguien finalize una tarea</string>
@@ -19,10 +18,7 @@
     <string name="dividir_gastos_title">Dividir Gastos</string>
     <string name="eventos_title">Eventos</string>
     <string name="participantes_title">Participantes</string>
-    <string name="hello_world">Hello world!</string>
     <string name="btitle">Load Contacts</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_guardar">Guardar</string>
     <string name="title_activity_tarea_form">TareaForm</string>
@@ -42,6 +38,35 @@
     <string name="success_division_info_msg">La división de gastos del evento ya ha sido realizada anteriormente.</string>
     <string name="alert_success_total_msg">Gastos totales:</string>
     <string name="alert_success_individual_msg">Gasto por Participante:</string>
+    <string name="emtpy_msg_division_gastos">Aún no has dividido los gastos del evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
+    <string name="emtpy_msg_eventos">Aún no has creado ningun evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
+    <string name="emtpy_msg_tareas">Aún no has creado tareas para el evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
+    <string name="emtpy_msg_participantes">Aún no has añadido participantes al evento. Para hacerlo, haz click en el botón flotante en la esquina inferior derecha.</string>
     <string name="agregar_gasto">Agregar gasto</string>
     <string name="gastos_actuales_de_la_tarea">Gastos actuales de la tarea:</string>
+    <string name="no_hay_tareas_msg_error">Aún no hay tareas en el evento!</string>
+    <string name="permisos_contactos_dialog_title">Acceso a Contactos</string>
+    <string name="permisos_contactos_dialog_msg">La APP necesita acceso a sus contactos para que los pueda agregar como participantes a un evento</string>
+    <string name="dialog_borrar_pagos_title">¿Desea continuar?</string>
+    <string name="dialog_borrar_pagos_message">La división de gastos actual se eliminará.</string>
+    <string name="tarea_borrada">Tarea borrada</string>
+    <string name="no_se_agrego_gasto">No se pudo agregar el gasto</string>
+    <string name="tarea_no_borrada">La tarea no se borró</string>
+    <string name="tarea_no_editada">La tarea no se editó</string>
+    <string name="participante_no_borrado">Participante no borrado</string>
+    <string name="participante_borrado">Participante borrado</string>
+    <string name="dar_por_finalizada">Dar por finalizada</string>
+    <string name="tarea_no_asignada">La tarea no fue asignada a ningun participante</string>
+    <string name="tarea_ya_finalizada">La tarea ya se encuentra finalizada</string>
+    <string name="evento_editado">Evento editado exitosamente</string>
+    <string name="evento_creado">Evento creado exitosamente</string>
+    <string name="tarea_creada">Tarea creada exitosamente</string>
+    <string name="tarea_editada">Tarea editada exitosamente</string>
+    <string name="participante_creado">Participante agregado exitosamente</string>
+    <string name="titulo_dialog">Solicitud de permisos</string>
+    <string name="solicitud_permiso_foto">Para poder capturar una foto es necesario que le des los permisos necesarios a la aplicación.</string>
+    <string name="cargar_imagen">Cargar Foto</string>
+    <string name="sms_msg">\"Te he agregado a un evento como participante!\"</string>
+    <string name="ver_foto">Ver Foto</string>
+    <string name="emtpy_msg_foto_dialog">Esta tarea no tiene ninguna foto para mostrar todavía.</string>
 </resources>

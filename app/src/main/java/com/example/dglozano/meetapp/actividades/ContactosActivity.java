@@ -76,7 +76,6 @@ public class ContactosActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.toolbar_search_contactos:
-
                 return true;
             case R.id.menu_item_Ok:
                 ArrayList<String> checkeados = getChecked();

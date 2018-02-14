@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
@@ -34,7 +36,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link EventosPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener{
+public class EventosPageFragment extends android.support.v4.app.Fragment implements View.OnCreateContextMenuListener {
 
     private final int CREAR_EVENTO = 1;
     private final int EDITAR_EVENTO = 2;
@@ -42,6 +44,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
     private List<Evento> eventosListDisplayed = new ArrayList<>();
     private EventoItemAdapter mEventoItemAdapter;
     private RecyclerView mEventosRecyclerView;
+
+    private LinearLayout mLayoutEmptyMsg;
 
     private DaoEvento daoEvento;
     private List<Evento> eventosDelUsuario;
@@ -70,7 +74,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         setHasOptionsMenu(true);
 
         daoEvento = new SQLiteDaoEvento(getActivity());
-        eventosDelUsuario = daoEvento.getAll();
     }
 
     @Override
@@ -82,9 +85,11 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        eventosDelUsuario = daoEvento.getAll();
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_eventos);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
         mEventoItemAdapter = new EventoItemAdapter(eventosListDisplayed, getActivity());
-        //TODO: VER QUE MOSTRAR CUANDO NO HAY PAGOS TODAVIA
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mEventosRecyclerView.setLayoutManager(mLayoutManager);
@@ -96,8 +101,9 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         eventosListDisplayed.clear();
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
-        //registerForContextMenu(mEventosRecyclerView);
-
+        if(eventosDelUsuario.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
@@ -159,26 +165,24 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         }
     }
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        Activity act = this.getActivity();
-//        MenuInflater inflater = act.getMenuInflater();
-//        inflater.inflate(R.menu.cm_evento, menu);
-//    }
-
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
         Evento evento = eventosListDisplayed.get(item.getGroupId());
 
-        switch (item.getItemId()) {
+        switch(item.getItemId()) {
             case 1:
                 editarEvento(evento);
                 return true;
             case 2:
-                //TODO ELIMINAR?
+                daoEvento.delete(evento);
+                eventosDelUsuario.clear();
+                eventosDelUsuario.addAll(daoEvento.getAll());
+                restoreOriginalEventosList();
+                if(eventosDelUsuario.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -197,15 +201,16 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         switch(requestCode) {
             case CREAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.evento_creado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                 }
                 break;
             }
             case EDITAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.evento_editado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                 }
@@ -220,5 +225,34 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
             Intent i = new Intent(getActivity(), EventoForm.class);
             startActivityForResult(i, CREAR_EVENTO);
         }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // load data here
+            if(eventosDelUsuario != null && daoEvento != null){
+                eventosDelUsuario = daoEvento.getAll();
+                restoreOriginalEventosList();
+                if(eventosDelUsuario.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
+            }
+        }else{
+            // fragment is no longer visible
+        }
+    }
+
+    @Override
+    public void onResume() {
+        if(eventosDelUsuario != null && daoEvento != null){
+            eventosDelUsuario = daoEvento.getAll();
+            restoreOriginalEventosList();
+            if(eventosDelUsuario.isEmpty()){
+                mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+            }
+        }
+        super.onResume();
     }
 }

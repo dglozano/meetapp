@@ -9,39 +9,43 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.dglozano.meetapp.actividades.EventoActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimaryDark"
-        app:titleTextColor="@android:color/white"
-        app:subtitleTextColor="@android:color/white"
-        android:elevation="4dp"
-        android:theme="@style/ToolbarStyle"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_evento"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_toolbar_evento_act"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimaryDark"
+            app:elevation="0dp"
+            android:theme="@style/ToolbarStyle"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:subtitleTextColor="@android:color/white"
+            app:titleTextColor="@android:color/white" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout_evento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_toolbar_main"
+            android:background="?attr/colorPrimaryDark"
+            app:tabSelectedTextColor="@color/colorAccent"
+            app:tabTextColor="@android:color/white"
+            app:tabMaxWidth="0dp"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorAccent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarStyle"/>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:descendantFocusability="blocksDescendants" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom">
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabDotsTareasParticipantesGastos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="100dp"
-            android:layout_marginStart="100dp"
-            app:tabBackground="@drawable/tab_selector"
-            app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"/>
-    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

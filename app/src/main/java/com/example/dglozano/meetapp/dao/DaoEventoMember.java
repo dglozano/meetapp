@@ -9,7 +9,7 @@ import java.util.List;
 public interface DaoEventoMember<T> {
     T getById(int id);
 
-    void save(T item, int eventoId);
+    long save(T item, int eventoId);
 
     void delete(T item);
 

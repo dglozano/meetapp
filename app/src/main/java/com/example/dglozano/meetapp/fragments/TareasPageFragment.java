@@ -1,10 +1,14 @@
 package com.example.dglozano.meetapp.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
@@ -24,10 +29,16 @@ import com.example.dglozano.meetapp.adapters.TareaItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
+import com.example.dglozano.meetapp.dao.SQLiteDaoPago;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
+import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +51,8 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link TareasPageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TareasPageFragment extends android.support.v4.app.Fragment {
+public class TareasPageFragment extends android.support.v4.app.Fragment
+        implements DialogDeletePagos.NoticeDialogListener{
 
     private final int CREAR_TAREA = 1;
     private final int EDITAR_TAREA = 2;
@@ -48,12 +60,14 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
     private List<Tarea> tareasListDisplayed = new ArrayList<>();
     private TareaItemAdapter mTareaAdapter;
     private RecyclerView mTareasRecyclerview;
+    private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
 
     private DaoEventoMember<Tarea> daoTarea;
+    private DaoEventoMember<Pago> daoPagos;
     private DaoEvento daoEvento;
-    private Evento evento;
+    private Integer eventoId;
     private List<Tarea> tareasListDelEvento;
 
     public TareasPageFragment() {
@@ -80,9 +94,9 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         setHasOptionsMenu(true);
 
         daoEvento = new SQLiteDaoEvento(getActivity());
-        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
+        eventoId =getArguments().getInt(EVENTO_ID);
         daoTarea = new SQLiteDaoTarea(getActivity());
-        tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
+        daoPagos = new SQLiteDaoPago(getActivity());
     }
 
     @Override
@@ -94,9 +108,11 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_tareas);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mTareasRecyclerview = view.findViewById(R.id.recvw_tareas_list);
         mTareaAdapter = new TareaItemAdapter(tareasListDisplayed);
-        //TODO: ver que mostrar si no hay tareas aun
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mTareasRecyclerview.setLayoutManager(mLayoutManager);
@@ -108,7 +124,9 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         tareasListDisplayed.clear();
         tareasListDisplayed.addAll(tareasListDelEvento);
         mTareaAdapter.notifyDataSetChanged();
-
+        if(tareasListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_tarea);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
@@ -145,22 +163,87 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
+        Evento evento = daoEvento.getById(eventoId);
         Integer pos = item.getItemId();
-        Tarea tarea = tareasListDisplayed.get(item.getGroupId());
+        // El dialogo llama a los metodos onDialogPositiveClick o onDialogNeativeClick
+        // con el id del elemento del context menu clickeado.
+        if(pos <= 5){
+            Tarea tarea = tareasListDisplayed.get(item.getGroupId());
+            //si el ID del item del menu clickeado es del 1 al 5, pertence a este fragment
+            if(evento.isDivisionGastosYaHecha() && pos <= 3){
+                DialogFragment df = DialogDeletePagos.newInstance(pos, tarea.getId());
+                df.setTargetFragment(this,1);
+                df.show(getFragmentManager(), "tag");
+            } else {
+                accionesContextMenu(pos, tarea);
+            }
+            return true;
+        }
+        // si no devuelve false para que lo maneje el siguiente fragmento
+        return false;
+    }
 
-        switch(item.getItemId()) {
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog, int idAccion, int idTarea) {
+        Evento evento = daoEvento.getById(eventoId);
+        Tarea tarea = daoTarea.getById(idTarea);
+        for(Pago p: daoPagos.getAllDelEvento(evento.getId())){
+            daoPagos.delete(p);
+        }
+        evento.setGastosPorParticipante(0.0);
+        evento.setGastosTotales(0.0);
+        evento.setDivisionGastosYaHecha(false);
+        daoEvento.update(evento);
+        accionesContextMenu(idAccion, tarea);
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idTarea) {
+        switch(idAccion) {
+            case 1:
+                Toast.makeText(this.getContext(), R.string.tarea_no_editada, Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                Toast.makeText(this.getContext(), R.string.tarea_no_borrada, Toast.LENGTH_SHORT).show();
+                break;
+            case 3:
+                Toast.makeText(this.getContext(), R.string.no_se_agrego_gasto, Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void accionesContextMenu(int idAccion, Tarea tarea) {
+        switch(idAccion) {
             case 1:
                 editarTarea(tarea);
-                return true;
+                tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
+                restoreOriginalTareasList();
+                break;
             case 2:
-                return true;
+                Toast.makeText(this.getContext(), R.string.tarea_borrada, Toast.LENGTH_SHORT).show();
+                daoTarea.delete(tarea);
+                tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
+                restoreOriginalTareasList();
+                if(tareasListDelEvento.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
+                break;
             case 3:
                 agregarGasto(tarea);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+                break;
+            case 4:
+                darPorFinalizada(tarea);
+                break;
+            case 5:
+                verFoto(tarea);
+                break;
         }
+    }
+
+    private void verFoto(Tarea tarea) {
+        DialogFragment df = DialogVerFotoTarea.newInstance(eventoId, tarea.getId(), tarea.getTitulo());
+        df.setTargetFragment(this,1);
+        df.show(getFragmentManager(), "tag");
     }
 
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
@@ -194,10 +277,23 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         f.show(getFragmentManager(), "dialog");
     }
 
+    private void darPorFinalizada(Tarea tarea) {
+        if(tarea.getEstadoTarea().equals(EstadoTarea.SIN_ASIGNAR)) {
+            Toast.makeText(getContext(), R.string.tarea_no_asignada, Toast.LENGTH_LONG).show();
+        } else if(tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
+            Toast.makeText(getContext(), R.string.tarea_ya_finalizada, Toast.LENGTH_LONG).show();
+        } else {
+            tarea.setEstadoTarea(EstadoTarea.FINALIZADA);
+            daoTarea.update(tarea);
+            tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
+            restoreOriginalTareasList();
+        }
+    }
+
     private void editarTarea(Tarea tarea) {
         Intent i = new Intent(getActivity(), TareaForm.class);
         i.putExtra(TareaForm.KEY_TAREA_ID, tarea.getId());
-        i.putExtra(TareaForm.KEY_EVENTO_ID, evento.getId());
+        i.putExtra(TareaForm.KEY_EVENTO_ID, eventoId);
         i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, false);
         startActivityForResult(i, EDITAR_TAREA);
     }
@@ -207,16 +303,17 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         switch(requestCode) {
             case CREAR_TAREA: {
                 if(resultCode == RESULT_OK) {
-                    Toast.makeText(this.getContext(), "Tarea editada", Toast.LENGTH_SHORT).show();
-                    tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
+                    Toast.makeText(this.getContext(), R.string.tarea_creada, Toast.LENGTH_SHORT).show();
+                    tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                     restoreOriginalTareasList();
                 }
                 break;
             }
             case EDITAR_TAREA: {
                 if(resultCode == RESULT_OK) {
-                    Toast.makeText(this.getContext(), "Tarea borrada", Toast.LENGTH_SHORT).show();
-                    tareasListDelEvento = daoTarea.getAllDelEvento(evento.getId());
+                    Toast.makeText(this.getContext(), R.string.tarea_editada, Toast.LENGTH_SHORT).show();
+                    tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
                     restoreOriginalTareasList();
                 }
                 break;
@@ -228,9 +325,26 @@ public class TareasPageFragment extends android.support.v4.app.Fragment {
         @Override
         public void onClick(View view) {
             Intent i = new Intent(getActivity(), TareaForm.class);
-            i.putExtra(TareaForm.KEY_EVENTO_ID, evento.getId());
+            i.putExtra(TareaForm.KEY_EVENTO_ID, eventoId);
             i.putExtra(TareaForm.KEY_TAREA_NUEVA_FLAG, true);
             startActivityForResult(i, CREAR_TAREA);
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // load data here
+            if(eventoId != null) {
+                tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
+                restoreOriginalTareasList();
+                if(tareasListDelEvento.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
+            }
+        }else{
+            // fragment is no longer visible
         }
     }
 }

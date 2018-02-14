@@ -14,6 +14,8 @@ import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
+import java.text.DecimalFormat;
+
 public class AgregarGastoFragment extends DialogFragment {
 
     private Double gasto;
@@ -57,7 +59,7 @@ public class AgregarGastoFragment extends DialogFragment {
         findViews(view);
 
         tv_nombreTarea.setText(tarea.getTitulo());
-        tv_gastoActual.setText("$" + gasto.toString());
+        setearGasto(gasto);
 
         setListeners();
 
@@ -81,7 +83,7 @@ public class AgregarGastoFragment extends DialogFragment {
                 String texto = et_gasto.getText().toString();
                 if(!texto.equals("")) {
                     gasto += Double.valueOf(texto);
-                    tv_gastoActual.setText("$" + gasto.toString());
+                    setearGasto(gasto);
                 }
             }
         });
@@ -92,7 +94,7 @@ public class AgregarGastoFragment extends DialogFragment {
                 if(!texto.equals("")) {
                     gasto -= Double.valueOf(texto);
                     if(gasto < 0) gasto = 0.0;
-                    tv_gastoActual.setText("$" + gasto.toString());
+                    setearGasto(gasto);
                 }
             }
         });
@@ -110,5 +112,10 @@ public class AgregarGastoFragment extends DialogFragment {
                 AgregarGastoFragment.this.getDialog().cancel();
             }
         });
+    }
+
+    private void setearGasto(Double gasto) {
+        DecimalFormat df = new DecimalFormat("$ ###,##0.00");
+        tv_gastoActual.setText("$" + df.format(gasto));
     }
 }

@@ -109,14 +109,15 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
      * @param p Evento a crear
      */
     @Override
-    public void save(Participante p, int eventoId) {
+    public long save(Participante p, int eventoId) {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.PARTICIPANTE_NOMBRE, p.getNombreApellido());
         cv.put(Constants.PARTICIPANTE_EVENTO_FK, eventoId);
         cv.put(Constants.PARTICIPANTE_TELEFONO, p.getNumeroTel());
-        db.insert(Constants.PARTICIPANTE_TABLENAME, null, cv);
+        long id = db.insert(Constants.PARTICIPANTE_TABLENAME, null, cv);
         db.close();
+        return id;
     }
 
     /**
@@ -128,7 +129,6 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
     @Override
     public void delete(Participante p) {
         db = dbhelper.getWritableDatabase();
-        //TODO VER QUE HACER SI HAY PAGOS CON ESTE PARTICIPANTE
         db.delete(Constants.PARTICIPANTE_TABLENAME, Constants.PARTICIPANTE_ID + "=" + p.getId(), null);
         db.close();
     }
@@ -146,6 +146,9 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
     public void createMockData(List<Evento> eventosYaGuardadosEnDb) {
         List<Participante> participantesMock = Participante.getParticipantesMock();
         for(Evento e : eventosYaGuardadosEnDb) {
+            Participante creadorEvento = Participante.participanteCreadorEvento();
+            e.addParticipante(creadorEvento);
+            save(creadorEvento, e.getId());
             int totalPart = ThreadLocalRandom.current().nextInt(1, participantesMock.size() + 1);
             for(int i = 0; i < totalPart; i++) {
                 int partRandom = ThreadLocalRandom.current().nextInt(0, participantesMock.size());
@@ -157,6 +160,4 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
             participantesMock = Participante.getParticipantesMock();
         }
     }
-
-    //TODO UPDATE?
 }
