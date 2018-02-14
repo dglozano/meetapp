@@ -50,7 +50,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
             menu.add(this.getAdapterPosition(), 1, 0, R.string.texto_editar);
-            menu.add(Menu.NONE, 2, 1, R.string.texto_borrar);
+            menu.add(this.getAdapterPosition(), 2, 1, R.string.texto_borrar);
         }
     }
 
@@ -64,7 +64,6 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.evento_list_row, parent, false);
         itemView.setOnClickListener(new MyOnClickListener());
-        // itemView.setOnLongClickListener(new MyOnLongClickListener());
         return new EventoViewHolder(itemView);
     }
 
@@ -122,26 +121,10 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
             RecyclerView rv = (RecyclerView) view.getParent();
             int itemPosition = rv.getChildLayoutPosition(view);
             Evento eventoClickeado = eventosList.get(itemPosition);
-            System.out.println(eventoClickeado);
             Intent intent = new Intent(mContext, EventoActivity.class);
             intent.putExtra(EXTRA_EVENTO_ID, eventoClickeado.getId());
             mContext.startActivity(intent);
         }
     }
-
-//    private class MyOnLongClickListener implements View.OnLongClickListener {
-//
-//        public boolean onLongClick(View view) {
-//            RecyclerView rv = (RecyclerView) view.getParent();
-//            int itemPosition = rv.getChildLayoutPosition(view);
-//            Evento eventoClickeado = eventosList.get(itemPosition);
-//            System.out.println(eventoClickeado);
-//            Toast toast = Toast.makeText(mContext, eventoClickeado.getNombre(), Toast.LENGTH_LONG);
-//            toast.show();
-//
-//            return true;
-//        }
-//    }
-
 }
 

@@ -81,9 +81,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     public Pago getById(int id){
         Pago pago = null;
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.PAGO_TABLENAME + " WHERE "
                 + Constants.PAGO_ID + " = " +String.valueOf(id),null);
@@ -99,9 +96,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     public List<Pago> getAllDelEvento(int eventoId){
         List<Pago> pagos = new ArrayList<>();
         db = dbhelper.getReadableDatabase();
-        /**
-         * FIXME: ESTO IRIA CON UN ? COMO PARAM Y UNA ARRAY DE STRING CON EL ID PERO A.S. TIENE UN BUG
-         */
         Cursor c = db.rawQuery("SELECT * FROM "
                 + Constants.PAGO_TABLENAME + " WHERE "
                 + Constants.PAGO_EVENTO_FK + " = " +String.valueOf(eventoId),null);
@@ -141,7 +135,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
     @Override
     public void delete(Pago p) {
         db = dbhelper.getWritableDatabase();
-        //TODO VER QUE HACER SI HAY PAGOS CON ESTE PARTICIPANTE
         db.delete(Constants.PAGO_TABLENAME, Constants.PAGO_ID + "=" + p.getId(), null);
         db.close();
     }
@@ -169,6 +162,4 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
             }
         }
     }
-
-    //TODO UPDATE?
 }

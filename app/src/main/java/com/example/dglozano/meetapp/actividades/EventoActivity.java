@@ -77,6 +77,7 @@ public class EventoActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        // para que recree cada vez que se mueve
 
         /**
          * Esto es para que aparezcan los puntito abajo que indican en que pagina se esta

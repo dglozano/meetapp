@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.actividades.EventoForm;
@@ -73,7 +74,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         setHasOptionsMenu(true);
 
         daoEvento = new SQLiteDaoEvento(getActivity());
-        eventosDelUsuario = daoEvento.getAll();
     }
 
     @Override
@@ -85,6 +85,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        eventosDelUsuario = daoEvento.getAll();
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_eventos);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
@@ -100,7 +101,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         eventosListDisplayed.clear();
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
-        //registerForContextMenu(mEventosRecyclerView);
         if(eventosDelUsuario.isEmpty()){
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
         }
@@ -165,14 +165,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         }
     }
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//        super.onCreateContextMenu(menu, v, menuInfo);
-//        Activity act = this.getActivity();
-//        MenuInflater inflater = act.getMenuInflater();
-//        inflater.inflate(R.menu.cm_evento, menu);
-//    }
-
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -184,10 +176,10 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 editarEvento(evento);
                 return true;
             case 2:
-                //TODO ELIMINAR?
-                //ELIMINAR EVENTO
-                //dao eliminar
-                //notifydatasetchange
+                daoEvento.delete(evento);
+                eventosDelUsuario.clear();
+                eventosDelUsuario.addAll(daoEvento.getAll());
+                restoreOriginalEventosList();
                 if(eventosDelUsuario.isEmpty()){
                     mLayoutEmptyMsg.setVisibility(View.VISIBLE);
                 }
@@ -209,7 +201,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         switch(requestCode) {
             case CREAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.evento_creado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                     mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
@@ -218,7 +210,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
             }
             case EDITAR_EVENTO: {
                 if(resultCode == RESULT_OK) {
-                    // TODO agregar toast
+                    Toast.makeText(this.getContext(), R.string.evento_editado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
                 }

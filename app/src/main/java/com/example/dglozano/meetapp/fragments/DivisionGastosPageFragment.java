@@ -43,7 +43,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
-    private Evento evento;
+    private int eventoId;
 
     private DaoEvento daoEvento;
     private DaoEventoMember<Pago> daoPago;
@@ -76,8 +76,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
 
         daoEvento = new SQLiteDaoEvento(getActivity());
         daoPago = new SQLiteDaoPago(getActivity());
-        evento = daoEvento.getById(getArguments().getInt(EVENTO_ID));
-        pagosListDelEvento = daoPago.getAllDelEvento(evento.getId());
+        eventoId = getArguments().getInt(EVENTO_ID);
     }
 
     @Override
@@ -89,6 +88,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        pagosListDelEvento = daoPago.getAllDelEvento(eventoId);
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_dividir_gastos);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
@@ -104,10 +104,14 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         pagosListDisplayed.clear();
         pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
+        fab = view.findViewById(R.id.fab_btn_dividir_gastos);
         if(pagosListDelEvento.isEmpty()){
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+            fab.setImageResource(R.drawable.ic_attach_money_white_24dp);
+        } else {
+            mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
+            fab.setImageResource(R.drawable.ic_info_white_24dp);
         }
-        fab = view.findViewById(R.id.fab_btn_dividir_gastos);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
 
@@ -141,7 +145,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     }
 
     private void calcularPagos() {
-        final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(), evento.getId());
+        final Evento evento = daoEvento.getById(eventoId);
+        final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(), eventoId);
         if(evento.isDivisionGastosYaHecha()) {
             DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
                     evento.getGastosPorParticipante(), true)
@@ -151,22 +156,23 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
                 @Override
                 public void run() {
                     calculadorDePagos.calcularPagos();
-                    //FIXME ON CASCADE
-                    evento.addAllPagos(calculadorDePagos.getListaPagos());
-                    for(Pago p : evento.getPagos()) {
+                    for(Pago p : evento.getPagos()){
+                        daoPago.delete(p);
+                    }
+                    for(Pago p : calculadorDePagos.getListaPagos()) {
                         daoPago.save(p, evento.getId());
                     }
                     evento.setDivisionGastosYaHecha(true);
                     evento.setGastosTotales(calculadorDePagos.getGastoTotal());
                     evento.setGastosPorParticipante(calculadorDePagos.getGastoPorParticipante());
-                    //daoEvento.save(evento);
+                    daoEvento.update(evento);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
                                     evento.getGastosPorParticipante(), false)
                                     .show(getActivity().getFragmentManager(), "dialog");
-                            pagosListDelEvento = calculadorDePagos.getListaPagos();
+                            pagosListDelEvento = daoPago.getAllDelEvento(evento.getId());
                             restoreOriginalPagosList();
                             fab.setImageResource(R.drawable.ic_info_white_24dp);
                             if(!pagosListDelEvento.isEmpty()){

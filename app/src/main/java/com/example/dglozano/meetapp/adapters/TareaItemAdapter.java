@@ -39,7 +39,7 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
 
             menu.add(this.getAdapterPosition(), 3, 0, R.string.agregar_gasto);
             menu.add(this.getAdapterPosition(), 1, 1, R.string.texto_editar);
-            menu.add(Menu.NONE, 2, 2, R.string.texto_borrar);
+            menu.add(this.getAdapterPosition(), 2, 2, R.string.texto_borrar);
         }
     }
 
@@ -58,6 +58,8 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
     @Override
     public void onBindViewHolder(TareaViewHolder holder, int position) {
         Tarea tarea = tareasList.get(position);
+        System.out.println("tarea " + tarea.getTitulo());
+        System.out.println("part " + tarea.getPersonaAsignada());
         holder.titleTextView.setText(tarea.getTitulo());
         holder.personasAsignadaTextView.setText(tarea.getPersonaAsignada().toString());
         switch(tarea.getEstadoTarea()) {

@@ -129,7 +129,6 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
     @Override
     public void delete(Participante p) {
         db = dbhelper.getWritableDatabase();
-        //TODO VER QUE HACER SI HAY PAGOS CON ESTE PARTICIPANTE
         db.delete(Constants.PARTICIPANTE_TABLENAME, Constants.PARTICIPANTE_ID + "=" + p.getId(), null);
         db.close();
     }
@@ -147,6 +146,9 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
     public void createMockData(List<Evento> eventosYaGuardadosEnDb) {
         List<Participante> participantesMock = Participante.getParticipantesMock();
         for(Evento e : eventosYaGuardadosEnDb) {
+            Participante creadorEvento = Participante.participanteCreadorEvento();
+            e.addParticipante(creadorEvento);
+            save(creadorEvento, e.getId());
             int totalPart = ThreadLocalRandom.current().nextInt(1, participantesMock.size() + 1);
             for(int i = 0; i < totalPart; i++) {
                 int partRandom = ThreadLocalRandom.current().nextInt(0, participantesMock.size());
@@ -158,6 +160,4 @@ public class SQLiteDaoParticipante implements DaoEventoMember<Participante> {
             participantesMock = Participante.getParticipantesMock();
         }
     }
-
-    //TODO UPDATE?
 }
