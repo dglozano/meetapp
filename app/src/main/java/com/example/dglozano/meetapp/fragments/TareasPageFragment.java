@@ -236,6 +236,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
                 break;
             case 5:
                 verFoto(tarea);
+                break;
         }
     }
 

@@ -194,17 +194,20 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Evento evento = daoEvento.getById(eventoId);
         Integer pos = item.getItemId();
-        Participante participante = participantesListDisplayed.get(item.getGroupId());
-        // El dialogo llama a los metodos onDialogPositiveClick o onDialogNeativeClick
-        // con el id del elemento del context menu clickeado.
-        if(evento.isDivisionGastosYaHecha()){
-            DialogFragment df = DialogDeletePagos.newInstance(pos, participante.getId());
-            df.setTargetFragment(this,1);
-            df.show(getFragmentManager(), "tag");
-        } else {
-            accionesContextMenu(participante);
+        if(pos == 6) {
+            Participante participante = participantesListDisplayed.get(item.getGroupId());
+            // El dialogo llama a los metodos onDialogPositiveClick o onDialogNeativeClick
+            // con el id del elemento del context menu clickeado.
+            if(evento.isDivisionGastosYaHecha()){
+                DialogFragment df = DialogDeletePagos.newInstance(pos, participante.getId());
+                df.setTargetFragment(this,1);
+                df.show(getFragmentManager(), "tag");
+            } else {
+                accionesContextMenu(participante);
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     @Override

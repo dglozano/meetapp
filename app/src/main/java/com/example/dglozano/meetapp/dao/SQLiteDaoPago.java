@@ -63,7 +63,6 @@ public class SQLiteDaoPago implements DaoEventoMember<Pago> {
         Pago pago = new Pago();
         pago.setId(c.getInt(c.getColumnIndex(Constants.PAGO_ID)));
         pago.setMonto(c.getDouble(c.getColumnIndex(Constants.PAGO_MONTO)));
-        int estadoOrdinal = c.getInt(c.getColumnIndex(Constants.PAGO_ESTADO));
         int idParticipantePagador = c.getInt(c.getColumnIndex(Constants.PAGO_PARTICIPANTE_PAGADOR_FK));
         int idParticipanteCobrador = c.getInt(c.getColumnIndex(Constants.PAGO_PARTICIPANTE_COBRADOR_FK));
         Participante cobrador = daoParticipante.getById(idParticipanteCobrador);

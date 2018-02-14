@@ -54,7 +54,6 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.PAGO_TABLENAME + "("
             + Constants.PAGO_ID +  " integer primary key autoincrement,"
             + Constants.PAGO_MONTO + " real,"
-            + Constants.PAGO_ESTADO + " integer,"
             + Constants.PAGO_PARTICIPANTE_COBRADOR_FK + " integer,"
             + Constants.PAGO_PARTICIPANTE_PAGADOR_FK + " integer,"
             + Constants.PAGO_EVENTO_FK + " integer,"
