@@ -116,6 +116,6 @@ public class AgregarGastoFragment extends DialogFragment {
 
     private void setearGasto(Double gasto) {
         DecimalFormat df = new DecimalFormat("$ ###,##0.00");
-        tv_gastoActual.setText("$" + df.format(gasto));
+        tv_gastoActual.setText(df.format(gasto));
     }
 }
