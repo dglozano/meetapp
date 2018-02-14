@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
@@ -62,6 +63,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     private DaoEventoMember<Participante> daoParticipante;
     private DaoEventoMember<Pago> daoPagos;
     private List<Participante> participantesListDelEvento;
+    private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
     private int eventoId;
@@ -106,7 +108,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
-
+        mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_participantes);
+        mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
         mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
         mParticipanteAdapter = new ParticipanteItemAdapter(participantesListDisplayed);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
@@ -120,7 +123,9 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         participantesListDisplayed.clear();
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
-
+        if(participantesListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
         fab.setOnClickListener(new MyFabIconOnClickListener());
     }
@@ -234,6 +239,9 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         daoParticipante.delete(participante);
         participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
         restoreOriginalParticipantesList();
+        if(participantesListDelEvento.isEmpty()){
+            mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+        }
     }
 
     private class MyOnQueryTextListener implements SearchView.OnQueryTextListener {
@@ -269,7 +277,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
                 if(resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), R.string.participante_creado, Toast.LENGTH_SHORT).show();
                     participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
-
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                     restoreOriginalParticipantesList();
                 }
                 break;

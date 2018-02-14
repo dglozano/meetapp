@@ -226,4 +226,33 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
             startActivityForResult(i, CREAR_EVENTO);
         }
     }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // load data here
+            if(eventosDelUsuario != null && daoEvento != null){
+                eventosDelUsuario = daoEvento.getAll();
+                restoreOriginalEventosList();
+                if(eventosDelUsuario.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                }
+            }
+        }else{
+            // fragment is no longer visible
+        }
+    }
+
+    @Override
+    public void onResume() {
+        if(eventosDelUsuario != null && daoEvento != null){
+            eventosDelUsuario = daoEvento.getAll();
+            restoreOriginalEventosList();
+            if(eventosDelUsuario.isEmpty()){
+                mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+            }
+        }
+        super.onResume();
+    }
 }

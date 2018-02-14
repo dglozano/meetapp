@@ -16,7 +16,34 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scrollbars="vertical" />
+        <LinearLayout
+            android:id="@+id/empty_msg_layout_participantes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_alignEnd="@id/recvw_participantes_list"
+            android:layout_alignStart="@id/recvw_participantes_list"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical"
+            android:visibility="visible">
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:srcCompat="@drawable/ic_mood_black_48dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lineSpacingExtra="4sp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="@string/emtpy_msg_participantes"
+                android:textAlignment="center"
+                android:textAppearance="@android:style/TextAppearance.Material.Medium" />
+        </LinearLayout>
     </RelativeLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_btn_agregar_participante"
