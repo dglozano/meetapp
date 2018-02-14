@@ -16,6 +16,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scrollbars="vertical" />
+
         <LinearLayout
             android:id="@+id/empty_msg_layout_participantes"
             android:layout_width="match_parent"

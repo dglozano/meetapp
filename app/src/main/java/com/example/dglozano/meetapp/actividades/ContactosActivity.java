@@ -13,37 +13,37 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-
 import java.util.Collections;
 import java.util.List;
 
-import android.widget.ListView;
-
 import com.example.dglozano.meetapp.R;
+import com.example.dglozano.meetapp.adapters.ContactoItemAdapter;
 import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
 import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
-import com.example.dglozano.meetapp.modelo.Evento;
+import com.example.dglozano.meetapp.modelo.Contacto;
 import com.example.dglozano.meetapp.modelo.Participante;
 
 public class ContactosActivity extends AppCompatActivity {
 
-    private ListView list;
+    private RecyclerView mContactosRecyclerView;
     private Intent intentOrigen;
     private Participante participante;
-    private ArrayAdapter<String> adapter;
-    private List<String> todosLosContactos = new ArrayList<>();
-    private List<String> contactosDisplayed = new ArrayList<>();
+    private ContactoItemAdapter mContactoItemAdapter;
+    private List<Contacto> todosLosContactos = new ArrayList<>();
+    private List<Contacto> contactosDisplayed = new ArrayList<>();
+
     private DaoEventoMember<Participante> daoParticipante;
-    private DaoEvento daoEvento;
-    private Evento evento;
+    private Integer eventoId;
 
     public static final String KEY_EVENTO_ID = "idEvento";
 
@@ -57,19 +57,25 @@ public class ContactosActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-        daoParticipante = new SQLiteDaoParticipante(this);
-        daoEvento = new SQLiteDaoEvento(this);
 
+        daoParticipante = new SQLiteDaoParticipante(this);
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
-        evento = daoEvento.getById(extras.getInt(KEY_EVENTO_ID));
-
-        list = (ListView) findViewById(R.id.listView1);
-
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        eventoId = extras.getInt(KEY_EVENTO_ID);
 
         LoadContactsAsycn lca = new LoadContactsAsycn();
         lca.execute();
+
+        mContactosRecyclerView = findViewById(R.id.recvw_contactos_list);
+        mContactoItemAdapter = new ContactoItemAdapter(contactosDisplayed, this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
+                this.getApplicationContext());
+        mContactosRecyclerView.setLayoutManager(mLayoutManager);
+        mContactosRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mContactosRecyclerView.addItemDecoration(new DividerItemDecoration(
+                this.getApplicationContext(),
+                LinearLayoutManager.VERTICAL));
+        mContactosRecyclerView.setAdapter(mContactoItemAdapter);
     }
 
     @Override
@@ -78,8 +84,8 @@ public class ContactosActivity extends AppCompatActivity {
             case R.id.toolbar_search_contactos:
                 return true;
             case R.id.menu_item_Ok:
-                ArrayList<String> checkeados = getChecked();
-                guardar(checkeados);
+                ArrayList<Contacto> contactosCheckeados = getChecked();
+                guardar(contactosCheckeados);
                 setResult(RESULT_OK, intentOrigen);
                 finish();
                 return true;
@@ -92,35 +98,32 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> getChecked() {
-        int count = list.getCount();
-        ArrayList<String> save = new ArrayList<>();
-        SparseBooleanArray viewItems = list.getCheckedItemPositions();
-        for (int i = 0; i < count; i++) {
-            if (viewItems.get(i)) {
-                String selectedContact = (String) list.getItemAtPosition(i);
-                save.add(selectedContact);
+    public ArrayList<Contacto> getChecked() {
+        ArrayList<Contacto> contactosCheckeados = new ArrayList<>();
+        for (Contacto c: todosLosContactos){
+            if(c.isChecked()){
+                contactosCheckeados.add(c);
             }
         }
-        return save;
+        return contactosCheckeados;
     }
 
     private void search(String query) {
-        List<String> result = new ArrayList<>();
-        for(String c: todosLosContactos) {
-            if(c.toUpperCase().contains(query.toUpperCase())) {
+        List<Contacto> result = new ArrayList<>();
+        for(Contacto c: todosLosContactos) {
+            if(c.getNombre().contains(query.toUpperCase())) {
                 result.add(c);
             }
         }
         contactosDisplayed.clear();
         contactosDisplayed.addAll(result);
-        adapter.notifyDataSetChanged();
+        mContactoItemAdapter.notifyDataSetChanged();
     }
 
     private void restoreOriginalContactosList() {
         contactosDisplayed.clear();
         contactosDisplayed.addAll(todosLosContactos);
-        adapter.notifyDataSetChanged();
+        mContactoItemAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -161,7 +164,7 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    class LoadContactsAsycn extends AsyncTask<Void, Void, ArrayList<String>> {
+    class LoadContactsAsycn extends AsyncTask<Void, Void, ArrayList<Contacto>> {
 
         @Override
         protected void onPreExecute() {
@@ -169,9 +172,9 @@ public class ContactosActivity extends AppCompatActivity {
         }
 
         @Override
-        protected ArrayList<String> doInBackground(Void... params) {
+        protected ArrayList<Contacto> doInBackground(Void... params) {
 
-            ArrayList<String> contacts = new ArrayList<>();
+            ArrayList<Contacto> contacts = new ArrayList<>();
 
             Cursor c = getContentResolver().query(
                     ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
@@ -186,18 +189,17 @@ public class ContactosActivity extends AppCompatActivity {
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                 if (contacts.size()==0) {
-                    contacts.add(contactName + System.lineSeparator() + phNumber);
+                    contacts.add(new Contacto(contactName, phNumber, false));
                 }
                 else {
                     boolean flag = false;
-                    for (String cn : contacts){
-                        String[] partes = cn.split(System.lineSeparator());
-                        if (partes[0].equals(contactName)){
+                    for (Contacto cn : contacts){
+                        if (cn.getNombre().equals(contactName)){
                             flag = true;
                         }
                     }
                     if (!flag){
-                        contacts.add(contactName + System.lineSeparator() + phNumber);
+                        contacts.add(new Contacto(contactName, phNumber,false));
                     }
                 }
             }
@@ -207,28 +209,26 @@ public class ContactosActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<String> contacts) {
+        protected void onPostExecute(ArrayList<Contacto> contacts) {
 
             super.onPostExecute(contacts);
             todosLosContactos.addAll(contacts);
             contactosDisplayed.addAll(contacts);
 
-            adapter = new ArrayAdapter<String>(getApplicationContext(),
-                    android.R.layout.simple_list_item_multiple_choice, contactosDisplayed);
-
-            list.setAdapter(adapter);
+            contactosDisplayed.clear();
+            contactosDisplayed.addAll(todosLosContactos);
+            mContactoItemAdapter.notifyDataSetChanged();
         }
     }
 
-    public void guardar(ArrayList<String> check){
-        for (String s : check){
-            String[] partes = s.split(System.lineSeparator());
-            String nombre = partes[0];
-            String numero = partes[1];
+    public void guardar(ArrayList<Contacto> contactosChecked){
+        for (Contacto c : contactosChecked){
+            String nombre = c.getNombre();
+            String numero = c.getNumero();
 
             participante = new Participante(nombre, numero);
 
-            daoParticipante.save(participante, evento.getId());
+            daoParticipante.save(participante, eventoId);
         }
     }
 }
