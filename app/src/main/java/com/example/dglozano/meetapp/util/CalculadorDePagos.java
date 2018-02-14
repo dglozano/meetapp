@@ -6,7 +6,6 @@ import android.util.Pair;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
-import com.example.dglozano.meetapp.modelo.EstadoPago;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Pago;
 import com.example.dglozano.meetapp.modelo.Participante;
@@ -147,7 +146,7 @@ public class CalculadorDePagos {
             deudasPorParticipante.add(new Pair(acreedor.first, acreedor.second + monto));
 
             // crea pago
-            pagos.add(new Pago(EstadoPago.NO_PAGADO, deudor.first, acreedor.first, monto));
+            pagos.add(new Pago(deudor.first, acreedor.first, monto));
 
             // aumenta contador si ya están saldados
             deudorDeberiaPagar = Math.abs(deudor.second - monto);

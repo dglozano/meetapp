@@ -17,19 +17,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:text="$150.23"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@android:color/black" />
 
     <LinearLayout
         android:id="@+id/linear_layout_pagador_cobrador"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/tv_payment_row_monto"
-        android:layout_toLeftOf="@id/img_payment_row_estado_icon"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_toRightOf="@id/tv_payment_row_monto"
         android:orientation="vertical">
 
         <LinearLayout
@@ -43,10 +43,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_weight="0.75"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:text="Diego Garcia Lozano"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
-                android:maxLines="3"
-                android:ellipsize="end"
                 android:textColor="@color/colorPrimaryDark" />
 
         </LinearLayout>
@@ -59,10 +59,9 @@
 
             <ImageView
                 android:id="@+id/img_payment_row_arrow"
-                android:layout_width="wrap_content"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/tv_payment_row_monto"
-                android:layout_weight="0.25"
                 android:src="@drawable/ic_subdirectory_arrow_right_black_18dp" />
 
             <TextView
@@ -71,23 +70,14 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="3dp"
-                android:layout_weight="0.75"
-                android:singleLine="true"
                 android:ellipsize="marquee"
                 android:paddingLeft="3dp"
+                android:singleLine="true"
                 android:text="Esteban Rebechi"
                 android:textAppearance="@android:style/TextAppearance.Material.Small"
                 android:textColor="@android:color/darker_gray" />
 
         </LinearLayout>
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/img_payment_row_estado_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_access_time_black_24dp" />
 
 </RelativeLayout>

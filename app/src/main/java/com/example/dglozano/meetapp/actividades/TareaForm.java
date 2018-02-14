@@ -308,7 +308,7 @@ public class TareaForm extends AppCompatActivity {
         File mypath = new File(directory, "evento_" + eventoId + "tarea_" + tarea.getId() + ".jpg");
         try {
             FileOutputStream fos = new FileOutputStream(mypath);
-            imageTarea.compress(Bitmap.CompressFormat.PNG, 90, fos);
+            imageTarea.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
         } catch(FileNotFoundException e) {
