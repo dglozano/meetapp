@@ -78,7 +78,7 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
                     String numero = participante.getNumeroTel();
                     String dial = "sms:" + numero;
                     Intent intentSMS = new Intent(Intent.ACTION_VIEW, Uri.parse(dial));
-                    intentSMS.putExtra("sms_body", "Te he agregado a un evento como organizador!");
+                    intentSMS.putExtra("sms_body", R.string.sms_msg);
                     view.getContext().startActivity(intentSMS);
                 }
             });
