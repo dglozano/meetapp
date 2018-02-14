@@ -20,12 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.DaoEvento;
