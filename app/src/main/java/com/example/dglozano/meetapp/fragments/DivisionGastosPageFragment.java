@@ -43,7 +43,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
-    private int eventoId;
+    private Integer eventoId;
 
     private DaoEvento daoEvento;
     private DaoEventoMember<Pago> daoPago;
@@ -220,6 +220,27 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         @Override
         public void onClick(View view) {
             calcularPagos();
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // load data here
+            if(eventoId != null) {
+                pagosListDelEvento = daoPago.getAllDelEvento(eventoId);
+                restoreOriginalPagosList();
+                if(pagosListDelEvento.isEmpty()){
+                    mLayoutEmptyMsg.setVisibility(View.VISIBLE);
+                    fab.setImageResource(R.drawable.ic_attach_money_white_24dp);
+                } else {
+                    mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
+                    fab.setImageResource(R.drawable.ic_info_white_24dp);
+                }
+            }
+        }else{
+            // fragment is no longer visible
         }
     }
 }
