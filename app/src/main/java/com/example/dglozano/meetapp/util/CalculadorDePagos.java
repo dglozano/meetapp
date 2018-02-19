@@ -71,7 +71,7 @@ public class CalculadorDePagos {
 
     public void calcularPagos() {
         List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
-        List<Participante> participantesDelEvento = daoParticipante.getAllDelEvento(idEvento);
+        List<Participante> participantesDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(idEvento);
 
         HashMap<Participante, Double> gastosPorParticipante = new HashMap<>();
         for(Tarea tarea : tareasDelEvento) {
@@ -116,10 +116,10 @@ public class CalculadorDePagos {
         for(Pair<Participante, Double> participanteDoublePair : deudasPorParticipante) {
             System.out.println(participanteDoublePair.first + ": " + participanteDoublePair.second);
         }
-        listaPagos = pagos(deudasPorParticipante, 0.009);
+        listaPagos = pagos(deudasPorParticipante);
     }
 
-    private List<Pago> pagos(List<Pair<Participante, Double>> deudasPorParticipante, double tolerancia) {
+    private List<Pago> pagos(List<Pair<Participante, Double>> deudasPorParticipante) {
         List<Pago> pagos = new ArrayList<>();
         int resueltos = 0;
         while(resueltos < deudasPorParticipante.size()) {
@@ -151,16 +151,16 @@ public class CalculadorDePagos {
             // aumenta contador si ya están saldados
             deudorDeberiaPagar = Math.abs(deudor.second - monto);
             acreedorDeberiaRecibir = Math.abs(acreedor.second + monto);
-            if(deudorDeberiaPagar <= tolerancia)
+            if(deudorDeberiaPagar <= 0.009)
                 resueltos++;
-            if(acreedorDeberiaRecibir <= tolerancia)
+            if(acreedorDeberiaRecibir <= 0.009)
                 resueltos++;
         }
         // limita las transacciones por la tolerancia
         Iterator<Pago> iterator = pagos.iterator();
         while(iterator.hasNext()) {
             Pago pago = iterator.next();
-            if(pago.getMonto() <= tolerancia)
+            if(pago.getMonto() <= 0.009)
                 iterator.remove();
         }
         return pagos;

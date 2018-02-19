@@ -20,8 +20,8 @@ public class DialogDeletePagos extends android.support.v4.app.DialogFragment {
      * implement this interface in order to receive event callbacks.
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog, int idAccion, int idElemento);
-        public void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idElemento);
+        void onDialogPositiveClick(DialogFragment dialog, int idAccion, int idElemento);
+        void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idElemento);
     }
 
     // Use this instance of the interface to deliver action events

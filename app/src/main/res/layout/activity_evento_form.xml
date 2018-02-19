@@ -57,8 +57,9 @@
             android:id="@+id/editText_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/textView_labelNombre"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView_labelNombre"
+            android:layout_below="@id/textView_labelNombre"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="8dp"
             android:ems="10"
@@ -76,12 +77,13 @@
             android:id="@+id/editText_lugar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/textView_labelLugar"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView_labelLugar"
+            android:layout_below="@id/textView_labelLugar"
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:ems="10"
-            android:focusable="false"
+            android:focusable="true"
             android:inputType="text"/>
 
         <TextView
@@ -96,12 +98,13 @@
             android:id="@+id/editText_fecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/textView_labelFecha"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView_labelFecha"
+            android:layout_below="@id/textView_labelFecha"
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:ems="10"
-            android:focusable="false"
+            android:focusable="true"
             android:inputType="text"/>
 
     </RelativeLayout>

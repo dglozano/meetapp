@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:singleLine="true"
         android:ellipsize="marquee"
-        android:text="Comprar Jabon"
+        android:text="@string/tarea_title_ejemplo"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimaryDark" />
 
@@ -33,7 +33,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_tarea_row_title"
-        android:text="Diego Garcia Lozano"
+        android:text="@string/name_example"
         android:textColor="@android:color/darker_gray" />
 
     <ImageView
@@ -42,5 +42,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/finalizada"
         android:src="@drawable/ic_person_add_black_24dp" />
 </RelativeLayout>

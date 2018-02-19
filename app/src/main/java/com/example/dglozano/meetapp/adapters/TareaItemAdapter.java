@@ -28,9 +28,9 @@ public class TareaItemAdapter extends RecyclerView.Adapter<TareaItemAdapter.Tare
 
         public TareaViewHolder(View view) {
             super(view);
-            titleTextView = (TextView) view.findViewById(R.id.tv_tarea_row_title);
-            personasAsignadaTextView = (TextView) view.findViewById(R.id.tv_tarea_row_persona_asignada);
-            estadoImageView = (ImageView) view.findViewById(R.id.img_tarea_row_estado_icon);
+            titleTextView = view.findViewById(R.id.tv_tarea_row_title);
+            personasAsignadaTextView = view.findViewById(R.id.tv_tarea_row_persona_asignada);
+            estadoImageView = view.findViewById(R.id.img_tarea_row_estado_icon);
             view.setOnCreateContextMenuListener(this);
         }
 

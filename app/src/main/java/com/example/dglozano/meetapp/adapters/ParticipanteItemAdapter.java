@@ -30,15 +30,18 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
 
         public ParticipanteViewHolder(View view) {
             super(view);
-            nombreTextView = (TextView) view.findViewById(R.id.tv_participante_row_nombre);
-            btnLlamarParticipante = (ImageButton) view.findViewById(R.id.btn_llamar_participante);
-            btnSmsParticipante = (ImageButton) view.findViewById(R.id.btn_sms_participante);
+            nombreTextView = view.findViewById(R.id.tv_participante_row_nombre);
+            btnLlamarParticipante = view.findViewById(R.id.btn_llamar_participante);
+            btnSmsParticipante = view.findViewById(R.id.btn_sms_participante);
             view.setOnCreateContextMenuListener(this);
         }
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(this.getAdapterPosition(), 6, 0, R.string.texto_borrar);
+            final Participante participante = participantesList.get(this.getAdapterPosition());
+            if(!participante.esSinAsignar() && !participante.esCreadorEvento()){
+                menu.add(this.getAdapterPosition(), 6, 0, R.string.texto_borrar);
+            }
         }
     }
 
@@ -58,8 +61,7 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
     public void onBindViewHolder(ParticipanteViewHolder holder, int position) {
         final Participante participante = participantesList.get(position);
         holder.nombreTextView.setText(participante.toString());
-
-        if(participante.esCreadorEvento()) {
+        if (participante.esCreadorEvento()) {
             holder.btnLlamarParticipante.setVisibility(View.INVISIBLE);
             holder.btnSmsParticipante.setVisibility(View.INVISIBLE);
         } else {

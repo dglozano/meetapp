@@ -34,10 +34,10 @@ public class PagoItemAdapter extends RecyclerView.Adapter<PagoItemAdapter.PagoVi
 
         public PagoViewHolder(View view) {
             super(view);
-            montoTextView = (TextView) view.findViewById(R.id.tv_payment_row_monto);
-            pagadorTextView = (TextView) view.findViewById(R.id.tv_payment_row_pagador);
-            arrowImageView = (ImageView) view.findViewById(R.id.img_payment_row_arrow);
-            cobradorTextView = (TextView) view.findViewById(R.id.tv_payment_row_cobrador);
+            montoTextView = view.findViewById(R.id.tv_payment_row_monto);
+            pagadorTextView = view.findViewById(R.id.tv_payment_row_pagador);
+            arrowImageView = view.findViewById(R.id.img_payment_row_arrow);
+            cobradorTextView = view.findViewById(R.id.tv_payment_row_cobrador);
         }
     }
 

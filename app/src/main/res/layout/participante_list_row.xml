@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
@@ -21,7 +20,6 @@
         android:layout_alignTop="@id/btn_llamar_participante"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/btn_llamar_participante"
-        android:text="Juan Roman Carlos Salu Riquelme Perez Esquivel"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimaryDark"
         android:singleLine="true"
@@ -32,6 +30,7 @@
         android:id="@+id/btn_llamar_participante"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/icono_llamar"
         android:layout_alignTop="@+id/btn_sms_participante"
         android:layout_toStartOf="@+id/btn_sms_participante"
         android:backgroundTint="?android:attr/colorBackground"
@@ -42,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:contentDescription="@string/icono_sms"
         android:layout_centerVertical="true"
         android:backgroundTint="?android:attr/colorBackground"
         app:srcCompat="@drawable/ic_chat_black_24dp" />

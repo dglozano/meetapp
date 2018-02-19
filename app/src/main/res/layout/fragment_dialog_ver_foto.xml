@@ -12,7 +12,6 @@
         android:background="@color/colorPrimary"
         android:padding="12dp"
         android:scaleType="center"
-        android:text="Un nombre de una tarea muy muy muy larga"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Title"
         android:textColor="@android:color/white" />
@@ -26,10 +25,10 @@
         android:visibility="visible">
 
         <ImageView
-            android:id="@+id/alert_dialog_foto_img_empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+            android:contentDescription="@string/no_image"
             app:srcCompat="@drawable/ic_photo_camera_black_48dp" />
 
         <TextView
@@ -47,6 +46,7 @@
         android:id="@+id/alert_dialog_foto_img_picture"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:contentDescription="@string/string_content_description_img_form"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:visibility="gone"/>
 

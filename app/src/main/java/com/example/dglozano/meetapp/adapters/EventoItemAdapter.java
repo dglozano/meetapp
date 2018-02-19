@@ -21,6 +21,7 @@ import com.example.dglozano.meetapp.modelo.Tarea;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by augusto on 01/02/2018.
@@ -70,7 +71,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
     @Override
     public void onBindViewHolder(EventoViewHolder holder, int position) {
         Evento evento = eventosList.get(position);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.tituloEventoTV.setText(evento.getNombre());
         Geocoder geoCoder = new Geocoder(mContext);
         List<Address> matches = null;
@@ -92,7 +93,7 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         }
         holder.lugarEventoTV.setText(lugarAMostrar);
         holder.fechaEventoTV.setText(sdf.format(evento.getFecha()));
-        holder.cantOrganizadoresTV.setText(evento.getParticipantes().size() + " Participantes");
+        holder.cantOrganizadoresTV.setText(evento.getParticipantes().size()-1 + mContext.getString(R.string.participantes));
         int totalTareas = evento.getTareas().size();
         int tareasHechas = 0;
         for(Tarea t : evento.getTareas()) {
@@ -100,19 +101,12 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
                 tareasHechas++;
             }
         }
-        holder.tareasRestantesTV.setText(tareasHechas + " de " + totalTareas + " Tareas");
+        holder.tareasRestantesTV.setText(tareasHechas + mContext.getString(R.string.de) + totalTareas + mContext.getString(R.string.tareas));
     }
 
     @Override
     public int getItemCount() {
         return eventosList.size();
-    }
-
-    public Evento getItemAtPosition(int position) {
-
-        Evento evento = eventosList.get(position);
-
-        return evento;
     }
 
     private class MyOnClickListener implements View.OnClickListener {

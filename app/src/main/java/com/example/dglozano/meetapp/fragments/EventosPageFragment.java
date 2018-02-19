@@ -44,7 +44,6 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     private List<Evento> eventosListDisplayed = new ArrayList<>();
     private EventoItemAdapter mEventoItemAdapter;
-    private RecyclerView mEventosRecyclerView;
 
     private LinearLayout mLayoutEmptyMsg;
 
@@ -89,7 +88,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         eventosDelUsuario = daoEvento.getAll();
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_eventos);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
-        mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
+        RecyclerView mEventosRecyclerView = view.findViewById(R.id.rcvw_eventos_list);
         mEventoItemAdapter = new EventoItemAdapter(eventosListDisplayed, getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());

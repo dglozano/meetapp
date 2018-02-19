@@ -13,7 +13,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Comprar Servilletas"
+        android:text="@string/tarea_title_ejemplo"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimaryDark"/>
 
@@ -37,9 +37,9 @@
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:text="$0.00"
+        android:text="@string/gasto_cero"
         android:textAlignment="center"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"/>
 
 
@@ -51,11 +51,10 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:text="$"/>
+            android:text="@string/dollar"/>
 
         <EditText
             android:id="@+id/editText_gasto"
@@ -64,7 +63,7 @@
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="0.00"
+            android:hint="@string/gasto_cero_sin_dolar"
             android:inputType="numberDecimal"/>
 
         <Button
@@ -72,18 +71,17 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="+"/>
+            android:text="@string/plus"/>
 
         <Button
             android:id="@+id/button_restar"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="-"/>
+            android:text="@string/minus"/>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/agregarGasto_ll2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -59,7 +59,6 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
 
     private List<Tarea> tareasListDisplayed = new ArrayList<>();
     private TareaItemAdapter mTareaAdapter;
-    private RecyclerView mTareasRecyclerview;
     private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
@@ -111,7 +110,7 @@ public class TareasPageFragment extends android.support.v4.app.Fragment
         tareasListDelEvento = daoTarea.getAllDelEvento(eventoId);
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_tareas);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
-        mTareasRecyclerview = view.findViewById(R.id.recvw_tareas_list);
+        RecyclerView mTareasRecyclerview = view.findViewById(R.id.recvw_tareas_list);
         mTareaAdapter = new TareaItemAdapter(tareasListDisplayed);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());

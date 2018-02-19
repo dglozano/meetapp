@@ -19,7 +19,6 @@ import java.util.concurrent.ThreadLocalRandom;
 public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
 
     private SQLiteDatabase db;
-    private final Context context;
     private final MeetAppOpenHelper dbhelper;
     private SQLiteDaoParticipante daoParticipante;
 
@@ -29,36 +28,10 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
      * @param c
      */
     public SQLiteDaoTarea(Context c) {
-        context = c;
+        Context context = c;
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
         daoParticipante = new SQLiteDaoParticipante(c);
-    }
-
-    /**
-     * Hace un SELECT * FROM TABLE Tarea y, por cada resultado de la query, crea un
-     * Tarea, le setea los datos y la agrega a la lista a retornar.
-     * <p>
-     * NOTA: LA HAGO SOLO PARA CUMPLIR LA INTERFACE, PERO NO SE USARIA PORQUE
-     * TRAE TODAS LAS TAREAS DE TODOS LOS EVENTOS.
-     *
-     * @return Lista de tareas en la tabla tareas
-     */
-    @Override
-    public List<Tarea> getAll() {
-        List<Tarea> tareas = new ArrayList<>();
-        db = dbhelper.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + Constants.TAREA_TABLENAME, null);
-        // Nos movemos con el cursor por cada resultado
-        while(c.moveToNext()) {
-            // Y creamos el tarea con los datos correspondientes
-            Tarea tarea = parseTareaFromCursor(c);
-            tareas.add(tarea);
-        }
-        c.close();
-        db.close();
-        Collections.sort(tareas);
-        return tareas;
     }
 
     @NonNull

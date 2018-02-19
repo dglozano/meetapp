@@ -51,10 +51,10 @@ public class DialogVerFotoTarea extends android.support.v4.app.DialogFragment {
         // Pass null as the parent view because its going in the dialog layout
         View view = inflater.inflate(R.layout.fragment_dialog_ver_foto, null);
 
-        TextView tvTitle = (TextView) view.findViewById(R.id.header_alert_ver_foto);
-        ImageView imagen = (ImageView) view.findViewById(R.id.alert_dialog_foto_img_picture);
-        LinearLayout layoutEmptyMsg = (LinearLayout) view.findViewById(R.id.empty_msg_layout_foto_dialog);
-        Button btnOk = (Button) view.findViewById(R.id.alert_dialog_foto_button_ok);
+        TextView tvTitle = view.findViewById(R.id.header_alert_ver_foto);
+        ImageView imagen = view.findViewById(R.id.alert_dialog_foto_img_picture);
+        LinearLayout layoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_foto_dialog);
+        Button btnOk = view.findViewById(R.id.alert_dialog_foto_button_ok);
 
         tvTitle.setText(titulo);
         try {

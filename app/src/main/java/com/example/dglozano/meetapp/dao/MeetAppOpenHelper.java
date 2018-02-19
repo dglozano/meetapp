@@ -29,6 +29,8 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.PARTICIPANTE_ID +  " integer primary key autoincrement,"
             + Constants.PARTICIPANTE_NOMBRE + " string,"
             + Constants.PARTICIPANTE_TELEFONO + " string,"
+            + Constants.PARTICIPANTE_ES_CREADOR + " boolean,"
+            + Constants.PARTICIPANTE_ES_SIN_ASIGNAR + " boolean,"
             + Constants.PARTICIPANTE_EVENTO_FK + " integer,"
             + "FOREIGN KEY("+Constants.PARTICIPANTE_EVENTO_FK+") " +
             "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + ") " +
@@ -44,7 +46,7 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.TAREA_EVENTO_FK + " integer,"
             + Constants.TAREA_PARTICIPANTE_FK + " integer DEFAULT NULL,"
             + "FOREIGN KEY("+Constants.TAREA_EVENTO_FK+") " +
-            "REFERENCES " + Constants.TAREA_TABLENAME + "(" + Constants.TAREA_ID + ") " +
+            "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + ") " +
             "ON DELETE CASCADE,"
             + "FOREIGN KEY("+Constants.TAREA_PARTICIPANTE_FK+") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + ") " +

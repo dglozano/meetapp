@@ -15,7 +15,5 @@ public interface DaoEventoMember<T> {
 
     void update(T item);
 
-    List<T> getAll();
-
     List<T> getAllDelEvento(int idEvento);
 }

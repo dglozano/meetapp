@@ -18,15 +18,7 @@ public class Tarea implements Comparable<Tarea> {
         this.gasto = 0.0;
     }
 
-    public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
-        this.titulo = titulo;
-        this.personaAsignada = personaAsignada;
-        this.estadoTarea = estadoTarea;
-        this.descripcion = descripcion;
-        this.gasto = 0.0;
-    }
-
-    public Tarea(String titulo, String descripcion) {
+    private Tarea(String titulo, String descripcion) {
         this.titulo = titulo;
         this.personaAsignada = Participante.getParticipanteSinAsignar();
         this.estadoTarea = EstadoTarea.SIN_ASIGNAR;

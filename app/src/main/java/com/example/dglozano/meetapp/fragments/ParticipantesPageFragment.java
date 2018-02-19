@@ -56,11 +56,10 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private List<Participante> participantesListDisplayed = new ArrayList<>();
     private ParticipanteItemAdapter mParticipanteAdapter;
-    private RecyclerView mParticipantesRecyclerView;
     private final int CREAR_PARTICIPANTE = 1;
 
     private DaoEvento daoEvento;
-    private DaoEventoMember<Participante> daoParticipante;
+    private SQLiteDaoParticipante daoParticipante;
     private DaoEventoMember<Pago> daoPagos;
     private List<Participante> participantesListDelEvento;
     private LinearLayout mLayoutEmptyMsg;
@@ -107,10 +106,10 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+        participantesListDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(eventoId);
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_participantes);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
-        mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
+        RecyclerView mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
         mParticipanteAdapter = new ParticipanteItemAdapter(participantesListDisplayed);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -130,7 +129,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         fab.setOnClickListener(new MyFabIconOnClickListener(this));
     }
 
-    public void pedirPermisoContactos(){
+    private void pedirPermisoContactos(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
@@ -247,7 +246,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     private void accionesContextMenu(Participante participante) {
         Toast.makeText(this.getContext(), R.string.participante_borrado, Toast.LENGTH_SHORT).show();
         daoParticipante.delete(participante);
-        participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+        participantesListDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(eventoId);
         restoreOriginalParticipantesList();
         if(participantesListDelEvento.isEmpty()){
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
@@ -286,7 +285,12 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
             case CREAR_PARTICIPANTE: {
                 if(resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), R.string.participante_creado, Toast.LENGTH_SHORT).show();
-                    participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+                    participantesListDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(eventoId);
+                    for(Participante p: participantesListDelEvento){
+                        if(p.esSinAsignar()){
+                            participantesListDelEvento.remove(p);
+                        }
+                    }
                     mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                     restoreOriginalParticipantesList();
                 }

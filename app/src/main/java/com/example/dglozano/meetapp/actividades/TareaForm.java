@@ -58,7 +58,6 @@ public class TareaForm extends AppCompatActivity {
     private Intent intentOrigen;
     private Boolean flagNuevaTarea;
     private Tarea tarea;
-    private DaoEvento daoEvento;
     private DaoEventoMember<Tarea> daoTarea;
     private DaoEventoMember<Participante> daoParticipante;
 
@@ -86,7 +85,7 @@ public class TareaForm extends AppCompatActivity {
 
         daoTarea = new SQLiteDaoTarea(this);
         daoParticipante = new SQLiteDaoParticipante(this);
-        daoEvento = new SQLiteDaoEvento(this);
+        DaoEvento daoEvento = new SQLiteDaoEvento(this);
 
         intentOrigen = getIntent();
         Bundle extras = intentOrigen.getExtras();
@@ -140,7 +139,6 @@ public class TareaForm extends AppCompatActivity {
                 List<Participante> lista = daoParticipante.getAllDelEvento(eventoId);
                 listaParticipantes.clear();
                 listaParticipantes.addAll(lista);
-                listaParticipantes.add(0, Participante.getParticipanteSinAsignar());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -241,20 +239,16 @@ public class TareaForm extends AppCompatActivity {
         }
     }
 
-    public boolean hasPermission(final String permisoManifest) {
+    private boolean hasPermission(final String permisoManifest) {
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             // la versión alcanza con tenerlo declarado
             return true;
         }
-        if(ContextCompat.checkSelfPermission(TareaForm.this, permisoManifest)
-                == PackageManager.PERMISSION_GRANTED) {
-            // El permiso ya esta dado
-            return true;
-        }
-        return false;
+        return ContextCompat.checkSelfPermission(TareaForm.this, permisoManifest)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
-    public void askForPermission(final String permisoManifest, final int codigoPermiso, String rationaleMsgStr) {
+    private void askForPermission(final String permisoManifest, final int codigoPermiso, String rationaleMsgStr) {
         if(ActivityCompat.shouldShowRequestPermissionRationale(TareaForm.this,
                 permisoManifest)) {
             // Por lo que entiendo, esto lo pide solamente si ya intento varias veces y
@@ -293,7 +287,6 @@ public class TareaForm extends AppCompatActivity {
                     // tengo el permiso, saco la foto!!!
                     dispatchTakePictureIntent();
                 }
-                return;
             }
         }
     }

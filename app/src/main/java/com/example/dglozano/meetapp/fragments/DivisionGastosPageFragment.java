@@ -39,7 +39,6 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
 
     private List<Pago> pagosListDisplayed = new ArrayList<>();
     private PagoItemAdapter mPagoItemAdapter;
-    private RecyclerView mPagosRecyclerView;
     private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
@@ -91,7 +90,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         pagosListDelEvento = daoPago.getAllDelEvento(eventoId);
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_dividir_gastos);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
-        mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
+        RecyclerView mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
         mPagoItemAdapter =  new PagoItemAdapter(pagosListDisplayed);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());

@@ -35,9 +35,7 @@ import com.example.dglozano.meetapp.modelo.Participante;
 
 public class ContactosActivity extends AppCompatActivity {
 
-    private RecyclerView mContactosRecyclerView;
     private Intent intentOrigen;
-    private Participante participante;
     private ContactoItemAdapter mContactoItemAdapter;
     private List<Contacto> todosLosContactos = new ArrayList<>();
     private List<Contacto> contactosDisplayed = new ArrayList<>();
@@ -66,7 +64,7 @@ public class ContactosActivity extends AppCompatActivity {
         LoadContactsAsycn lca = new LoadContactsAsycn();
         lca.execute();
 
-        mContactosRecyclerView = findViewById(R.id.recvw_contactos_list);
+        RecyclerView mContactosRecyclerView = findViewById(R.id.recvw_contactos_list);
         mContactoItemAdapter = new ContactoItemAdapter(contactosDisplayed, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 this.getApplicationContext());
@@ -98,7 +96,7 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<Contacto> getChecked() {
+    private ArrayList<Contacto> getChecked() {
         ArrayList<Contacto> contactosCheckeados = new ArrayList<>();
         for (Contacto c: todosLosContactos){
             if(c.isChecked()){
@@ -167,11 +165,6 @@ public class ContactosActivity extends AppCompatActivity {
     class LoadContactsAsycn extends AsyncTask<Void, Void, ArrayList<Contacto>> {
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
         protected ArrayList<Contacto> doInBackground(Void... params) {
 
             ArrayList<Contacto> contacts = new ArrayList<>();
@@ -189,7 +182,7 @@ public class ContactosActivity extends AppCompatActivity {
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
                 if (contacts.size()==0) {
-                    contacts.add(new Contacto(contactName, phNumber, false));
+                    contacts.add(new Contacto(contactName, phNumber));
                 }
                 else {
                     boolean flag = false;
@@ -199,7 +192,7 @@ public class ContactosActivity extends AppCompatActivity {
                         }
                     }
                     if (!flag){
-                        contacts.add(new Contacto(contactName, phNumber,false));
+                        contacts.add(new Contacto(contactName, phNumber));
                     }
                 }
             }
@@ -221,12 +214,12 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    public void guardar(ArrayList<Contacto> contactosChecked){
+    private void guardar(ArrayList<Contacto> contactosChecked){
         for (Contacto c : contactosChecked){
             String nombre = c.getNombre();
             String numero = c.getNumero();
 
-            participante = new Participante(nombre, numero);
+            Participante participante = new Participante(nombre, numero);
 
             daoParticipante.save(participante, eventoId);
         }

@@ -19,7 +19,7 @@ public class DatePickerFragment extends DialogFragment {
         return fragment;
     }
 
-    public void setListener(DatePickerDialog.OnDateSetListener listener) {
+    private void setListener(DatePickerDialog.OnDateSetListener listener) {
         this.listener = listener;
     }
 

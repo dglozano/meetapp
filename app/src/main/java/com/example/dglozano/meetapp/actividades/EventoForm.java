@@ -37,7 +37,7 @@ import java.util.Locale;
 public class EventoForm extends AppCompatActivity {
     public static final String KEY_EVENTO_ID = "id";
     private static final int PLACE_PICKER_REQUEST = 1;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
 
     private Intent intentOrigen;
     private Boolean flagNuevoEvento;
@@ -182,6 +182,7 @@ public class EventoForm extends AppCompatActivity {
             if(evento.getFecha() != null)
                 recordatorios.recordatorioEvento(this, id, evento.getFecha());
             daoParticipante.save(Participante.participanteCreadorEvento(), id);
+            daoParticipante.save(Participante.getParticipanteSinAsignar(), id);
         } else {
             daoEvento.update(evento);
             if(evento.getFecha() != null)
@@ -195,7 +196,7 @@ public class EventoForm extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, day);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
                 String formatedDate = sdf.format(calendar.getTime());
                 et_fecha.setText(formatedDate);
             }

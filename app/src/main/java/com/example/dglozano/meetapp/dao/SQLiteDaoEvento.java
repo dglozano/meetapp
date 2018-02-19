@@ -29,7 +29,6 @@ import java.util.List;
 public class SQLiteDaoEvento implements DaoEvento {
 
     private SQLiteDatabase db;
-    private final Context context;
     private final MeetAppOpenHelper dbhelper;
     private SQLiteDaoParticipante daoParticipante;
     private SQLiteDaoTarea daoTarea;
@@ -41,7 +40,7 @@ public class SQLiteDaoEvento implements DaoEvento {
      * @param c
      */
     public SQLiteDaoEvento(Context c) {
-        context = c;
+        Context context = c;
         dbhelper = MeetAppOpenHelper.getInstance(context, Constants.DATABASE_NAME,
                 Constants.DATABASE_VERSION);
         daoParticipante = new SQLiteDaoParticipante(c);
@@ -81,7 +80,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         Double len = c.getDouble(c.getColumnIndex(Constants.EVENTO_LNG));
         LatLng lugar = new LatLng(lat, len);
         evento.setLugar(lugar);
-        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, java.util.Locale.getDefault());
         String fechaString = c.getString(c.getColumnIndex(Constants.EVENTO_FECHA));
         try {
             evento.setFecha(sdf.parse(fechaString));
@@ -89,7 +88,7 @@ public class SQLiteDaoEvento implements DaoEvento {
             e.printStackTrace();
         }
         int divisionHechaInt = c.getInt(c.getColumnIndex(Constants.EVENTO_DIVISION_YA_REALIZADA));
-        boolean divisionHechaFlag = (divisionHechaInt == 0) ? false : true;
+        boolean divisionHechaFlag = divisionHechaInt != 0;
         evento.setDivisionGastosYaHecha(divisionHechaFlag);
         evento.setGastosTotales(c.getDouble(c.getColumnIndex(Constants.EVENTO_GASTO_TOTAL)));
         evento.setGastosPorParticipante(c.getDouble(c.getColumnIndex(Constants.EVENTO_GASTO_POR_PARTICIPANTE)));
@@ -124,7 +123,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.EVENTO_NAME, e.getNombre());
-        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, java.util.Locale.getDefault());
         cv.put(Constants.EVENTO_FECHA, sdf.format(e.getFecha()));
         cv.put(Constants.EVENTO_LAT, e.getLugar().latitude);
         cv.put(Constants.EVENTO_LNG, e.getLugar().longitude);
@@ -141,7 +140,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         db = dbhelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Constants.EVENTO_NAME, e.getNombre());
-        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, java.util.Locale.getDefault());
         cv.put(Constants.EVENTO_FECHA, sdf.format(e.getFecha()));
         cv.put(Constants.EVENTO_LAT, e.getLugar().latitude);
         cv.put(Constants.EVENTO_LNG, e.getLugar().longitude);

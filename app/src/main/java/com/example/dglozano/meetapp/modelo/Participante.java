@@ -8,27 +8,37 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Participante implements Comparable<Participante> {
     private static final String NOMBRE_CREADOR_EVENTO = "Yo";
+    private static final String NOMBRE_SIN_ASIGNAR = "<Sin Asignar>";
 
     private Integer id;
     private String nombreApellido;
     private String numeroTel;
+    private boolean esCreador;
+    private boolean esSinAsignar;
 
     public Participante(String nombreApellido, String numeroTel) {
         this.nombreApellido = nombreApellido;
         this.numeroTel = numeroTel;
+        this.esCreador = false;
+        this.esSinAsignar = false;
     }
 
     public Participante() {
-        this.id = null;
-        this.nombreApellido = "<Sin Asignar>";
+        this.esCreador = false;
+        this.esSinAsignar = false;
     }
 
     public static Participante participanteCreadorEvento() {
-        return new Participante(NOMBRE_CREADOR_EVENTO, "");
+        Participante creador = new Participante();
+        creador.nombreApellido = NOMBRE_CREADOR_EVENTO;
+        creador.numeroTel = "";
+        creador.esCreador = true;
+        creador.esSinAsignar = false;
+        return creador;
     }
 
     public boolean esCreadorEvento() {
-        return this.nombreApellido.equals(NOMBRE_CREADOR_EVENTO);
+        return this.esCreador;
     }
 
     public Integer getId() {
@@ -65,11 +75,16 @@ public class Participante implements Comparable<Participante> {
     }
 
     public static Participante getParticipanteSinAsignar() {
-        return new Participante();
+        Participante sinAsignar = new Participante();
+        sinAsignar.nombreApellido = NOMBRE_SIN_ASIGNAR;
+        sinAsignar.numeroTel = "";
+        sinAsignar.esCreador = false;
+        sinAsignar.esSinAsignar = true;
+        return sinAsignar;
     }
 
     public boolean esSinAsignar() {
-        return this.id == null;
+        return this.esSinAsignar;
     }
 
     @Override
@@ -180,6 +195,7 @@ public class Participante implements Comparable<Participante> {
 
     @Override
     public int compareTo(@NonNull Participante participante) {
+        if(this.esSinAsignar()) return -2;
         if(this.esCreadorEvento()) return -1;
         else if(participante.esCreadorEvento()) return 1;
         else return this.getNombreApellido().compareToIgnoreCase(participante.getNombreApellido());
