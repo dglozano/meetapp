@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dglozano.meetapp">
+    package="com.retigalo.dglozano.meetapp">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -26,7 +26,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".actividades.MainActivity"
+            android:name="com.retigalo.dglozano.meetapp.actividades.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,45 +36,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".actividades.EventoActivity"
+            android:name="com.retigalo.dglozano.meetapp.actividades.EventoActivity"
             android:label="Nombre del Evento"
-            android:parentActivityName=".actividades.MainActivity"
+            android:parentActivityName="com.retigalo.dglozano.meetapp.actividades.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".actividades.MainActivity" />
+                android:value="com.retigalo.dglozano.meetapp.actividades.MainActivity" />
         </activity>
         <activity
-            android:name=".actividades.EventoForm"
-            android:parentActivityName=".actividades.EventoActivity"
+            android:name="com.retigalo.dglozano.meetapp.actividades.EventoForm"
+            android:parentActivityName="com.retigalo.dglozano.meetapp.actividades.EventoActivity"
             android:label="Formulario de Evento"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".actividades.MainActivity" />
+                android:value="com.retigalo.dglozano.meetapp.actividades.MainActivity" />
         </activity>
         <activity
-            android:name=".actividades.TareaForm"
-            android:parentActivityName=".actividades.EventoActivity"
+            android:name="com.retigalo.dglozano.meetapp.actividades.TareaForm"
+            android:parentActivityName="com.retigalo.dglozano.meetapp.actividades.EventoActivity"
             android:label="Formulario de Tarea"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".actividades.EventoActivity" />
+                android:value="com.retigalo.dglozano.meetapp.actividades.EventoActivity" />
         </activity>
         <activity
-            android:name=".actividades.ContactosActivity"
-            android:parentActivityName=".actividades.EventoActivity"
+            android:name="com.retigalo.dglozano.meetapp.actividades.ContactosActivity"
+            android:parentActivityName="com.retigalo.dglozano.meetapp.actividades.EventoActivity"
             android:label="Contactos"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".actividades.EventoActivity" />
+                android:value="com.retigalo.dglozano.meetapp.actividades.EventoActivity" />
         </activity>
 
         <service
-            android:name=".NotifyService"
+            android:name="com.retigalo.dglozano.meetapp.NotifyService"
             android:enabled="true">
             <intent-filter>
                 <action android:name="NOTIFICATION_SERVICE" />
