@@ -43,11 +43,9 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         tarea.setGasto(c.getDouble(c.getColumnIndex(Constants.TAREA_GASTO)));
         int estadoOrdinal = c.getInt(c.getColumnIndex(Constants.TAREA_ESTADO));
         tarea.setEstadoTarea(EstadoTarea.values()[estadoOrdinal]);
-        System.out.println("tarea " + tarea.getTitulo());
-        System.out.println("part " +c.getInt(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK)));
-        System.out.println("part null " +c.isNull(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK)));
-        if(c.isNull(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK))){
-            tarea.setPersonaAsignada(Participante.getParticipanteSinAsignar());
+        int eventoId = c.getInt(c.getColumnIndex(Constants.TAREA_EVENTO_FK));
+        if (c.isNull(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK))) {
+            tarea.setPersonaAsignada(daoParticipante.getSinAsignar(eventoId));
             tarea.setEstadoTarea(EstadoTarea.SIN_ASIGNAR);
         } else {
             Integer idParticipanteAsignado = c.getInt(c.getColumnIndex(Constants.TAREA_PARTICIPANTE_FK));
@@ -64,7 +62,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
                 + Constants.TAREA_TABLENAME + " WHERE "
                 + Constants.TAREA_ID + " = " + String.valueOf(id), null);
         // Nos movemos con el cursor por cada resultado (deberia ser uno solo)
-        while(c.moveToNext()) {
+        while (c.moveToNext()) {
             // Y creamos el tarea con los datos correspondientes
             tarea = parseTareaFromCursor(c);
         }
@@ -79,7 +77,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
                 + Constants.TAREA_TABLENAME + " WHERE "
                 + Constants.TAREA_EVENTO_FK + " = " + String.valueOf(eventoId), null);
         // Nos movemos con el cursor por cada resultado
-        while(c.moveToNext()) {
+        while (c.moveToNext()) {
             // Y creamos el tarea con los datos correspondientes
             Tarea tarea = parseTareaFromCursor(c);
             tareas.add(tarea);
@@ -103,11 +101,7 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         cv.put(Constants.TAREA_GASTO, t.getGasto());
         cv.put(Constants.TAREA_EVENTO_FK, eventoId);
         cv.put(Constants.TAREA_ESTADO, t.getEstadoTarea().ordinal());
-        if(t.getPersonaAsignada().esSinAsignar()){
-            cv.putNull(Constants.TAREA_PARTICIPANTE_FK);
-        } else {
-            cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
-        }
+        cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
         long id = db.insert(Constants.TAREA_TABLENAME, null, cv);
         db.close();
         return id;
@@ -134,43 +128,36 @@ public class SQLiteDaoTarea implements DaoEventoMember<Tarea> {
         cv.put(Constants.TAREA_TITULO, t.getTitulo());
         cv.put(Constants.TAREA_GASTO, t.getGasto());
         cv.put(Constants.TAREA_ESTADO, t.getEstadoTarea().ordinal());
-        if(t.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR) {
-            cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
-        }
+        cv.put(Constants.TAREA_PARTICIPANTE_FK, t.getPersonaAsignada().getId());
         db.update(Constants.TAREA_TABLENAME, cv, Constants.TAREA_ID + "=" + t.getId(), null);
         db.close();
     }
 
     public void createMockData(List<Evento> eventosYaGuardadosEnDb) {
         List<Tarea> tareasMock = Tarea.getTareasMock();
-        for(Evento e : eventosYaGuardadosEnDb) {
+        for (Evento e : eventosYaGuardadosEnDb) {
             int totalTareas = ThreadLocalRandom.current().nextInt(1, tareasMock.size() + 1);
             List<Participante> listaParticipantes = daoParticipante.getAllDelEvento(e.getId());
-            for(int i = 0; i < totalTareas; i++) {
+            for (int i = 0; i < totalTareas; i++) {
                 int tareaRandom = ThreadLocalRandom.current().nextInt(0, totalTareas);
-                int estadoRandom = ThreadLocalRandom.current().nextInt(0, EstadoTarea.values().length);
+                int estadoRandom = ThreadLocalRandom.current().nextInt(0, 10);
                 int partRandom = ThreadLocalRandom.current().nextInt(0, listaParticipantes.size());
 
                 Tarea tarea = tareasMock.get(tareaRandom);
-                tarea.setEstadoTarea(EstadoTarea.values()[estadoRandom]);
-
-                /**
-                 * Se asegura que los eventos Mock "Fiesta Universitaria" y "Fiesta de fin de anio"
-                 * tenga todas las tareas finalizadas
-                 */
-
-                if(e.getNombre().contains("Fiesta")) {
-                    tarea.setEstadoTarea(EstadoTarea.FINALIZADA);
-                }
-
-                if(tarea.getEstadoTarea() == EstadoTarea.SIN_ASIGNAR) {
-                    tarea.setPersonaAsignada(Participante.getParticipanteSinAsignar());
+                tarea.setPersonaAsignada(listaParticipantes.get(partRandom));
+                if(tarea.getPersonaAsignada().esSinAsignar()){
+                    tarea.setEstadoTarea(EstadoTarea.SIN_ASIGNAR);
                 } else {
-                    tarea.setPersonaAsignada(listaParticipantes.get(partRandom));
+                    if(estadoRandom % 2 == 0){
+                        tarea.setEstadoTarea(EstadoTarea.FINALIZADA);
+                    } else {
+                        tarea.setEstadoTarea(EstadoTarea.EN_PROGRESO);
+                    }
                 }
 
                 tarea.setGasto(0.0);
-                if(tarea.getEstadoTarea() == EstadoTarea.FINALIZADA) {
+                if (tarea.getEstadoTarea() == EstadoTarea.FINALIZADA ||
+                        tarea.getEstadoTarea() == EstadoTarea.EN_PROGRESO) {
                     double gastoint = ThreadLocalRandom.current().nextInt(1, 1500);
                     double gastodecimal = ThreadLocalRandom.current().nextInt(0, 100);
                     double gasto = gastoint + gastodecimal / 100.00;

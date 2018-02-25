@@ -1,15 +1,14 @@
 package com.example.dglozano.meetapp.actividades;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -108,11 +107,12 @@ public class EventoActivity extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-        private String[] titles = {"TAREAS","PARTICIPANTES","PAGOS"};
+
+        private String[] titles = {"TAREAS", "PARTICIPANTES", "PAGOS"};
 
         @Override
         public Fragment getItem(int position) {
-            switch(position){
+            switch (position) {
                 case FRAGMENT_ID_LISTA_TAREAS:
                     fragmentBeingDisplayed = TareasPageFragment.newInstance(evento.getId());
                     break;

@@ -46,9 +46,10 @@
         android:id="@+id/alert_dialog_foto_img_picture"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:elevation="20dp"
         android:contentDescription="@string/string_content_description_img_form"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/alert_dialog_foto_button_ok"

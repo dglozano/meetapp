@@ -39,8 +39,8 @@ public class ParticipanteItemAdapter extends RecyclerView.Adapter<ParticipanteIt
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             final Participante participante = participantesList.get(this.getAdapterPosition());
-            if(!participante.esSinAsignar() && !participante.esCreadorEvento()){
-                menu.add(this.getAdapterPosition(), 6, 0, R.string.texto_borrar);
+            if (!participante.esSinAsignar() && !participante.esCreadorEvento()) {
+                menu.add(this.getAdapterPosition(), 7, 0, R.string.texto_borrar);
             }
         }
     }

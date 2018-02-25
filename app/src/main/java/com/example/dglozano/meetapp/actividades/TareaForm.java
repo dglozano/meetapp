@@ -34,7 +34,6 @@ import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
-import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
 import com.example.dglozano.meetapp.modelo.Tarea;
 
@@ -97,8 +96,9 @@ public class TareaForm extends AppCompatActivity {
         getViews();
         inicializarSpinner(0); //0 para que no seleccione nada
 
-        if(!flagNuevaTarea) {
-            btnCargarFoto.setEnabled(true);
+        if (!flagNuevaTarea) {
+            setTitle(R.string.editar_tarea);
+            btnCargarFoto.setVisibility(View.VISIBLE);
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
@@ -114,7 +114,9 @@ public class TareaForm extends AppCompatActivity {
             Thread t = new Thread(r);
             t.start();
         } else {
-            btnCargarFoto.setEnabled(false);
+            btnCargarFoto.setVisibility(View.GONE);
+            imgFoto.setVisibility(View.GONE);
+            setTitle(R.string.crear_tarea);
         }
     }
 
@@ -130,7 +132,7 @@ public class TareaForm extends AppCompatActivity {
     private void inicializarSpinner(final int selectedPosition) {
         listaParticipantes = new ArrayList<>();
         adapterParticipantes = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, listaParticipantes);
+                android.R.layout.simple_spinner_dropdown_item, listaParticipantes);
         spinner_encargado.setAdapter(adapterParticipantes);
 
         Runnable r = new Runnable() {
@@ -154,32 +156,27 @@ public class TareaForm extends AppCompatActivity {
 
     private void mostrarDatosTarea() {
         et_titulo.setText(tarea.getTitulo());
-        if(tarea.getEstadoTarea() != EstadoTarea.SIN_ASIGNAR) {
-            inicializarSpinner(adapterParticipantes.getPosition(tarea.getPersonaAsignada()));
-        } else {
-            inicializarSpinner(0);
-        }
+        inicializarSpinner(adapterParticipantes.getPosition(tarea.getPersonaAsignada()));
         et_descripcion.setText(tarea.getDescripcion());
 
         // Mostrar o no la imagen
         try {
             loadImageFromStorage(eventoId, tarea.getId());
             imgFoto.setVisibility(View.VISIBLE);
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             imgFoto.setVisibility(View.GONE);
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_item_Ok:
-                if (!et_titulo.getText().toString().matches("")){
-                guardar();
-                setResult(RESULT_OK, intentOrigen);
-                finish();
-                }
-                else {
+                if (!et_titulo.getText().toString().matches("")) {
+                    guardar();
+                    setResult(RESULT_OK, intentOrigen);
+                    finish();
+                } else {
                     Toast toast = Toast.makeText(this, "Algunos campos se encuentran en blanco", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -203,16 +200,16 @@ public class TareaForm extends AppCompatActivity {
         String titulo = et_titulo.getText().toString();
         String descripcion = et_descripcion.getText().toString();
         Participante encargado = adapterParticipantes.getItem(spinner_encargado.getSelectedItemPosition());
-        if(flagNuevaTarea) {
+        if (flagNuevaTarea) {
             tarea = new Tarea();
         } else {
-            if(imageBitmap != null) {
+            if (imageBitmap != null) {
                 saveImageInStorage(imageBitmap);
             }
         }
-        if(flagNuevaTarea || !flagNuevaTarea && !tarea.estaFinalizada()) {
+        if (flagNuevaTarea || !flagNuevaTarea && !tarea.estaFinalizada()) {
             // si se crea una nueva o se edita una finalizada (ya que si se edita una finalizada no debería cambiar el estado a pesar de cambiar el encargado)
-            if(encargado.esSinAsignar()) {
+            if (encargado.esSinAsignar()) {
                 tarea.setEstadoTarea(EstadoTarea.SIN_ASIGNAR);
             } else {
                 tarea.setEstadoTarea(EstadoTarea.EN_PROGRESO);
@@ -222,7 +219,7 @@ public class TareaForm extends AppCompatActivity {
         tarea.setDescripcion(descripcion);
         tarea.setPersonaAsignada(encargado);
 
-        if(flagNuevaTarea) daoTarea.save(tarea, eventoId);
+        if (flagNuevaTarea) daoTarea.save(tarea, eventoId);
         else daoTarea.update(tarea);
     }
 
@@ -230,7 +227,7 @@ public class TareaForm extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            if(hasPermission(Manifest.permission.CAMERA)) {
+            if (hasPermission(Manifest.permission.CAMERA)) {
                 dispatchTakePictureIntent();
             } else {
                 askForPermission(Manifest.permission.CAMERA, TareaForm.PERMISSION_REQUEST_CAMERA,
@@ -240,7 +237,7 @@ public class TareaForm extends AppCompatActivity {
     }
 
     private boolean hasPermission(final String permisoManifest) {
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             // la versión alcanza con tenerlo declarado
             return true;
         }
@@ -249,7 +246,7 @@ public class TareaForm extends AppCompatActivity {
     }
 
     private void askForPermission(final String permisoManifest, final int codigoPermiso, String rationaleMsgStr) {
-        if(ActivityCompat.shouldShowRequestPermissionRationale(TareaForm.this,
+        if (ActivityCompat.shouldShowRequestPermissionRationale(TareaForm.this,
                 permisoManifest)) {
             // Por lo que entiendo, esto lo pide solamente si ya intento varias veces y
             // hay que hacerle una explicacion mas detallada de por que necesitamos el permiso
@@ -279,10 +276,10 @@ public class TareaForm extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch(requestCode) {
+        switch (requestCode) {
             case TareaForm.PERMISSION_REQUEST_CAMERA: {
                 // si el request es cancelado el arreglo es vacio.
-                if(grantResults.length > 0
+                if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // tengo el permiso, saco la foto!!!
                     dispatchTakePictureIntent();
@@ -294,7 +291,7 @@ public class TareaForm extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new
                 Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(takePictureIntent.resolveActivity(getPackageManager()) !=
+        if (takePictureIntent.resolveActivity(getPackageManager()) !=
                 null) {
             startActivityForResult(takePictureIntent,
                     REQUEST_IMAGE_CAPTURE);
@@ -303,7 +300,7 @@ public class TareaForm extends AppCompatActivity {
 
     private void saveImageInStorage(Bitmap imageTarea) {
         File directory = getApplicationContext().getDir("imagenes", Context.MODE_PRIVATE);
-        if(!directory.exists())
+        if (!directory.exists())
             directory.mkdir();
         File mypath = new File(directory, "evento_" + eventoId + "tarea_" + tarea.getId() + ".jpg");
         try {
@@ -311,9 +308,9 @@ public class TareaForm extends AppCompatActivity {
             imageTarea.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -327,13 +324,15 @@ public class TareaForm extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
+        switch (requestCode) {
             case REQUEST_IMAGE_CAPTURE:
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                imgFoto.setImageBitmap(imageBitmap);
-                imgFoto.setVisibility(View.VISIBLE);
-                break;
+                if(resultCode == RESULT_OK){
+                    Bundle extras = data.getExtras();
+                    imageBitmap = (Bitmap) extras.get("data");
+                    imgFoto.setImageBitmap(imageBitmap);
+                    imgFoto.setVisibility(View.VISIBLE);
+                    break;
+                }
         }
     }
 }

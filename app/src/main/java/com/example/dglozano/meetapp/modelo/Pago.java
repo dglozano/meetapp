@@ -17,7 +17,7 @@ public class Pago {
         this.monto = monto;
     }
 
-    public Pago(){
+    public Pago() {
 
     }
 
@@ -53,14 +53,19 @@ public class Pago {
         this.monto = monto;
     }
 
-    public boolean matches (String query){
+    public boolean matches(String query) {
         boolean matches = false;
-        if(this.getPagador().matches(query) || this.getCobrador().matches(query)){
+        if (this.getPagador().matches(query) || this.getCobrador().matches(query)) {
             matches = true;
         }
-        if(Double.toString(this.getMonto()).contains(query)){
+        if (Double.toString(this.getMonto()).contains(query)) {
             matches = true;
         }
         return matches;
+    }
+
+    @Override
+    public String toString(){
+        return pagador + " le paga a " + cobrador + " $ " + monto;
     }
 }

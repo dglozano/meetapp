@@ -2,7 +2,6 @@ package com.example.dglozano.meetapp.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,7 +63,7 @@ public class DialogVerFotoTarea extends android.support.v4.app.DialogFragment {
             layoutEmptyMsg.setVisibility(View.GONE);
             imagen.setVisibility(View.VISIBLE);
             imagen.setImageBitmap(b);
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             imagen.setVisibility(View.GONE);
             layoutEmptyMsg.setVisibility(View.VISIBLE);
         }

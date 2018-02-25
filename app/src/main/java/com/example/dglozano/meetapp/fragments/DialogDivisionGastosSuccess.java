@@ -57,7 +57,7 @@ public class DialogDivisionGastosSuccess extends DialogFragment {
         Button btnOk = view.findViewById(R.id.tv_alert_success_button_ok);
         gastosTotalTV.setText(msgGastoTotal);
         gastosPorPartTV.setText(msgGastoCadaParticipante);
-        if(divisionYaHecha){
+        if (divisionYaHecha) {
             tituloTV.setText(R.string.success_division_info_msg);
         }
         btnOk.setOnClickListener(new View.OnClickListener() {

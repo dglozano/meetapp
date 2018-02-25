@@ -40,6 +40,7 @@
         android:id="@+id/contacto_row_chbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:buttonTint="@color/colorPrimaryDark"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 </RelativeLayout>

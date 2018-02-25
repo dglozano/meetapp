@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.30"
             android:ellipsize="marquee"
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/tv_fecha_evento"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_weight="0.5"/>
+            android:layout_weight="0.5" />
 
         <TextView
             android:id="@+id/tv_tareas_completas_evento"

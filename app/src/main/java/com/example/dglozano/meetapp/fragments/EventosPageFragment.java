@@ -101,7 +101,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         eventosListDisplayed.clear();
         eventosListDisplayed.addAll(eventosDelUsuario);
         mEventoItemAdapter.notifyDataSetChanged();
-        if(eventosDelUsuario.isEmpty()){
+        if (eventosDelUsuario.isEmpty()) {
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
         }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_crear_evento);
@@ -111,8 +111,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     private void search(String query) {
         List<Evento> result = new ArrayList<>();
-        for(Evento e : eventosDelUsuario) {
-            if(e.matches(query)) {
+        for (Evento e : eventosDelUsuario) {
+            if (e.matches(query)) {
                 result.add(e);
             }
         }
@@ -149,7 +149,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         public boolean onQueryTextChange(String query) {
 
             search(query);
-            if(query.trim().isEmpty()) {
+            if (query.trim().isEmpty()) {
                 restoreOriginalEventosList();
             }
             return false;
@@ -171,7 +171,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
         Evento evento = eventosListDisplayed.get(item.getGroupId());
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case 1:
                 editarEvento(evento);
                 return true;
@@ -181,8 +181,8 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 eventosDelUsuario.addAll(daoEvento.getAll());
                 restoreOriginalEventosList();
                 Recordatorios recordatorios = new Recordatorios();
-                recordatorios.eliminarRecordatorio(getContext(),evento.getId());
-                if(eventosDelUsuario.isEmpty()){
+                recordatorios.eliminarRecordatorio(getContext(), evento.getId());
+                if (eventosDelUsuario.isEmpty()) {
                     mLayoutEmptyMsg.setVisibility(View.VISIBLE);
                 }
                 return true;
@@ -200,9 +200,9 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
+        switch (requestCode) {
             case CREAR_EVENTO: {
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), R.string.evento_creado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
@@ -211,7 +211,7 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
                 break;
             }
             case EDITAR_EVENTO: {
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), R.string.evento_editado, Toast.LENGTH_SHORT).show();
                     eventosDelUsuario = daoEvento.getAll();
                     restoreOriginalEventosList();
@@ -234,24 +234,24 @@ public class EventosPageFragment extends android.support.v4.app.Fragment impleme
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             // load data here
-            if(eventosDelUsuario != null && daoEvento != null){
+            if (eventosDelUsuario != null && daoEvento != null) {
                 eventosDelUsuario = daoEvento.getAll();
                 restoreOriginalEventosList();
-                if(eventosDelUsuario.isEmpty()){
+                if (eventosDelUsuario.isEmpty()) {
                     mLayoutEmptyMsg.setVisibility(View.VISIBLE);
                 }
             }
-        }else{
+        } else {
             // fragment is no longer visible
         }
     }
 
     @Override
     public void onResume() {
-        if(eventosDelUsuario != null && daoEvento != null){
+        if (eventosDelUsuario != null && daoEvento != null) {
             eventosDelUsuario = daoEvento.getAll();
             restoreOriginalEventosList();
-            if(eventosDelUsuario.isEmpty()){
+            if (eventosDelUsuario.isEmpty()) {
                 mLayoutEmptyMsg.setVisibility(View.VISIBLE);
             }
         }

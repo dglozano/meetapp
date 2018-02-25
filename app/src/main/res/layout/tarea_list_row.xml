@@ -12,17 +12,30 @@
     android:paddingTop="@dimen/row_padding_vertical">
 
     <TextView
+        android:id="@+id/tv_tarea_row_gasto"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:text="$ 1.234"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/tv_tarea_row_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/activity_horizontal_margin_small"
         android:layout_toLeftOf="@id/img_tarea_row_estado_icon"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:singleLine="true"
-        android:ellipsize="marquee"
+        android:layout_toRightOf="@id/tv_tarea_row_gasto"
+        android:maxLines="4"
         android:text="@string/tarea_title_ejemplo"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        android:textColor="@color/colorPrimaryDark" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_tarea_row_persona_asignada"
@@ -31,6 +44,7 @@
         android:ellipsize="marquee"
         android:layout_toLeftOf="@id/img_tarea_row_estado_icon"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_toRightOf="@id/tv_tarea_row_gasto"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_tarea_row_title"
         android:text="@string/name_example"

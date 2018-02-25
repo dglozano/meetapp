@@ -10,6 +10,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar_main"
         android:layout_width="match_parent"
+        app:titleMarginStart="32dp"
+        app:logo="@mipmap/ic_launcher_cake_round"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryDark"
         app:elevation="0dp"

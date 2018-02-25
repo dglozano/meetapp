@@ -7,7 +7,6 @@ import android.location.Geocoder;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import com.example.dglozano.meetapp.actividades.EventoActivity;
 import com.example.dglozano.meetapp.modelo.EstadoTarea;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Tarea;
+import com.example.dglozano.meetapp.util.AddressFormater;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -73,35 +73,20 @@ public class EventoItemAdapter extends RecyclerView.Adapter<EventoItemAdapter.Ev
         Evento evento = eventosList.get(position);
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         holder.tituloEventoTV.setText(evento.getNombre());
-        Geocoder geoCoder = new Geocoder(mContext);
-        List<Address> matches = null;
-        String lugarAMostrar = "Lugar no especificado";
-        try {
-            matches = geoCoder.getFromLocation(evento.getLugar().latitude,
-                    evento.getLugar().longitude,
-                    1);
-            Address bestMatch = (matches == null || matches.isEmpty()) ? null : matches.get(0);
-            if(bestMatch != null) {
-                String direccion = bestMatch.getAddressLine(0);
-                lugarAMostrar = String.format("%s, %s, %s",
-                        direccion.substring(0, direccion.indexOf(',')),
-                        bestMatch.getLocality(),
-                        bestMatch.getCountryCode());
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+        AddressFormater af = new AddressFormater(new Geocoder(mContext, Locale.getDefault()));
+        String lugarAMostrar = af.format(evento.getLugar());
         holder.lugarEventoTV.setText(lugarAMostrar);
         holder.fechaEventoTV.setText(sdf.format(evento.getFecha()));
-        holder.cantOrganizadoresTV.setText(evento.getParticipantes().size()-1 + mContext.getString(R.string.participantes));
+        holder.cantOrganizadoresTV.setText(String.format(mContext.getString(R.string.participantes),
+                evento.getParticipantes().size() - 1));
         int totalTareas = evento.getTareas().size();
         int tareasHechas = 0;
-        for(Tarea t : evento.getTareas()) {
-            if(t.getEstadoTarea() == EstadoTarea.FINALIZADA) {
+        for (Tarea t : evento.getTareas()) {
+            if (t.getEstadoTarea() == EstadoTarea.FINALIZADA) {
                 tareasHechas++;
             }
         }
-        holder.tareasRestantesTV.setText(tareasHechas + mContext.getString(R.string.de) + totalTareas + mContext.getString(R.string.tareas));
+        holder.tareasRestantesTV.setText(String.format(mContext.getString(R.string.tareas_avance),tareasHechas,totalTareas));
     }
 
     @Override

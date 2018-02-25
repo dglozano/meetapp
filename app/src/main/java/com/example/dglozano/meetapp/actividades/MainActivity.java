@@ -1,7 +1,6 @@
 package com.example.dglozano.meetapp.actividades;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -32,9 +31,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_main);
         setSupportActionBar(myToolbar);
 
+
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
+        ab.setDisplayUseLogoEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         /*
@@ -54,26 +55,25 @@ public class MainActivity extends AppCompatActivity {
         ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
+        /*SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
         SQLiteDaoParticipante daoParticipante = new SQLiteDaoParticipante(this);
         SQLiteDaoTarea daoTarea = new SQLiteDaoTarea(this);
-        if(daoEvento.getAll().isEmpty()) {
+        if (daoEvento.getAll().isEmpty()) {
             daoEvento.createMockData();
             daoParticipante.createMockData(daoEvento.getAll());
             daoTarea.createMockData(daoEvento.getAll());
-        }
+        }*/
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.toolbar_search_main:
                 // User chose the Search option.
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
-                System.out.println("Hizo click en buscar");
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case FRAGMENT_ID_LISTA_EVENTOS:
                     fragmentBeingDisplayed = EventosPageFragment.newInstance();
                     break;

@@ -49,15 +49,15 @@ public class CalculadorDePagos {
 
     public boolean puedeCalcular() {
         List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
-        if(tareasDelEvento.isEmpty()){
+        if (tareasDelEvento.isEmpty()) {
             codigoError = R.string.no_hay_tareas_msg_error;
             return false;
         }
-        for(Tarea tarea : tareasDelEvento) {
-            if(!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
+        for (Tarea tarea : tareasDelEvento) {
+            if (!tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) {
                 codigoError = R.string.tareas_sin_finalizar;
                 return false;
-            } else if(tarea.getPersonaAsignada().esSinAsignar()) {
+            } else if (tarea.getPersonaAsignada().esSinAsignar()) {
                 codigoError = R.string.tareas_sin_encargado;
                 return false;
             }
@@ -72,10 +72,9 @@ public class CalculadorDePagos {
     public void calcularPagos() {
         List<Tarea> tareasDelEvento = daoTarea.getAllDelEvento(idEvento);
         List<Participante> participantesDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(idEvento);
-
         HashMap<Participante, Double> gastosPorParticipante = new HashMap<>();
-        for(Tarea tarea : tareasDelEvento) {
-            if(!tarea.getPersonaAsignada().esSinAsignar()) {
+        for (Tarea tarea : tareasDelEvento) {
+            if (!tarea.getPersonaAsignada().esSinAsignar()) {
                 Double gasto = gastosPorParticipante.get(tarea.getPersonaAsignada());
                 gasto = gasto == null ? tarea.getGasto() : gasto + tarea.getGasto();
                 gastosPorParticipante.put(tarea.getPersonaAsignada(), gasto);
@@ -84,18 +83,18 @@ public class CalculadorDePagos {
 
         // Agrego con gasto 0 a los participantes del evento que no estaban en ninguna tarea
         List<Participante> participantesSinGastos = new ArrayList<>();
-        for(Participante participante : participantesDelEvento) {
-            if(!gastosPorParticipante.containsKey(participante)) {
+        for (Participante participante : participantesDelEvento) {
+            if (!gastosPorParticipante.containsKey(participante)) {
                 participantesSinGastos.add(participante);
             }
         }
-        for(Participante participantesSinGasto : participantesSinGastos) {
+        for (Participante participantesSinGasto : participantesSinGastos) {
             gastosPorParticipante.put(participantesSinGasto, 0.0);
         }
 
         // calcula el promedio, es decir, lo que debería gastar cada participante para quedar saldados
         double sumaTotal = 0.0;
-        for(Double g : gastosPorParticipante.values()) {
+        for (Double g : gastosPorParticipante.values()) {
             sumaTotal += g;
         }
         double promedio = sumaTotal / gastosPorParticipante.values().size();
@@ -109,11 +108,11 @@ public class CalculadorDePagos {
 
         // deudas por participante (ya sean positivas, porque debe dar plata, o negativas porque debe recibir plata)
         List<Pair<Participante, Double>> deudasPorParticipante = new ArrayList<>();
-        for(Participante participante : gastosPorParticipante.keySet()) {
+        for (Participante participante : gastosPorParticipante.keySet()) {
             deudasPorParticipante.add(new Pair(participante, promedio - gastosPorParticipante.get(participante)));
         }
 
-        for(Pair<Participante, Double> participanteDoublePair : deudasPorParticipante) {
+        for (Pair<Participante, Double> participanteDoublePair : deudasPorParticipante) {
             System.out.println(participanteDoublePair.first + ": " + participanteDoublePair.second);
         }
         listaPagos = pagos(deudasPorParticipante);
@@ -122,7 +121,7 @@ public class CalculadorDePagos {
     private List<Pago> pagos(List<Pair<Participante, Double>> deudasPorParticipante) {
         List<Pago> pagos = new ArrayList<>();
         int resueltos = 0;
-        while(resueltos < deudasPorParticipante.size()) {
+        while (resueltos < deudasPorParticipante.size()) {
             // Desde deuda más alta a deuda más baja (negativa)
             Collections.sort(deudasPorParticipante, new Comparator<Pair<Participante, Double>>() {
                 @Override
@@ -135,7 +134,7 @@ public class CalculadorDePagos {
             double deudorDeberiaPagar = Math.abs(deudor.second);
             double acreedorDeberiaRecibir = Math.abs(acreedor.second);
             double monto;
-            if(deudorDeberiaPagar > acreedorDeberiaRecibir) {
+            if (deudorDeberiaPagar > acreedorDeberiaRecibir) {
                 monto = acreedorDeberiaRecibir;
             } else {
                 monto = deudorDeberiaPagar;
@@ -151,16 +150,16 @@ public class CalculadorDePagos {
             // aumenta contador si ya están saldados
             deudorDeberiaPagar = Math.abs(deudor.second - monto);
             acreedorDeberiaRecibir = Math.abs(acreedor.second + monto);
-            if(deudorDeberiaPagar <= 0.009)
+            if (deudorDeberiaPagar <= 0.009)
                 resueltos++;
-            if(acreedorDeberiaRecibir <= 0.009)
+            if (acreedorDeberiaRecibir <= 0.009)
                 resueltos++;
         }
         // limita las transacciones por la tolerancia
         Iterator<Pago> iterator = pagos.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Pago pago = iterator.next();
-            if(pago.getMonto() <= 0.009)
+            if (pago.getMonto() <= 0.009)
                 iterator.remove();
         }
         return pagos;

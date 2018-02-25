@@ -47,7 +47,7 @@
     <string name="titulo_dialog">Solicitud de permisos</string>
     <string name="solicitud_permiso_foto">Para poder capturar una foto es necesario que le des los permisos necesarios a la aplicación.</string>
     <string name="cargar_imagen">Cargar Foto</string>
-    <string name="sms_msg">\"Te he agregado a un evento como participante!\"</string>
+    <string name="sms_msg">Te he agregado a un evento como participante!</string>
     <string name="ver_foto">Ver Foto</string>
     <string name="emtpy_msg_foto_dialog">Esta tarea no tiene ninguna foto para mostrar todavía.</string>
     <string name="tarea_no_creada">La tarea no ha sido creada</string>
@@ -56,10 +56,9 @@
     <string name="no_image">No se ha cargado una foto todavía</string>
     <string name="icono_llamar">Llamar</string>
     <string name="icono_sms">Enviar mensaje de texto</string>
-    <string name="le_paga_a">Le paga a</string>
+    <string name="le_paga_a">Le paga a </string>
     <string name="finalizada">Tarea finalizada</string>
-    <string name="foto">Foto</string>
-    <string name="tarea_title_ejemplo">Comprar servilletas</string>
+    <string name="tarea_title_ejemplo">Comprar servilletas de muchos colores y tamaños diversos, pero baratas.</string>
     <string name="gasto_cero">$0.00</string>
     <string name="dollar">$</string>
     <string name="gasto_cero_sin_dolar">0.00</string>
@@ -67,7 +66,12 @@
     <string name="minus">-</string>
     <string name="name_example">Diego Garcia Lozano</string>
     <string name="number_example">+543425202254</string>
-    <string name="participantes">Participantes</string>
-    <string name="de">de</string>
-    <string name="tareas">Tareas</string>
+    <string name="participantes">%1$d Participantes</string>
+    <string name="tareas_avance">%1$d de %2$d Tareas</string>
+    <string name="body_msg_notif">%1$s es mañana en %2$s.</string>
+    <string name="title_notif">Tienes un evento mañana</string>
+    <string name="asignar_encargado">Asignar encargado</string>
+    <string name="no_se_asigno_encargado">No se asigno encargado</string>
+    <string name="editar_evento">Editar evento</string>
+    <string name="editar_tarea">Editar tarea</string>
 </resources>

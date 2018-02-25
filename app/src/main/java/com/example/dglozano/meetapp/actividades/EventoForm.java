@@ -22,6 +22,7 @@ import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.fragments.DatePickerFragment;
 import com.example.dglozano.meetapp.modelo.Evento;
 import com.example.dglozano.meetapp.modelo.Participante;
+import com.example.dglozano.meetapp.util.AddressFormater;
 import com.example.dglozano.meetapp.util.Recordatorios;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -59,7 +60,6 @@ public class EventoForm extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
-
         daoEvento = new SQLiteDaoEvento(this);
         daoParticipante = new SQLiteDaoParticipante(this);
 
@@ -71,7 +71,8 @@ public class EventoForm extends AppCompatActivity {
         final Integer id = (extras != null) ? extras.getInt(KEY_EVENTO_ID) : null;
         flagNuevoEvento = id == null;
 
-        if(!flagNuevoEvento) {
+        if (!flagNuevoEvento) {
+            setTitle(R.string.editar_evento);
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
@@ -86,6 +87,8 @@ public class EventoForm extends AppCompatActivity {
             };
             Thread t = new Thread(r);
             t.start();
+        } else {
+            setTitle(R.string.crear_evento);
         }
     }
 
@@ -107,7 +110,7 @@ public class EventoForm extends AppCompatActivity {
             public void onClick(View view) {
                 try {
                     showPlacePicker();
-                } catch(GooglePlayServicesNotAvailableException | GooglePlayServicesRepairableException e) {
+                } catch (GooglePlayServicesNotAvailableException | GooglePlayServicesRepairableException e) {
                     e.printStackTrace();
                 }
             }
@@ -116,29 +119,20 @@ public class EventoForm extends AppCompatActivity {
 
     private void mostrarDatosEvento() {
         et_nombre.setText(evento.getNombre());
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        if(evento.getLugar() != null) {
-            try {
-                String l = geocoder.getFromLocation(evento.getLugar().latitude, evento.getLugar().longitude, 1).get(0).getAddressLine(0);
-                et_lugar.setText(l);
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
-        }
-
+        AddressFormater af = new AddressFormater(new Geocoder(this, Locale.getDefault()));
+        et_lugar.setText(af.format(evento.getLugar()));
         et_fecha.setText(sdf.format(evento.getFecha()));
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_item_Ok:
-                if (!et_fecha.getText().toString().matches("") && !et_lugar.getText().toString().matches("") && !et_nombre.getText().toString().matches("")){
+                if (!et_fecha.getText().toString().matches("") && !et_lugar.getText().toString().matches("") && !et_nombre.getText().toString().matches("")) {
                     guardar();
                     setResult(RESULT_OK, intentOrigen);
                     finish();
-                }
-                else {
+                } else {
                     Toast toast = Toast.makeText(this, "Algunos campos se encuentran en blanco", Toast.LENGTH_SHORT);
                     toast.show();
                 }
@@ -162,30 +156,30 @@ public class EventoForm extends AppCompatActivity {
         String nombre = et_nombre.getText().toString();
         String fecha = et_fecha.getText().toString();
 
-        if(flagNuevoEvento) {
+        if (flagNuevoEvento) {
             evento = new Evento();
         }
 
         evento.setNombre(nombre);
-        if(place != null) {
+        if (place != null) {
             evento.setLugar(place.getLatLng());
         }
         try {
             evento.setFecha(sdf.parse(fecha));
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
         Recordatorios recordatorios = new Recordatorios();
-        if(flagNuevoEvento) {
+        if (flagNuevoEvento) {
             int id = (int) daoEvento.save(evento);
-            if(evento.getFecha() != null)
+            if (evento.getFecha() != null)
                 recordatorios.recordatorioEvento(this, id, evento.getFecha());
             daoParticipante.save(Participante.participanteCreadorEvento(), id);
             daoParticipante.save(Participante.getParticipanteSinAsignar(), id);
         } else {
             daoEvento.update(evento);
-            if(evento.getFecha() != null)
+            if (evento.getFecha() != null)
                 recordatorios.recordatorioEvento(this, evento.getId(), evento.getFecha());
         }
     }
@@ -210,10 +204,11 @@ public class EventoForm extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PLACE_PICKER_REQUEST) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
                 place = PlacePicker.getPlace(this, data);
-                et_lugar.setText(place.getAddress());
+                AddressFormater af = new AddressFormater(new Geocoder(this,Locale.getDefault()));
+                et_lugar.setText(af.format(place.getLatLng()));
             }
         }
     }

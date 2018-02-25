@@ -11,9 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import com.example.dglozano.meetapp.modelo.Evento;
-import com.example.dglozano.meetapp.modelo.Pago;
-import com.example.dglozano.meetapp.modelo.Participante;
-import com.example.dglozano.meetapp.modelo.Tarea;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.text.ParseException;
@@ -60,7 +57,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         db = dbhelper.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + Constants.EVENTO_TABLENAME, null);
         // Nos movemos con el cursor por cada resultado
-        while(c.moveToNext()) {
+        while (c.moveToNext()) {
             // Y creamos el evento con los datos correspondientes
             Evento evento = parseEventoFromCursor(c);
             eventos.add(evento);
@@ -84,7 +81,7 @@ public class SQLiteDaoEvento implements DaoEvento {
         String fechaString = c.getString(c.getColumnIndex(Constants.EVENTO_FECHA));
         try {
             evento.setFecha(sdf.parse(fechaString));
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         int divisionHechaInt = c.getInt(c.getColumnIndex(Constants.EVENTO_DIVISION_YA_REALIZADA));
@@ -105,7 +102,7 @@ public class SQLiteDaoEvento implements DaoEvento {
                 + Constants.EVENTO_TABLENAME + " WHERE "
                 + Constants.EVENTO_ID + " = " + String.valueOf(id), null);
         // Nos movemos con el cursor por cada resultado (deberia ser uno solo)
-        while(c.moveToNext()) {
+        while (c.moveToNext()) {
             // Y creamos el evento con los datos correspondientes
             evento = parseEventoFromCursor(c);
         }
@@ -166,7 +163,7 @@ public class SQLiteDaoEvento implements DaoEvento {
 
     public void createMockData() {
         List<Evento> eventos = Evento.getEventosMock();
-        for(Evento e : eventos) {
+        for (Evento e : eventos) {
             save(e);
         }
     }

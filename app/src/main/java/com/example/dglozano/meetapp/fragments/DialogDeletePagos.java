@@ -21,6 +21,7 @@ public class DialogDeletePagos extends android.support.v4.app.DialogFragment {
      * Each method passes the DialogFragment in case the host needs to query it. */
     public interface NoticeDialogListener {
         void onDialogPositiveClick(DialogFragment dialog, int idAccion, int idElemento);
+
         void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idElemento);
     }
 

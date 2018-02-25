@@ -42,7 +42,7 @@ public class Evento implements Comparable<Evento> {
 
     public boolean matches(String query) {
         boolean matches = false;
-        if(this.nombre.toUpperCase().contains(query.toUpperCase())) {
+        if (this.nombre.toUpperCase().contains(query.toUpperCase())) {
             matches = true;
         }
         return matches;
@@ -143,7 +143,7 @@ public class Evento implements Comparable<Evento> {
         Date fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -156,7 +156,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -168,7 +168,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -180,7 +180,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -192,7 +192,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -203,8 +203,8 @@ public class Evento implements Comparable<Evento> {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Evento evento = (Evento) o;
 

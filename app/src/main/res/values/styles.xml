@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogCustom</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -26,6 +29,15 @@
     <style name="MyActionButtonOverflow">
         <item name="android:src">@drawable/ic_menu_white_24dp</item>
         <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorPrimaryDark</item>
     </style>
 
 </resources>
