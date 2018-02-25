@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +12,7 @@
         android:background="?attr/colorPrimaryDark"
         android:elevation="4dp"
         android:theme="@style/ToolbarStyle"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/white" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,44 +28,24 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:id="@+id/tv_tarea_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="2dp"
-                android:text="@string/crear_tarea"
-                android:textAppearance="@android:style/TextAppearance.Material.Large"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="30sp"/>
-
-            <View
-                android:id="@+id/settings_separator"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_below="@id/tv_tarea_title"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="3dp"
-                android:background="@color/colorPrimary"/>
-
-            <TextView
                 android:id="@+id/textView_labelTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/settings_separator"
-                android:text="@string/titulo"/>
+                android:text="@string/titulo" />
 
             <EditText
                 android:id="@+id/editText_titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:labelFor="@id/textView_labelTitulo"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/textView_labelTitulo"
+                android:layout_below="@id/textView_labelTitulo"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="8dp"
                 android:ems="10"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName" />
 
             <TextView
                 android:id="@+id/textView_labelEncargado"
@@ -74,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/editText_titulo"
-                android:text="@string/encargado"/>
+                android:text="@string/encargado" />
 
             <Spinner
                 android:id="@+id/spinner_encargado"
@@ -83,7 +62,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/textView_labelEncargado"
                 android:layout_marginBottom="8dp"
-                android:minHeight="45dp"/>
+                android:minHeight="45dp" />
 
             <TextView
                 android:id="@+id/textView_labelDescripcion"
@@ -91,41 +70,44 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/spinner_encargado"
-                android:text="@string/descripcion"/>
+                android:text="@string/descripcion" />
 
             <EditText
                 android:id="@+id/editText_descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="1"
+                android:gravity="top|left"
+                android:maxLines="10"
+                android:scrollbars="vertical"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/textView_labelDescripcion"
+                android:layout_below="@id/textView_labelDescripcion"
+                android:labelFor="@id/textView_labelDescripcion"
                 android:layout_marginBottom="8dp"
-                android:ems="10"
-                android:inputType="textLongMessage"/>
-
-            <TextView
-                android:id="@+id/frmLblFoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/editText_descripcion"
-                android:text="Foto"/>
-
-            <Button
-                android:id="@+id/btn_cargarfoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/editText_descripcion"
-                android:text="@string/cargar_imagen"/>
+                android:ems="10" />
 
             <ImageView
                 android:id="@+id/frmImgFoto"
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/btn_cargarfoto"/>
+                android:layout_below="@+id/editText_descripcion"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:contentDescription="@string/string_content_description_img_form"
+                android:elevation="10dp" />
 
+            <Button
+                android:id="@+id/btn_cargarfoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/frmImgFoto"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin_big"
+                android:layout_marginRight="@dimen/activity_horizontal_margin_big"
+                android:background="@color/colorAccent"
+                android:text="@string/cargar_imagen"
+                android:textColor="@color/colorPrimaryDark" />
         </RelativeLayout>
     </ScrollView>
 

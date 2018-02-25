@@ -51,16 +51,15 @@ import static android.app.Activity.RESULT_OK;
  * create an instance of this fragment.
  */
 public class ParticipantesPageFragment extends android.support.v4.app.Fragment
-        implements DialogDeletePagos.NoticeDialogListener{
+        implements DialogDeletePagos.NoticeDialogListener {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1;
     private List<Participante> participantesListDisplayed = new ArrayList<>();
     private ParticipanteItemAdapter mParticipanteAdapter;
-    private RecyclerView mParticipantesRecyclerView;
     private final int CREAR_PARTICIPANTE = 1;
 
     private DaoEvento daoEvento;
-    private DaoEventoMember<Participante> daoParticipante;
+    private SQLiteDaoParticipante daoParticipante;
     private DaoEventoMember<Pago> daoPagos;
     private List<Participante> participantesListDelEvento;
     private LinearLayout mLayoutEmptyMsg;
@@ -107,10 +106,10 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+        participantesListDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(eventoId);
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_participantes);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
-        mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
+        RecyclerView mParticipantesRecyclerView = view.findViewById(R.id.recvw_participantes_list);
         mParticipanteAdapter = new ParticipanteItemAdapter(participantesListDisplayed);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
@@ -123,31 +122,31 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         participantesListDisplayed.clear();
         participantesListDisplayed.addAll(participantesListDelEvento);
         mParticipanteAdapter.notifyDataSetChanged();
-        if(participantesListDelEvento.isEmpty()){
+        if (participantesListDelEvento.isEmpty()) {
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
         }
         FloatingActionButton fab = view.findViewById(R.id.fab_btn_agregar_participante);
         fab.setOnClickListener(new MyFabIconOnClickListener(this));
     }
 
-    public void pedirPermisoContactos(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+    private void pedirPermisoContactos() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-                        builder.setTitle(R.string.permisos_contactos_dialog_title);
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setMessage(R.string.permisos_contactos_dialog_msg);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @TargetApi(Build.VERSION_CODES.M)
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                requestPermissions(
-                                        new String[]
-                                                {Manifest.permission.READ_CONTACTS}
-                                        , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                            }
-                        });
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+                    builder.setTitle(R.string.permisos_contactos_dialog_title);
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setMessage(R.string.permisos_contactos_dialog_msg);
+                    builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            requestPermissions(
+                                    new String[]
+                                            {Manifest.permission.READ_CONTACTS}
+                                    , MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                        }
+                    });
                     builder.show();
                 } else {
                     ActivityCompat.requestPermissions(getActivity(),
@@ -168,8 +167,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
 
     private void search(String query) {
         List<Participante> result = new ArrayList<>();
-        for(Participante p : participantesListDelEvento) {
-            if(p.matches(query)) {
+        for (Participante p : participantesListDelEvento) {
+            if (p.matches(query)) {
                 result.add(p);
             }
         }
@@ -199,13 +198,13 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Evento evento = daoEvento.getById(eventoId);
         Integer pos = item.getItemId();
-        if(pos == 6) {
+        if (pos == 7) {
             Participante participante = participantesListDisplayed.get(item.getGroupId());
             // El dialogo llama a los metodos onDialogPositiveClick o onDialogNeativeClick
             // con el id del elemento del context menu clickeado.
-            if(evento.isDivisionGastosYaHecha()){
+            if (evento.isDivisionGastosYaHecha()) {
                 DialogFragment df = DialogDeletePagos.newInstance(pos, participante.getId());
-                df.setTargetFragment(this,1);
+                df.setTargetFragment(this, 1);
                 df.show(getFragmentManager(), "tag");
             } else {
                 accionesContextMenu(participante);
@@ -219,14 +218,14 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     public void onDialogPositiveClick(DialogFragment dialog, int idAccion, int idParticipante) {
         Participante participante = daoParticipante.getById(idParticipante);
         Evento evento = daoEvento.getById(eventoId);
-        for(Pago p: daoPagos.getAllDelEvento(eventoId)){
+        for (Pago p : daoPagos.getAllDelEvento(eventoId)) {
             daoPagos.delete(p);
         }
         evento.setGastosPorParticipante(0.0);
         evento.setGastosTotales(0.0);
         evento.setDivisionGastosYaHecha(false);
         daoEvento.update(evento);
-        if(idAccion == -1){
+        if (idAccion == -2) {
             pedirPermisoContactos();
         } else {
             accionesContextMenu(participante);
@@ -235,8 +234,8 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog, int idAccion, int idParticipante) {
-        switch(idAccion){
-            case -1:
+        switch (idAccion) {
+            case -2:
                 Toast.makeText(this.getContext(), R.string.participante_no_creado, Toast.LENGTH_SHORT).show();
                 break;
             default:
@@ -247,9 +246,9 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
     private void accionesContextMenu(Participante participante) {
         Toast.makeText(this.getContext(), R.string.participante_borrado, Toast.LENGTH_SHORT).show();
         daoParticipante.delete(participante);
-        participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+        participantesListDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(eventoId);
         restoreOriginalParticipantesList();
-        if(participantesListDelEvento.isEmpty()){
+        if (participantesListDelEvento.isEmpty()) {
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
         }
     }
@@ -265,7 +264,7 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
         @Override
         public boolean onQueryTextChange(String query) {
             search(query);
-            if(query.trim().isEmpty()) {
+            if (query.trim().isEmpty()) {
                 restoreOriginalParticipantesList();
             }
             return false;
@@ -282,11 +281,16 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch(requestCode) {
+        switch (requestCode) {
             case CREAR_PARTICIPANTE: {
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     Toast.makeText(this.getContext(), R.string.participante_creado, Toast.LENGTH_SHORT).show();
-                    participantesListDelEvento = daoParticipante.getAllDelEvento(eventoId);
+                    participantesListDelEvento = daoParticipante.getAllDelEventoMenosSinAsignar(eventoId);
+                    for (Participante p : participantesListDelEvento) {
+                        if (p.esSinAsignar()) {
+                            participantesListDelEvento.remove(p);
+                        }
+                    }
                     mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                     restoreOriginalParticipantesList();
                 }
@@ -299,16 +303,16 @@ public class ParticipantesPageFragment extends android.support.v4.app.Fragment
 
         android.support.v4.app.Fragment fragment;
 
-        public MyFabIconOnClickListener(android.support.v4.app.Fragment f){
+        public MyFabIconOnClickListener(android.support.v4.app.Fragment f) {
             this.fragment = f;
         }
 
         @Override
         public void onClick(View view) {
             Evento evento = daoEvento.getById(eventoId);
-            if(evento.isDivisionGastosYaHecha()){
-                DialogFragment df = DialogDeletePagos.newInstance(-1, -1);
-                df.setTargetFragment(fragment,1);
+            if (evento.isDivisionGastosYaHecha()) {
+                DialogFragment df = DialogDeletePagos.newInstance(-2, -2);
+                df.setTargetFragment(fragment, 1);
                 df.show(getFragmentManager(), "tag");
             } else {
                 pedirPermisoContactos();

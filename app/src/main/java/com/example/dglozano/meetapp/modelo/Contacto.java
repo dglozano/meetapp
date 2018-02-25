@@ -12,34 +12,18 @@ public class Contacto implements Comparable<Contacto> {
     private String numero;
     private boolean isChecked;
 
-    public Contacto(String nombre, String numero, boolean isChecked) {
-        this.nombre = nombre;
-        this.numero = numero;
-        this.isChecked = isChecked;
-    }
-
     public Contacto(String nombre, String numero) {
         this.nombre = nombre;
         this.numero = numero;
-    }
-
-    public Contacto() {
+        this.isChecked = false;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getNumero() {
         return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
     }
 
     public boolean isChecked() {

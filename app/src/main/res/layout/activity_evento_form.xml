@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +12,7 @@
         android:background="?attr/colorPrimaryDark"
         android:elevation="4dp"
         android:theme="@style/ToolbarStyle"
-        app:titleTextColor="@android:color/white"/>
+        app:titleTextColor="@android:color/white" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -25,44 +24,24 @@
         android:paddingTop="20dp">
 
         <TextView
-            android:id="@+id/tv_evento_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="2dp"
-            android:text="@string/crear_evento"
-            android:textAppearance="@android:style/TextAppearance.Material.Large"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="30sp" />
-
-        <View
-            android:id="@+id/settings_separator"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_below="@id/tv_evento_title"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="3dp"
-            android:background="@color/colorPrimary"/>
-
-        <TextView
             android:id="@+id/textView_labelNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/settings_separator"
-            android:text="@string/nombre"/>
+            android:text="@string/nombre" />
 
         <EditText
             android:id="@+id/editText_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/textView_labelNombre"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView_labelNombre"
+            android:layout_below="@id/textView_labelNombre"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="8dp"
             android:ems="10"
-            android:inputType="textPersonName"/>
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/textView_labelLugar"
@@ -70,19 +49,20 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/editText_nombre"
-            android:text="@string/lugar"/>
+            android:text="@string/lugar" />
 
         <EditText
             android:id="@+id/editText_lugar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/textView_labelLugar"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView_labelLugar"
+            android:layout_below="@id/textView_labelLugar"
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:ems="10"
             android:focusable="false"
-            android:inputType="text"/>
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/textView_labelFecha"
@@ -90,19 +70,20 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/editText_lugar"
-            android:text="@string/fecha"/>
+            android:text="@string/fecha" />
 
         <EditText
             android:id="@+id/editText_fecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/textView_labelFecha"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView_labelFecha"
+            android:layout_below="@id/textView_labelFecha"
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:ems="10"
             android:focusable="false"
-            android:inputType="text"/>
+            android:inputType="text" />
 
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

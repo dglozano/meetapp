@@ -51,13 +51,13 @@ public class DialogDivisionGastosSuccess extends DialogFragment {
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         View view = inflater.inflate(R.layout.fragment_dialog_success_division, null);
-        TextView tituloTV = (TextView) view.findViewById(R.id.tv_alert_success_gastos_titulo);
-        TextView gastosTotalTV = (TextView) view.findViewById(R.id.tv_alert_success_gastos_total_msg);
-        TextView gastosPorPartTV = (TextView) view.findViewById(R.id.tv_alert_success_gastos_individual_msg);
-        Button btnOk = (Button) view.findViewById(R.id.tv_alert_success_button_ok);
+        TextView tituloTV = view.findViewById(R.id.tv_alert_success_gastos_titulo);
+        TextView gastosTotalTV = view.findViewById(R.id.tv_alert_success_gastos_total_msg);
+        TextView gastosPorPartTV = view.findViewById(R.id.tv_alert_success_gastos_individual_msg);
+        Button btnOk = view.findViewById(R.id.tv_alert_success_button_ok);
         gastosTotalTV.setText(msgGastoTotal);
         gastosPorPartTV.setText(msgGastoCadaParticipante);
-        if(divisionYaHecha){
+        if (divisionYaHecha) {
             tituloTV.setText(R.string.success_division_info_msg);
         }
         btnOk.setOnClickListener(new View.OnClickListener() {

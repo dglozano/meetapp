@@ -46,6 +46,7 @@
                 android:textAppearance="@android:style/TextAppearance.Material.Medium" />
         </LinearLayout>
     </RelativeLayout>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_btn_agregar_participante"
         android:layout_width="wrap_content"
@@ -53,6 +54,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"

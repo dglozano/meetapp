@@ -15,6 +15,6 @@
         android:id="@+id/menu_item_Ok"
         android:icon="@drawable/ic_done_white_24dp"
         android:title="@string/action_guardar"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
 </menu>

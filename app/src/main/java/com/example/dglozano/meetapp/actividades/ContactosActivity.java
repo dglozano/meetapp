@@ -4,8 +4,6 @@ package com.example.dglozano.meetapp.actividades;
  * Created by augusto on 10/02/2018.
  */
 
-import java.util.ArrayList;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -21,23 +19,21 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import java.util.Collections;
-import java.util.List;
 
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.adapters.ContactoItemAdapter;
-import com.example.dglozano.meetapp.dao.DaoEvento;
 import com.example.dglozano.meetapp.dao.DaoEventoMember;
-import com.example.dglozano.meetapp.dao.SQLiteDaoEvento;
 import com.example.dglozano.meetapp.dao.SQLiteDaoParticipante;
 import com.example.dglozano.meetapp.modelo.Contacto;
 import com.example.dglozano.meetapp.modelo.Participante;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ContactosActivity extends AppCompatActivity {
 
-    private RecyclerView mContactosRecyclerView;
     private Intent intentOrigen;
-    private Participante participante;
     private ContactoItemAdapter mContactoItemAdapter;
     private List<Contacto> todosLosContactos = new ArrayList<>();
     private List<Contacto> contactosDisplayed = new ArrayList<>();
@@ -66,7 +62,7 @@ public class ContactosActivity extends AppCompatActivity {
         LoadContactsAsycn lca = new LoadContactsAsycn();
         lca.execute();
 
-        mContactosRecyclerView = findViewById(R.id.recvw_contactos_list);
+        RecyclerView mContactosRecyclerView = findViewById(R.id.recvw_contactos_list);
         mContactoItemAdapter = new ContactoItemAdapter(contactosDisplayed, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 this.getApplicationContext());
@@ -80,7 +76,7 @@ public class ContactosActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.toolbar_search_contactos:
                 return true;
             case R.id.menu_item_Ok:
@@ -98,10 +94,10 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<Contacto> getChecked() {
+    private ArrayList<Contacto> getChecked() {
         ArrayList<Contacto> contactosCheckeados = new ArrayList<>();
-        for (Contacto c: todosLosContactos){
-            if(c.isChecked()){
+        for (Contacto c : todosLosContactos) {
+            if (c.isChecked()) {
                 contactosCheckeados.add(c);
             }
         }
@@ -110,8 +106,8 @@ public class ContactosActivity extends AppCompatActivity {
 
     private void search(String query) {
         List<Contacto> result = new ArrayList<>();
-        for(Contacto c: todosLosContactos) {
-            if(c.getNombre().toUpperCase().contains(query.toUpperCase())) {
+        for (Contacto c : todosLosContactos) {
+            if (c.getNombre().toUpperCase().contains(query.toUpperCase())) {
                 result.add(c);
             }
         }
@@ -149,7 +145,7 @@ public class ContactosActivity extends AppCompatActivity {
         @Override
         public boolean onQueryTextChange(String query) {
             search(query);
-            if(query.trim().isEmpty()) {
+            if (query.trim().isEmpty()) {
                 restoreOriginalContactosList();
             }
             return false;
@@ -165,11 +161,6 @@ public class ContactosActivity extends AppCompatActivity {
     }
 
     class LoadContactsAsycn extends AsyncTask<Void, Void, ArrayList<Contacto>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
 
         @Override
         protected ArrayList<Contacto> doInBackground(Void... params) {
@@ -188,18 +179,17 @@ public class ContactosActivity extends AppCompatActivity {
                         .getString(c
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                if (contacts.size()==0) {
-                    contacts.add(new Contacto(contactName, phNumber, false));
-                }
-                else {
+                if (contacts.size() == 0) {
+                    contacts.add(new Contacto(contactName, phNumber));
+                } else {
                     boolean flag = false;
-                    for (Contacto cn : contacts){
-                        if (cn.getNombre().equals(contactName)){
+                    for (Contacto cn : contacts) {
+                        if (cn.getNombre().equals(contactName)) {
                             flag = true;
                         }
                     }
-                    if (!flag){
-                        contacts.add(new Contacto(contactName, phNumber,false));
+                    if (!flag) {
+                        contacts.add(new Contacto(contactName, phNumber));
                     }
                 }
             }
@@ -221,12 +211,12 @@ public class ContactosActivity extends AppCompatActivity {
         }
     }
 
-    public void guardar(ArrayList<Contacto> contactosChecked){
-        for (Contacto c : contactosChecked){
+    private void guardar(ArrayList<Contacto> contactosChecked) {
+        for (Contacto c : contactosChecked) {
             String nombre = c.getNombre();
             String numero = c.getNumero();
 
-            participante = new Participante(nombre, numero);
+            Participante participante = new Participante(nombre, numero);
 
             daoParticipante.save(participante, eventoId);
         }

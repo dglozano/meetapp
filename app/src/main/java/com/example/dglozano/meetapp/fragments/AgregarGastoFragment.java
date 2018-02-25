@@ -1,6 +1,8 @@
 package com.example.dglozano.meetapp.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.example.dglozano.meetapp.R;
 import com.example.dglozano.meetapp.dao.SQLiteDaoTarea;
 import com.example.dglozano.meetapp.modelo.Tarea;
+import com.example.dglozano.meetapp.util.OnDismissListener;
 
 import java.text.DecimalFormat;
 
@@ -28,6 +31,7 @@ public class AgregarGastoFragment extends DialogFragment {
     private Button restar;
     private Button guardar;
     private Button cancelar;
+    private OnDismissListener mListener;
 
     public static AgregarGastoFragment newInstance(int idTarea) {
         AgregarGastoFragment f = new AgregarGastoFragment();
@@ -38,6 +42,21 @@ public class AgregarGastoFragment extends DialogFragment {
         f.setArguments(args);
 
         return f;
+    }
+
+    // Override the Fragment.onAttach() method to instantiate the NoticeDialogListener
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the NoticeDialogListener so we can send events to the host
+            mListener = (OnDismissListener) getTargetFragment();
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(activity.toString()
+                    + " must implement NoticeDialogListener");
+        }
     }
 
     @Override
@@ -81,7 +100,7 @@ public class AgregarGastoFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String texto = et_gasto.getText().toString();
-                if(!texto.equals("")) {
+                if (!texto.equals("")) {
                     gasto += Double.valueOf(texto);
                     setearGasto(gasto);
                 }
@@ -91,9 +110,9 @@ public class AgregarGastoFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 String texto = et_gasto.getText().toString();
-                if(!texto.equals("")) {
+                if (!texto.equals("")) {
                     gasto -= Double.valueOf(texto);
-                    if(gasto < 0) gasto = 0.0;
+                    if (gasto < 0) gasto = 0.0;
                     setearGasto(gasto);
                 }
             }
@@ -112,6 +131,11 @@ public class AgregarGastoFragment extends DialogFragment {
                 AgregarGastoFragment.this.getDialog().cancel();
             }
         });
+    }
+
+    @Override
+    public void onDismiss(DialogInterface di){
+        this.mListener.onDismiss();
     }
 
     private void setearGasto(Double gasto) {

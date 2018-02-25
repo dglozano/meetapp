@@ -39,7 +39,6 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
 
     private List<Pago> pagosListDisplayed = new ArrayList<>();
     private PagoItemAdapter mPagoItemAdapter;
-    private RecyclerView mPagosRecyclerView;
     private LinearLayout mLayoutEmptyMsg;
 
     private static final String EVENTO_ID = "EVENTO_ID";
@@ -91,8 +90,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         pagosListDelEvento = daoPago.getAllDelEvento(eventoId);
         mLayoutEmptyMsg = view.findViewById(R.id.empty_msg_layout_dividir_gastos);
         mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
-        mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
-        mPagoItemAdapter =  new PagoItemAdapter(pagosListDisplayed);
+        RecyclerView mPagosRecyclerView = view.findViewById(R.id.recvw_payments_list);
+        mPagoItemAdapter = new PagoItemAdapter(pagosListDisplayed);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(
                 getActivity().getApplicationContext());
         mPagosRecyclerView.setLayoutManager(mLayoutManager);
@@ -105,7 +104,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         pagosListDisplayed.addAll(pagosListDelEvento);
         mPagoItemAdapter.notifyDataSetChanged();
         fab = view.findViewById(R.id.fab_btn_dividir_gastos);
-        if(pagosListDelEvento.isEmpty()){
+        if (pagosListDelEvento.isEmpty()) {
             mLayoutEmptyMsg.setVisibility(View.VISIBLE);
             fab.setImageResource(R.drawable.ic_attach_money_white_24dp);
         } else {
@@ -117,8 +116,8 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
 
     private void search(String query) {
         List<Pago> result = new ArrayList<>();
-        for(Pago p : pagosListDelEvento) {
-            if(p.matches(query)) {
+        for (Pago p : pagosListDelEvento) {
+            if (p.matches(query)) {
                 result.add(p);
             }
         }
@@ -147,19 +146,20 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
     private void calcularPagos() {
         final Evento evento = daoEvento.getById(eventoId);
         final CalculadorDePagos calculadorDePagos = new CalculadorDePagos(getActivity(), eventoId);
-        if(evento.isDivisionGastosYaHecha()) {
+        if (evento.isDivisionGastosYaHecha()) {
             DialogDivisionGastosSuccess.newInstance(evento.getGastosTotales(),
                     evento.getGastosPorParticipante(), true)
                     .show(getActivity().getFragmentManager(), "dialog");
-        } else if(calculadorDePagos.puedeCalcular()) {
+        } else if (calculadorDePagos.puedeCalcular()) {
             Runnable r = new Runnable() {
                 @Override
                 public void run() {
                     calculadorDePagos.calcularPagos();
-                    for(Pago p : evento.getPagos()){
+                    for (Pago p : evento.getPagos()) {
                         daoPago.delete(p);
                     }
-                    for(Pago p : calculadorDePagos.getListaPagos()) {
+
+                    for (Pago p : calculadorDePagos.getListaPagos()) {
                         daoPago.save(p, evento.getId());
                     }
                     evento.setDivisionGastosYaHecha(true);
@@ -175,7 +175,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
                             pagosListDelEvento = daoPago.getAllDelEvento(evento.getId());
                             restoreOriginalPagosList();
                             fab.setImageResource(R.drawable.ic_info_white_24dp);
-                            if(!pagosListDelEvento.isEmpty()){
+                            if (!pagosListDelEvento.isEmpty()) {
                                 mLayoutEmptyMsg.setVisibility(View.INVISIBLE);
                             }
                         }
@@ -201,7 +201,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         @Override
         public boolean onQueryTextChange(String query) {
             search(query);
-            if(query.trim().isEmpty()) {
+            if (query.trim().isEmpty()) {
                 restoreOriginalPagosList();
             }
             return false;
@@ -228,10 +228,10 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
             // load data here
-            if(eventoId != null) {
+            if (eventoId != null) {
                 pagosListDelEvento = daoPago.getAllDelEvento(eventoId);
                 restoreOriginalPagosList();
-                if(pagosListDelEvento.isEmpty()){
+                if (pagosListDelEvento.isEmpty()) {
                     mLayoutEmptyMsg.setVisibility(View.VISIBLE);
                     fab.setImageResource(R.drawable.ic_attach_money_white_24dp);
                 } else {
@@ -239,7 +239,7 @@ public class DivisionGastosPageFragment extends android.support.v4.app.Fragment 
                     fab.setImageResource(R.drawable.ic_info_white_24dp);
                 }
             }
-        }else{
+        } else {
             // fragment is no longer visible
         }
     }

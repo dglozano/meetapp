@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:titleTextColor="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +9,6 @@
     tools:context="com.example.dglozano.meetapp.actividades.EventoActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_evento"
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
@@ -38,7 +36,7 @@
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/colorAccent"
             android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ToolbarStyle"/>
+            android:theme="@style/ToolbarStyle" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

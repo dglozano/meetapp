@@ -8,27 +8,46 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Participante implements Comparable<Participante> {
     private static final String NOMBRE_CREADOR_EVENTO = "Yo";
+    private static final String NOMBRE_SIN_ASIGNAR = "<Sin Asignar>";
 
     private Integer id;
     private String nombreApellido;
     private String numeroTel;
+    private boolean esCreador;
+    private boolean esSinAsignar;
 
     public Participante(String nombreApellido, String numeroTel) {
         this.nombreApellido = nombreApellido;
         this.numeroTel = numeroTel;
+        this.esCreador = false;
+        this.esSinAsignar = false;
     }
 
     public Participante() {
-        this.id = null;
-        this.nombreApellido = "<Sin Asignar>";
+        this.esCreador = false;
+        this.esSinAsignar = false;
     }
 
     public static Participante participanteCreadorEvento() {
-        return new Participante(NOMBRE_CREADOR_EVENTO, "");
+        Participante creador = new Participante();
+        creador.nombreApellido = NOMBRE_CREADOR_EVENTO;
+        creador.numeroTel = "";
+        creador.esCreador = true;
+        creador.esSinAsignar = false;
+        return creador;
+    }
+
+    public static Participante getParticipanteSinAsignar() {
+        Participante sinAsignar = new Participante();
+        sinAsignar.nombreApellido = NOMBRE_SIN_ASIGNAR;
+        sinAsignar.numeroTel = "";
+        sinAsignar.esCreador = false;
+        sinAsignar.esSinAsignar = true;
+        return sinAsignar;
     }
 
     public boolean esCreadorEvento() {
-        return this.nombreApellido.equals(NOMBRE_CREADOR_EVENTO);
+        return this.esCreador;
     }
 
     public Integer getId() {
@@ -64,12 +83,8 @@ public class Participante implements Comparable<Participante> {
         return this.nombreApellido.toUpperCase().contains(query.toUpperCase());
     }
 
-    public static Participante getParticipanteSinAsignar() {
-        return new Participante();
-    }
-
     public boolean esSinAsignar() {
-        return this.id == null;
+        return this.esSinAsignar;
     }
 
     @Override
@@ -79,8 +94,8 @@ public class Participante implements Comparable<Participante> {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Participante that = (Participante) o;
 
@@ -173,15 +188,23 @@ public class Participante implements Comparable<Participante> {
         numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
         numTelRandom = String.valueOf(numRandom);
         participantes.add(new Participante("Domingo Faustino Sarmiento", numTelRandom));
-        numRandom = ThreadLocalRandom.current().nextInt(154000000, 157000000);
-        numTelRandom = String.valueOf(numRandom);
         return participantes;
+    }
+
+    public void setEsCreador(boolean esCreador) {
+        this.esCreador = esCreador;
+    }
+
+    public void setEsSinAsignar(boolean esSinAsignar) {
+        this.esSinAsignar = esSinAsignar;
     }
 
     @Override
     public int compareTo(@NonNull Participante participante) {
-        if(this.esCreadorEvento()) return -1;
-        else if(participante.esCreadorEvento()) return 1;
+        if (this.esSinAsignar()) return -1;
+        else if (participante.esSinAsignar()) return 1;
+        if (this.esCreadorEvento()) return -1;
+        else if (participante.esCreadorEvento()) return 1;
         else return this.getNombreApellido().compareToIgnoreCase(participante.getNombreApellido());
     }
 }

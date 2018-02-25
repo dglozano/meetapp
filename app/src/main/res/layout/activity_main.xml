@@ -2,7 +2,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
@@ -11,6 +10,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar_main"
         android:layout_width="match_parent"
+        app:titleMarginStart="32dp"
+        app:logo="@mipmap/ic_launcher_cake_round"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryDark"
         app:elevation="0dp"

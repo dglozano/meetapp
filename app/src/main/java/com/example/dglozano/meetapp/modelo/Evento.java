@@ -23,7 +23,7 @@ public class Evento implements Comparable<Evento> {
     private double gastosTotales;
     private double gastosPorParticipante;
 
-    public Evento(String nombre, LatLng lugar, Date fecha) {
+    private Evento(String nombre, LatLng lugar, Date fecha) {
         this.nombre = nombre;
         this.lugar = lugar;
         this.fecha = fecha;
@@ -42,7 +42,7 @@ public class Evento implements Comparable<Evento> {
 
     public boolean matches(String query) {
         boolean matches = false;
-        if(this.nombre.toUpperCase().contains(query.toUpperCase())) {
+        if (this.nombre.toUpperCase().contains(query.toUpperCase())) {
             matches = true;
         }
         return matches;
@@ -112,55 +112,20 @@ public class Evento implements Comparable<Evento> {
         this.participantes.addAll(participantes);
     }
 
-    public void eliminarParticipante(Participante pEliminar) {
-        for(Participante p : participantes) {
-            if(p.getId() == pEliminar.getId()) {
-                participantes.remove(p);
-                //TODO ON DELETE CASCADE
-            }
-        }
-    }
-
     public List<Participante> getParticipantes() {
         return this.participantes;
-    }
-
-    public void addTarea(Tarea t) {
-        this.tareas.add(t);
     }
 
     public void addAllTareas(List<Tarea> tareas) {
         this.tareas.addAll(tareas);
     }
 
-    public void eliminarTarea(Tarea tEliminar) {
-        for(Tarea t : tareas) {
-            if(t.getId() == tEliminar.getId()) {
-                tareas.remove(t);
-                //TODO ON DELETE CASCADE
-            }
-        }
-    }
-
     public List<Tarea> getTareas() {
         return this.tareas;
     }
 
-    public void addPago(Pago p) {
-        this.pagos.add(p);
-    }
-
     public void addAllPagos(List<Pago> pagos) {
         this.pagos.addAll(pagos);
-    }
-
-    public void eliminarPago(Pago pEliminar) {
-        for(Pago p : pagos) {
-            if(p.getId() == pEliminar.getId()) {
-                tareas.remove(p);
-                //TODO ON DELETE CASCADE
-            }
-        }
     }
 
     public List<Pago> getPagos() {
@@ -170,7 +135,7 @@ public class Evento implements Comparable<Evento> {
     public static List<Evento> getEventosMock() {
         List<Evento> listaEventosMock = new ArrayList<>();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
 
         String nombre = "Fiesta Universitaria";
         String fechaString = "30/03/2018";
@@ -178,7 +143,7 @@ public class Evento implements Comparable<Evento> {
         Date fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -191,7 +156,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -203,7 +168,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -215,7 +180,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -227,7 +192,7 @@ public class Evento implements Comparable<Evento> {
         fecha = null;
         try {
             fecha = sdf.parse(fechaString);
-        } catch(ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         evento = new Evento(nombre, lugar, fecha);
@@ -238,8 +203,8 @@ public class Evento implements Comparable<Evento> {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Evento evento = (Evento) o;
 

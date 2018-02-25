@@ -18,15 +18,7 @@ public class Tarea implements Comparable<Tarea> {
         this.gasto = 0.0;
     }
 
-    public Tarea(String titulo, Participante personaAsignada, EstadoTarea estadoTarea, String descripcion) {
-        this.titulo = titulo;
-        this.personaAsignada = personaAsignada;
-        this.estadoTarea = estadoTarea;
-        this.descripcion = descripcion;
-        this.gasto = 0.0;
-    }
-
-    public Tarea(String titulo, String descripcion) {
+    private Tarea(String titulo, String descripcion) {
         this.titulo = titulo;
         this.personaAsignada = Participante.getParticipanteSinAsignar();
         this.estadoTarea = EstadoTarea.SIN_ASIGNAR;
@@ -76,10 +68,10 @@ public class Tarea implements Comparable<Tarea> {
 
     public boolean matches(String query) {
         boolean matches = false;
-        if(this.titulo.toUpperCase().contains(query.toUpperCase())) {
+        if (this.titulo.toUpperCase().contains(query.toUpperCase())) {
             matches = true;
         }
-        if(this.getPersonaAsignada().matches(query)) {
+        if (this.getPersonaAsignada().matches(query)) {
             matches = true;
         }
         return matches;
@@ -121,8 +113,8 @@ public class Tarea implements Comparable<Tarea> {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Tarea tarea = (Tarea) o;
 
@@ -131,15 +123,15 @@ public class Tarea implements Comparable<Tarea> {
 
     @Override
     public int compareTo(@NonNull Tarea tarea) {
-        if(this.estadoTarea.equals(tarea.getEstadoTarea())) {
+        if (this.estadoTarea.equals(tarea.getEstadoTarea())) {
             return this.titulo.compareToIgnoreCase(tarea.getTitulo());
         } else {
-            switch(this.estadoTarea) {
+            switch (this.estadoTarea) {
                 case SIN_ASIGNAR:
                     return -1;
                 case EN_PROGRESO:
-                    if(tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) return -1;
-                    if(tarea.getEstadoTarea().equals(EstadoTarea.SIN_ASIGNAR)) return 1;
+                    if (tarea.getEstadoTarea().equals(EstadoTarea.FINALIZADA)) return -1;
+                    if (tarea.getEstadoTarea().equals(EstadoTarea.SIN_ASIGNAR)) return 1;
                     break;
                 case FINALIZADA:
                     return 1;

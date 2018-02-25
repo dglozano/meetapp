@@ -22,7 +22,6 @@ import java.util.List;
 public class ContactoItemAdapter extends RecyclerView.Adapter<ContactoItemAdapter.ContactoItemViewHolder> {
 
     private List<Contacto> contactosList;
-    private Context mContext;
 
     public class ContactoItemViewHolder extends RecyclerView.ViewHolder {
         TextView nombreContactoTv, numeroContactoTv;
@@ -30,15 +29,14 @@ public class ContactoItemAdapter extends RecyclerView.Adapter<ContactoItemAdapte
 
         public ContactoItemViewHolder(View view) {
             super(view);
-            nombreContactoTv = (TextView) view.findViewById(R.id.contacto_row_nombre);
-            numeroContactoTv = (TextView) view.findViewById(R.id.contacto_row_numero);
-            contactoCheckBox = (CheckBox) view.findViewById(R.id.contacto_row_chbox);
+            nombreContactoTv = view.findViewById(R.id.contacto_row_nombre);
+            numeroContactoTv = view.findViewById(R.id.contacto_row_numero);
+            contactoCheckBox = view.findViewById(R.id.contacto_row_chbox);
         }
     }
 
     public ContactoItemAdapter(List<Contacto> contactosList, Context context) {
         this.contactosList = contactosList;
-        mContext = context;
     }
 
     @Override

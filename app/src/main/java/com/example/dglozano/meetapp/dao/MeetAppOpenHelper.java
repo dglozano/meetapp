@@ -1,8 +1,8 @@
 package com.example.dglozano.meetapp.dao;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Utiliza el patron Singleton.
@@ -15,8 +15,8 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_EVENTO = "CREATE TABLE "
             + Constants.EVENTO_TABLENAME + "("
-            + Constants.EVENTO_ID +  " integer primary key autoincrement,"
-            + Constants.EVENTO_NAME +  " string,"
+            + Constants.EVENTO_ID + " integer primary key autoincrement,"
+            + Constants.EVENTO_NAME + " string,"
             + Constants.EVENTO_LAT + " real,"
             + Constants.EVENTO_LNG + " real,"
             + Constants.EVENTO_DIVISION_YA_REALIZADA + " boolean,"
@@ -24,57 +24,59 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
             + Constants.EVENTO_GASTO_POR_PARTICIPANTE + " real,"
             + Constants.EVENTO_FECHA + " string);";
 
-    private static final String SQL_CREATE_PARTICIPANTE= "CREATE TABLE "
+    private static final String SQL_CREATE_PARTICIPANTE = "CREATE TABLE "
             + Constants.PARTICIPANTE_TABLENAME + "("
-            + Constants.PARTICIPANTE_ID +  " integer primary key autoincrement,"
+            + Constants.PARTICIPANTE_ID + " integer primary key autoincrement,"
             + Constants.PARTICIPANTE_NOMBRE + " string,"
             + Constants.PARTICIPANTE_TELEFONO + " string,"
+            + Constants.PARTICIPANTE_ES_CREADOR + " boolean,"
+            + Constants.PARTICIPANTE_ES_SIN_ASIGNAR + " boolean,"
             + Constants.PARTICIPANTE_EVENTO_FK + " integer,"
-            + "FOREIGN KEY("+Constants.PARTICIPANTE_EVENTO_FK+") " +
+            + "FOREIGN KEY(" + Constants.PARTICIPANTE_EVENTO_FK + ") " +
             "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + ") " +
             "ON DELETE CASCADE);";
 
-    private static final String SQL_CREATE_TAREA= "CREATE TABLE "
+    private static final String SQL_CREATE_TAREA = "CREATE TABLE "
             + Constants.TAREA_TABLENAME + "("
-            + Constants.TAREA_ID +  " integer primary key autoincrement,"
+            + Constants.TAREA_ID + " integer primary key autoincrement,"
             + Constants.TAREA_TITULO + " string,"
             + Constants.TAREA_DESCRIPCION + " text,"
             + Constants.TAREA_ESTADO + " integer,"
             + Constants.TAREA_GASTO + " real,"
             + Constants.TAREA_EVENTO_FK + " integer,"
-            + Constants.TAREA_PARTICIPANTE_FK + " integer DEFAULT NULL,"
-            + "FOREIGN KEY("+Constants.TAREA_EVENTO_FK+") " +
-            "REFERENCES " + Constants.TAREA_TABLENAME + "(" + Constants.TAREA_ID + ") " +
+            + Constants.TAREA_PARTICIPANTE_FK + " integer,"
+            + "FOREIGN KEY(" + Constants.TAREA_EVENTO_FK + ") " +
+            "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + ") " +
             "ON DELETE CASCADE,"
-            + "FOREIGN KEY("+Constants.TAREA_PARTICIPANTE_FK+") " +
+            + "FOREIGN KEY(" + Constants.TAREA_PARTICIPANTE_FK + ") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + ") " +
             "ON DELETE SET NULL);";
 
-    private static final String SQL_CREATE_PAGO= "CREATE TABLE "
+    private static final String SQL_CREATE_PAGO = "CREATE TABLE "
             + Constants.PAGO_TABLENAME + "("
-            + Constants.PAGO_ID +  " integer primary key autoincrement,"
+            + Constants.PAGO_ID + " integer primary key autoincrement,"
             + Constants.PAGO_MONTO + " real,"
             + Constants.PAGO_PARTICIPANTE_COBRADOR_FK + " integer,"
             + Constants.PAGO_PARTICIPANTE_PAGADOR_FK + " integer,"
             + Constants.PAGO_EVENTO_FK + " integer,"
-            + "FOREIGN KEY("+Constants.PAGO_EVENTO_FK+") " +
+            + "FOREIGN KEY(" + Constants.PAGO_EVENTO_FK + ") " +
             "REFERENCES " + Constants.EVENTO_TABLENAME + "(" + Constants.EVENTO_ID + ") " +
             "ON DELETE CASCADE,"
-            + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_COBRADOR_FK+") " +
+            + "FOREIGN KEY(" + Constants.PAGO_PARTICIPANTE_COBRADOR_FK + ") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + ") " +
             "ON DELETE CASCADE,"
-            + "FOREIGN KEY("+Constants.PAGO_PARTICIPANTE_PAGADOR_FK+") " +
+            + "FOREIGN KEY(" + Constants.PAGO_PARTICIPANTE_PAGADOR_FK + ") " +
             "REFERENCES " + Constants.PARTICIPANTE_TABLENAME + "(" + Constants.PARTICIPANTE_ID + ") " +
             "ON DELETE CASCADE);";
 
     private static MeetAppOpenHelper _INSTANCE;
 
-    private MeetAppOpenHelper(Context ctx, String dbname, Integer version){
+    private MeetAppOpenHelper(Context ctx, String dbname, Integer version) {
         super(ctx, dbname, null, version);
     }
 
-    public static MeetAppOpenHelper getInstance(Context ctx, String dbname, Integer version){
-        if(_INSTANCE==null) _INSTANCE = new MeetAppOpenHelper(ctx, dbname, version);
+    public static MeetAppOpenHelper getInstance(Context ctx, String dbname, Integer version) {
+        if (_INSTANCE == null) _INSTANCE = new MeetAppOpenHelper(ctx, dbname, version);
         return _INSTANCE;
     }
 
@@ -97,7 +99,7 @@ public class MeetAppOpenHelper extends SQLiteOpenHelper {
 
     //Esto hace falta para que funcionen los constraints de foreign keys
     @Override
-    public void onConfigure(SQLiteDatabase db){
+    public void onConfigure(SQLiteDatabase db) {
         db.setForeignKeyConstraintsEnabled(true);
     }
 }

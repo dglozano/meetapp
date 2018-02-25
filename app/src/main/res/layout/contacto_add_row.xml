@@ -20,7 +20,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:singleLine="true"
         android:ellipsize="marquee"
-        android:text="Diego Garcia Lozano"
+        android:text="@string/name_example"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"
         android:textColor="@color/colorPrimaryDark" />
 
@@ -33,13 +33,14 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_height="wrap_content"
         android:layout_below="@id/contacto_row_nombre"
-        android:text="+543425202254"
+        android:text="@string/number_example"
         android:textColor="@android:color/darker_gray" />
 
     <CheckBox
         android:id="@+id/contacto_row_chbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:buttonTint="@color/colorPrimaryDark"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true" />
 </RelativeLayout>

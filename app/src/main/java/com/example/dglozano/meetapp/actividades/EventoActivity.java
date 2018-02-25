@@ -1,15 +1,14 @@
 package com.example.dglozano.meetapp.actividades;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,21 +25,6 @@ import com.example.dglozano.meetapp.modelo.Evento;
 
 public class EventoActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
-
     private static final int FRAGMENT_ID_LISTA_TAREAS = 0;
     private static final int FRAGMENT_ID_LISTA_PARTICIPANTES = 1;
     private static final int FRAGMENT_ID_LISTA_PAGOS = 2;
@@ -48,13 +32,12 @@ public class EventoActivity extends AppCompatActivity {
     private Fragment fragmentBeingDisplayed;
 
     private Evento evento;
-    private DaoEvento daoEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evento);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_evento_act);
+        Toolbar myToolbar = findViewById(R.id.my_toolbar_evento_act);
         setSupportActionBar(myToolbar);
 
         // Get a support ActionBar corresponding to this toolbar
@@ -63,7 +46,7 @@ public class EventoActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        daoEvento = new SQLiteDaoEvento(this);
+        DaoEvento daoEvento = new SQLiteDaoEvento(this);
 
         Intent intentOrigen = getIntent();
         int idEventoClickeado = intentOrigen.getExtras().getInt(EventoItemAdapter.EXTRA_EVENTO_ID);
@@ -72,13 +55,24 @@ public class EventoActivity extends AppCompatActivity {
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout_evento);
+        TabLayout tabLayout = findViewById(R.id.tab_layout_evento);
         tabLayout.setupWithViewPager(mViewPager, true);
     }
 
@@ -113,11 +107,12 @@ public class EventoActivity extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
-        private String[] titles = {"TAREAS","PARTICIPANTES","PAGOS"};
+
+        private String[] titles = {"TAREAS", "PARTICIPANTES", "PAGOS"};
 
         @Override
         public Fragment getItem(int position) {
-            switch(position){
+            switch (position) {
                 case FRAGMENT_ID_LISTA_TAREAS:
                     fragmentBeingDisplayed = TareasPageFragment.newInstance(evento.getId());
                     break;

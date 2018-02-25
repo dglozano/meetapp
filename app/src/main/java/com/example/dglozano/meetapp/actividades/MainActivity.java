@@ -1,7 +1,6 @@
 package com.example.dglozano.meetapp.actividades;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -21,22 +20,7 @@ import com.example.dglozano.meetapp.fragments.EventosPageFragment;
 public class MainActivity extends AppCompatActivity {
 
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
     private static final int FRAGMENT_ID_LISTA_EVENTOS = 0;
-    private static final int FRAGMENT_ID_SETTINGS = 1;
 
     private Fragment fragmentBeingDisplayed;
 
@@ -47,37 +31,49 @@ public class MainActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar_main);
         setSupportActionBar(myToolbar);
 
+
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
 
+        ab.setDisplayUseLogoEnabled(true);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
+        /*SQLiteDaoEvento daoEvento = new SQLiteDaoEvento(this);
         SQLiteDaoParticipante daoParticipante = new SQLiteDaoParticipante(this);
         SQLiteDaoTarea daoTarea = new SQLiteDaoTarea(this);
-        if(daoEvento.getAll().isEmpty()) {
+        if (daoEvento.getAll().isEmpty()) {
             daoEvento.createMockData();
             daoParticipante.createMockData(daoEvento.getAll());
             daoTarea.createMockData(daoEvento.getAll());
-        }
+        }*/
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.toolbar_search_main:
                 // User chose the Search option.
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
-                System.out.println("Hizo click en buscar");
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case FRAGMENT_ID_LISTA_EVENTOS:
                     fragmentBeingDisplayed = EventosPageFragment.newInstance();
                     break;
